@@ -1,13 +1,15 @@
-package com.ajulay.executors;
+package com.ajulay.executor;
 
-import com.ajulay.tasks.AbstractTask;
+import com.ajulay.task.AbstractTask;
 
 import java.util.List;
 
 public class Executor {
 
     private String name;
+
     private String surname;
+
     private String lastName;
 
     private List<AbstractTask> tasks;

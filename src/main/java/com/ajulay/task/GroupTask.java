@@ -1,7 +1,4 @@
-package com.ajulay.tasks;
-
-import com.ajulay.projects.Project;
-import com.sun.tools.javac.code.Attribute;
+package com.ajulay.task;
 
 import java.util.ArrayList;
 import java.util.Arrays;

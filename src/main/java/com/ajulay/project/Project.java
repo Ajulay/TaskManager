@@ -1,6 +1,7 @@
-package com.ajulay.projects;
+package com.ajulay.project;
 
 public class Project {
+
     private String name;
 
     public Project(String name) {

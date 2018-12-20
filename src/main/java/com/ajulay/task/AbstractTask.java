@@ -1,6 +1,4 @@
-package com.ajulay.tasks;
-
-import com.ajulay.projects.Project;
+package com.ajulay.task;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -9,20 +7,25 @@ import java.time.ZoneOffset;
 public abstract class AbstractTask {
 
     private static int counter;
-    private int id;
+
+    private final int id;
 
     private String projectName;
+
     private Instant term;
+
     private int priority;
+
     private String content;
+
     private Enum status;
 
     public AbstractTask(String project, String term, int priority, String content) {
-        id = counter++;
+        this.id = counter++;
         this.projectName = project;
         this.priority = priority;
         this.content = content;
-        status = Status.NEW;
+        this.status = Status.NEW;
 
         String[] datePartArray = term.split("-");
         this.term = LocalDate.of(
@@ -82,7 +85,7 @@ public abstract class AbstractTask {
         this.status = status;
     }
 
-    public enum Status{
+    public enum Status {
         NEW, ONWORKING, FINISHED, FAILED
     }
 }
