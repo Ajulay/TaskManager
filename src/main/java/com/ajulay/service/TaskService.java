@@ -24,7 +24,7 @@ public class TaskService {
         return task;
     }
 
-    public static AbstractTask createGroupTask(String projectName, String term, int priority, String content, String executorName) throws Exception {
+    public static AbstractTask createGroupTask(String projectName, String term, int priority, String content, String... executorName) throws Exception {
         final AbstractTask task = new GroupTask(projectName, term, priority, content, executorName);
         tasks.add(task);
         return task;
@@ -56,7 +56,8 @@ public class TaskService {
 
     public static void showTasks() {
         for (AbstractTask task : TaskService.getTasks()) {
-            System.out.printf("ID task: %s, content: %s, status: %s, type: %s\n", task.getId(), task.getContent(), task.getStatus(), task.getClass().getSimpleName());
+           // System.out.printf("ID task: %s, content: %s, status: %s, type: %s\n", task.getId(), task.getContent(), task.getStatus(), task.getClass().getSimpleName());
+            System.out.println(task.toString());
         }
     }
 }

@@ -3,6 +3,9 @@ package com.ajulay.task;
 import com.ajulay.executor.Executor;
 import com.ajulay.service.ExecutorsService;
 
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 public class PrivateTask extends AbstractTask {
     private Executor executor;
 
@@ -23,5 +26,21 @@ public class PrivateTask extends AbstractTask {
 
     public void setExecutorName(Executor executorName) {
         this.executor = executorName;
+    }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                        .withZone( ZoneId.systemDefault() );
+        return "PrivateTask {" +
+                "id = " + getId() +
+                ", projectName = '" + getProjectName() + '\'' +
+                ", term = " + formatter.format(getTerm()) +
+                ", priority = " + getPriority() +
+                ", content = '" + getContent() + '\'' +
+                ", status = " + getStatus() +
+                ", executor = " + executor.getSurname() +
+                '}';
     }
 }
