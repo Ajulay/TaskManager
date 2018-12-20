@@ -13,6 +13,10 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
+        run();
+    }
+
+    private static void run(){
         testData();
         Scanner scanner = new Scanner(System.in);
         System.out.println("TASK MANAGER\n" +
@@ -60,7 +64,7 @@ public class Main {
                     if (taskData.length > TaskConstant.TASK_DATA_LENGTH) {
                         final String executorsSurnames = taskData[4];
 
-                        if (taskData[4].split("&").length == 1) {
+                        if (executorsSurnames.split("&").length == 1) {
                             TaskService.createPrivateTask(projectName, date, priority, content, executorsSurnames);
                             TaskService.showTasks();
                             continue;
@@ -70,14 +74,13 @@ public class Main {
                     TaskService.showTasks();
                     continue;
                 }
-                System.out.println("You entered wrong data...");
+                System.out.println("You entered incorrect data...");
             } catch (Exception e) {
                 System.out.println(e.getMessage());
                 break;
             }
         }
     }
-
     private static void testData() {
         ExecutorsService.getExecutors().add(new Executor("Alexeev"));
         ExecutorsService.getExecutors().add(new Executor("Andreev"));
