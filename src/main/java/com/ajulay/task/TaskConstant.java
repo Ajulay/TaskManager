@@ -12,4 +12,6 @@ public class TaskConstant {
     public static final String EXIT = "/exit";
     public static final String SHOW_EXECUTORS_COMMAND = "ex";
     public static final String CHANGE_STATUS_COMMAND = "/st";
+    public static final String SERVICE_COMMAND = "/";
+    public static final String DELETE_TASK = "/dt";
 }

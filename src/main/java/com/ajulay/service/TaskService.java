@@ -24,7 +24,7 @@ public class TaskService {
         return task;
     }
 
-    public static AbstractTask createGroupTask(String projectName, String term, int priority, String content, String executorName) {
+    public static AbstractTask createGroupTask(String projectName, String term, int priority, String content, String executorName) throws Exception {
         final AbstractTask task = new GroupTask(projectName, term, priority, content, executorName);
         tasks.add(task);
         return task;

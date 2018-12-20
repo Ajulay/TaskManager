@@ -16,7 +16,7 @@ public class Main {
         run();
     }
 
-    private static void run(){
+    private static void run() {
         testData();
         Scanner scanner = new Scanner(System.in);
         System.out.println("TASK MANAGER\n" +
@@ -26,31 +26,45 @@ public class Main {
                 "to add overal task write: project_name, term, priority(1-3), content\n" +
                 "to add private task write: projectName, term, priority(1-3), content, executor_surname\n" +
                 "to add group task write: project_name, term, priority(1-3), content, executor_surname1, executor_surname2...\n" +
-                "to change status task write: /st id(task), NEW (or ONWORKING, FINISHED, FAILED)");
+                "to change status task write: /st id(task), NEW (or ONWORKING, FINISHED, FAILED)" +
+                "to delete task write: /dt id(task)");
+
         String[] taskData = null;
         while (true) {
             try {
                 String str = scanner.nextLine();
+                if (str == null) continue;
                 str = str.replaceAll(", ", "&");
                 if (TaskConstant.EXIT.equals(str)) {
                     break;
                 }
                 if (TaskConstant.SHOW_PROJECTS_COMMAND.equals(str)) {
                     ProjectService.showProjects();
+                    continue;
                 }
                 if (TaskConstant.SHOW_EXECUTORS_COMMAND.equals(str)) {
                     ExecutorsService.showExecutors();
+                    continue;
                 }
                 if (TaskConstant.SHOW_TASKS_COMMAND.equals(str)) {
                     TaskService.showTasks();
-                }
-                if (TaskConstant.CHANGE_STATUS_COMMAND.startsWith(str)) {
-                    taskData = str.substring(str.indexOf(" ") + 1).split("&");
-                    final int taskId = Integer.parseInt(taskData[0]);
-                    final String status = taskData[1];
-                    TaskService.changeStatus(taskId, status);
-                    TaskService.showTasks();
                     continue;
+                }
+                if (str.startsWith(TaskConstant.SERVICE_COMMAND)) {
+                    if (str.startsWith(TaskConstant.CHANGE_STATUS_COMMAND)) {
+                        taskData = str.substring(str.indexOf(" ") + 1).split("&");
+                        final int taskId = Integer.parseInt(taskData[0]);
+                        final String status = taskData[1];
+                        TaskService.changeStatus(taskId, status);
+                        TaskService.showTasks();
+                        continue;
+                    }
+                    if (str.startsWith(TaskConstant.DELETE_TASK)) {
+                        str = str.substring(str.indexOf(" ") + 1);
+                        TaskService.deleteTask(Integer.parseInt(str));
+                        TaskService.showTasks();
+                        continue;
+                    }
                 }
                 if (str.length() > TaskConstant.SERVICE_WORD_LENGTH) {
                     taskData = str.split("&", TaskConstant.TASK_DATA_LENGTH + 1);
@@ -60,27 +74,26 @@ public class Main {
                     final String content = taskData[3];
                     if (taskData.length == TaskConstant.TASK_DATA_LENGTH) {
                         TaskService.createOveralTask(projectName, date, priority, content);
+                        TaskService.showTasks();
+                        continue;
                     }
-                    if (taskData.length > TaskConstant.TASK_DATA_LENGTH) {
-                        final String executorsSurnames = taskData[4];
-
-                        if (executorsSurnames.split("&").length == 1) {
-                            TaskService.createPrivateTask(projectName, date, priority, content, executorsSurnames);
-                            TaskService.showTasks();
-                            continue;
-                        }
-                        TaskService.createGroupTask(projectName, date, priority, content, executorsSurnames);
+                    final String executorsSurnames = taskData[4];
+                    if (executorsSurnames.split("&").length == 1) {
+                        TaskService.createPrivateTask(projectName, date, priority, content, executorsSurnames);
+                        TaskService.showTasks();
+                        continue;
                     }
+                    TaskService.createGroupTask(projectName, date, priority, content, executorsSurnames);
                     TaskService.showTasks();
                     continue;
                 }
                 System.out.println("You entered incorrect data...");
             } catch (Exception e) {
                 System.out.println(e.getMessage());
-                break;
             }
         }
     }
+
     private static void testData() {
         ExecutorsService.getExecutors().add(new Executor("Alexeev"));
         ExecutorsService.getExecutors().add(new Executor("Andreev"));
