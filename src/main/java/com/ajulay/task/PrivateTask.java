@@ -20,11 +20,11 @@ public class PrivateTask extends AbstractTask {
         throw new Exception("no such executor");
     }
 
-    public Executor getExecutorName() {
+    public Executor getExecutor() {
         return executor;
     }
 
-    public void setExecutorName(Executor executorName) {
+    public void setExecutor(Executor executorName) {
         this.executor = executorName;
     }
 

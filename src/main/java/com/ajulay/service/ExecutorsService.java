@@ -26,17 +26,16 @@ public class ExecutorsService {
         throw new Exception("No executor");
     }
 
-    public static void updateExecutor(String oldName, String newName) {
-        for (int i = 0; i < executors.size(); i++) {
-            if (executors.get(i).getName().equals(oldName)) {
-                executors.get(i).setName(newName);
-            }
-        }
+    public static void updateExecutor(Executor executor) throws Exception {
+        Executor oldExecutor = ExecutorsService.getBySurname(executor.getSurname());
+        oldExecutor.setName(executor.getName());
+        oldExecutor.setLastName(executor.getLastName());
+        oldExecutor.setTasks(executor.getTasks());
     }
 
-    public static Executor getByName(String name) throws Exception {
+    public static Executor getBySurname(String surname) throws Exception {
         for (Executor executor : executors) {
-            if (executor.getName().equals(name)) {
+            if (executor.getSurname().equals(surname)) {
                 return executor;
             }
         }

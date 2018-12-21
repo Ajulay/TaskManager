@@ -33,14 +33,6 @@ public abstract class AbstractTask {
                 .atStartOfDay().toInstant(ZoneOffset.UTC);
     }
 
-    public String getProject() {
-        return projectName;
-    }
-
-    public void setProject(String project) {
-        this.projectName = project;
-    }
-
     public Instant getTerm() {
         return term;
     }

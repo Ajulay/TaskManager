@@ -1,47 +1,39 @@
 package com.ajulay.service;
 
+import com.ajulay.dao.*;
 import com.ajulay.task.AbstractTask;
 import com.ajulay.task.GroupTask;
 import com.ajulay.task.OveralTask;
 import com.ajulay.task.PrivateTask;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TaskService {
 
-    private static final List<AbstractTask> tasks = new ArrayList<>();
+    private static final GroupTaskDao groupTaskDao = new GroupTaskDaoImpl();
 
-    public static AbstractTask createPrivateTask(String projectName, String term, int priority, String content, String executorName) throws Exception {
-        final AbstractTask task = new PrivateTask(projectName, term, priority, content, executorName);
-        tasks.add(task);
-        return task;
+    private static final PrivateTaskDao privateTaskDao = new PrivateTaskDaoImpl();
+
+    private static final OveralTaskDao overalTaskDao = new OveralTaskDaoImpl();
+
+    public static PrivateTask createPrivateTask(String projectName, String term, int priority, String content, String executorName) throws Exception {
+        return privateTaskDao.create(projectName, term, priority, content, executorName);
     }
 
-    public static AbstractTask createOveralTask(String projectName, String term, int priority, String content) {
-        final AbstractTask task = new OveralTask(projectName, term, priority, content);
-        tasks.add(task);
-        return task;
+    public static OveralTask createOveralTask(String projectName, String term, int priority, String content) {
+        return overalTaskDao.create(projectName, term, priority, content);
     }
 
-    public static AbstractTask createGroupTask(String projectName, String term, int priority, String content, String... executorName) throws Exception {
-        final AbstractTask task = new GroupTask(projectName, term, priority, content, executorName);
-        tasks.add(task);
-        return task;
+    public static GroupTask createGroupTask(String projectName, String term, int priority, String content, String... executorName) throws Exception {
+        return groupTaskDao.create(projectName, term, priority, content, executorName);
     }
 
     public static AbstractTask deleteTask(int id) throws Exception {
-        for (AbstractTask task : tasks) {
-            if (task.getId() == id) {
-                tasks.remove(task);
-                return task;
-            }
-        }
-        throw new Exception("No such task");
+        return overalTaskDao.delete(id);
     }
 
     public static void changeStatus(int taskId, String status) throws Exception {
-        for (AbstractTask task : tasks) {
+        for (AbstractTask task : overalTaskDao.getTasks()) {
             if (task.getId() == taskId) {
                 task.setStatus(AbstractTask.Status.valueOf(status.toUpperCase()));
                 return;
@@ -51,12 +43,11 @@ public class TaskService {
     }
 
     public static List<AbstractTask> getTasks() {
-        return tasks;
+        return overalTaskDao.getTasks();
     }
 
     public static void showTasks() {
         for (AbstractTask task : TaskService.getTasks()) {
-           // System.out.printf("ID task: %s, content: %s, status: %s, type: %s\n", task.getId(), task.getContent(), task.getStatus(), task.getClass().getSimpleName());
             System.out.println(task.toString());
         }
     }
