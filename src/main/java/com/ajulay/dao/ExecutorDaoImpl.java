@@ -3,30 +3,29 @@ package com.ajulay.dao;
 import com.ajulay.data.Data;
 import com.ajulay.executor.Executor;
 import com.ajulay.service.ExecutorsService;
+import com.ajulay.service.ExecutorsServiceImpl;
 
 import java.util.List;
 
 public class ExecutorDaoImpl implements ExecutorDao{
 
-    private static final List<Executor> executors = Data.getExecutors();
-
     public List<Executor> getExecutors() {
-        return executors;
+        return Data.getExecutors();
     }
 
     @Override
     public Executor create(String surname) throws Exception {
         if (surname == null) throw new Exception("No name");
         final Executor executor = new Executor(surname);
-        executors.add(executor);
+        getExecutors().add(executor);
         return executor;
     }
 
     @Override
     public Executor delete(String surname) throws Exception {
-        for (Executor executor : executors) {
+        for (Executor executor : getExecutors()) {
             if (executor.getName().equals(surname)) {
-                executors.remove(executor);
+                getExecutors().remove(executor);
                 return executor;
             }
         }
@@ -35,20 +34,21 @@ public class ExecutorDaoImpl implements ExecutorDao{
 
     @Override
     public Executor update(Executor executor) throws Exception {
-        Executor oldExecutor = ExecutorsService.getBySurname(executor.getSurname());
+        Executor oldExecutor = findById(executor.getId());
         oldExecutor.setName(executor.getName());
         oldExecutor.setLastName(executor.getLastName());
-        oldExecutor.setTasks(executor.getTasks());
+        oldExecutor.setSurname(executor.getSurname());
+
         return oldExecutor;
     }
 
     @Override
-    public Executor findById(String surname) throws Exception {
-        for (Executor executor : executors) {
-            if (executor.getSurname().equals(surname)) {
+    public Executor findById(String id) throws Exception {
+        for (Executor executor : getExecutors()) {
+            if (executor.getSurname().equals(id)) {
                 return executor;
             }
         }
-        throw new Exception("No executor");
+        throw new Exception("No such executor");
     }
 }

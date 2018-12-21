@@ -1,38 +1,21 @@
 package com.ajulay.service;
 
-import com.ajulay.dao.ExecutorDao;
-import com.ajulay.dao.ExecutorDaoImpl;
 import com.ajulay.executor.Executor;
 
 import java.util.List;
 
-public class ExecutorsService {
+public interface ExecutorsService {
 
-  private static ExecutorDao dao = new ExecutorDaoImpl();
+    Executor createExecutor(String surname) throws Exception;
 
-    public static Executor createExecutor(String surname) throws Exception {
-        return dao.create(surname);
-    }
+    Executor deleteExecutor(String surname) throws Exception;
 
-    public static Executor deleteExecutor(String surname) throws Exception {
-        return dao.delete(surname);
-    }
+    Executor updateExecutor(Executor executor) throws Exception;
 
-    public static Executor updateExecutor(Executor executor) throws Exception {
-        return dao.delete(executor.getSurname());
-    }
+    Executor getBySurname(String surname) throws Exception;
 
-    public static Executor getBySurname(String surname) throws Exception {
-        return dao.findById(surname);
-    }
+    void showExecutors();
 
-    public static List<Executor> getExecutors() {
-        return dao.getExecutors();
-    }
+    List<Executor> getExecutors();
 
-    public static void showExecutors() {
-        for (Executor executor : ExecutorsService.getExecutors()) {
-            System.out.println(executor.getSurname());
-        }
-    }
 }

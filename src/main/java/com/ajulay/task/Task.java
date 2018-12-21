@@ -1,14 +1,17 @@
 package com.ajulay.task;
 
+import com.ajulay.task.util.Status;
+
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
-public abstract class AbstractTask {
+public class Task {
 
-    private static int counter;
-
-    private final int id;
+    private final String id = UUID.randomUUID().toString();
 
     private String projectName;
 
@@ -18,19 +21,9 @@ public abstract class AbstractTask {
 
     private String content;
 
-    private Enum status;
+    private Enum status = Status.NEW;
 
-    public AbstractTask(String project, String term, int priority, String content) {
-        this.id = counter++;
-        this.projectName = project;
-        this.priority = priority;
-        this.content = content;
-        this.status = Status.NEW;
-
-        String[] datePartArray = term.split("-");
-        this.term = LocalDate.of(
-                Integer.parseInt(datePartArray[0]), Integer.parseInt(datePartArray[1]), Integer.parseInt(datePartArray[2]))
-                .atStartOfDay().toInstant(ZoneOffset.UTC);
+    public Task() {
     }
 
     public Instant getTerm() {
@@ -57,7 +50,7 @@ public abstract class AbstractTask {
         this.content = content;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -77,7 +70,18 @@ public abstract class AbstractTask {
         this.status = status;
     }
 
-    public enum Status {
-        NEW, ONWORKING, FINISHED, FAILED
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                        .withZone( ZoneId.systemDefault() );
+        return "Task {" +
+                "id = " + getId() +
+                ", projectName = '" + getProjectName() + '\'' +
+                ", term = " + formatter.format(getTerm()) +
+                ", priority = " + getPriority() +
+                ", content = '" + getContent() + '\'' +
+                ", status = " + getStatus() +
+                '}';
     }
 }

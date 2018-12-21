@@ -1,10 +1,16 @@
 package com.ajulay.executor;
 
-import com.ajulay.task.AbstractTask;
+import com.ajulay.task.Task;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Executor {
+
+    private final String id = UUID.randomUUID().toString();
+
+    private final List<Task> tasks = new ArrayList<>();
 
     private String name;
 
@@ -12,7 +18,8 @@ public class Executor {
 
     private String lastName;
 
-    private List<AbstractTask> tasks;
+    public Executor() {
+    }
 
     public Executor(String surname) {
         this.surname = surname;
@@ -42,11 +49,11 @@ public class Executor {
         this.lastName = lastName;
     }
 
-    public List<AbstractTask> getTasks() {
+    public List<Task> getTasks() {
         return tasks;
     }
 
-    public void setTasks(List<AbstractTask> tasks) {
-        this.tasks = tasks;
+    public String getId() {
+        return id;
     }
 }

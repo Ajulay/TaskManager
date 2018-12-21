@@ -1,8 +1,15 @@
 package com.ajulay.project;
 
+import java.util.UUID;
+
 public class Project {
 
+    private final String id = UUID.randomUUID().toString();
+
     private String name;
+
+    public Project() {
+    }
 
     public Project(String name) {
         this.name = name;
@@ -14,5 +21,9 @@ public class Project {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getId() {
+        return id;
     }
 }

@@ -2,15 +2,24 @@ package com.ajulay.gui;
 
 import com.ajulay.executor.Executor;
 import com.ajulay.project.Project;
-import com.ajulay.service.ExecutorsService;
-import com.ajulay.service.ProjectService;
-import com.ajulay.service.TaskService;
-import com.ajulay.task.OveralTask;
-import com.ajulay.task.TaskConstant;
+import com.ajulay.service.*;
+import com.ajulay.task.Task;
+import com.ajulay.task.util.TaskConstant;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class UIController {
+
+    private static ExecutorsService executorsService = new ExecutorsServiceImpl();
+    private static ProjectService projectService = new ProjectServiceImpl();
+    private static TaskService taskService = new TaskServiceImpl();
+
+
     public static void run() {
         testData();
         Scanner scanner = new Scanner(System.in);
@@ -27,61 +36,78 @@ public class UIController {
         String[] taskData = null;
         while (true) {
             try {
-                String str = scanner.nextLine();
-                if (str == null) continue;
-                str = str.replaceAll(", ", "&");
-                if (TaskConstant.EXIT.equals(str)) {
+                String in = scanner.nextLine();
+                if (in == null) continue;
+                in = in.replaceAll(", ", "&");
+                if (TaskConstant.EXIT.equals(in)) {
                     break;
                 }
-                if (TaskConstant.SHOW_PROJECTS_COMMAND.equals(str)) {
-                    ProjectService.showProjects();
+                if (TaskConstant.SHOW_PROJECTS_COMMAND.equals(in)) {
+                    projectService.showProjects();
                     continue;
                 }
-                if (TaskConstant.SHOW_EXECUTORS_COMMAND.equals(str)) {
-                    ExecutorsService.showExecutors();
+                if (TaskConstant.SHOW_EXECUTORS_COMMAND.equals(in)) {
+                    executorsService.showExecutors();
                     continue;
                 }
-                if (TaskConstant.SHOW_TASKS_COMMAND.equals(str)) {
-                    TaskService.showTasks();
+                if (TaskConstant.SHOW_TASKS_COMMAND.equals(in)) {
+                    taskService.showTasks();
                     continue;
                 }
-                if (str.startsWith(TaskConstant.SERVICE_COMMAND)) {
-                    if (str.startsWith(TaskConstant.CHANGE_STATUS_COMMAND)) {
-                        taskData = str.substring(str.indexOf(" ") + 1).split("&");
-                        final int taskId = Integer.parseInt(taskData[0]);
-                        final String status = taskData[1];
-                        TaskService.changeStatus(taskId, status);
-                        TaskService.showTasks();
+                if (in.startsWith(TaskConstant.SERVICE_COMMAND)) {
+                    if (in.startsWith(TaskConstant.CHANGE_STATUS_COMMAND)) {
+                        taskData = in.substring(in.indexOf(" ") + 1).split("&");
+                        String taskId = taskData[0];
+                        String status = taskData[1];
+                        taskService.changeStatus(taskId, status);
+                        taskService.showTasks();
                         continue;
                     }
-                    if (str.startsWith(TaskConstant.DELETE_TASK)) {
-                        str = str.substring(str.indexOf(" ") + 1);
-                        TaskService.deleteTask(Integer.parseInt(str));
-                        TaskService.showTasks();
+                    if (in.startsWith(TaskConstant.DELETE_TASK)) {
+                        in = in.substring(in.indexOf(" ") + 1);
+                        taskService.deleteTask(in);
+                        taskService.showTasks();
                         continue;
                     }
                 }
-                if (str.length() > TaskConstant.SERVICE_WORD_LENGTH) {
-                    taskData = str.split("&", TaskConstant.TASK_DATA_LENGTH + 1);
+                if (in.length() > TaskConstant.SERVICE_WORD_LENGTH) {
+                    taskData = in.split("&", TaskConstant.TASK_DATA_LENGTH);
                     final String projectName = taskData[0];
-                    final String date = taskData[1];
+                    final String sTerm = taskData[1];
                     final int priority = Integer.parseInt(taskData[2]);
                     final String content = taskData[3];
-                    if (taskData.length == TaskConstant.TASK_DATA_LENGTH) {
-                        TaskService.createOveralTask(projectName, date, priority, content);
-                        TaskService.showTasks();
-                        continue;
-                    }
                     final String executorsSurname = taskData[4];
-                    String[] executorsSurnames = null;
-                    if ((executorsSurnames = executorsSurname.split("&")).length == 1) {
-                        TaskService.createPrivateTask(projectName, date, priority, content, executorsSurname);
-                        TaskService.showTasks();
-                        continue;
+
+                        Task task = new Task();
+                        task.setProjectName(projectName);
+                        task.setContent(content);
+                        String[] datePartArray = sTerm.split("-");
+                        String year = datePartArray[0];
+                        String month = datePartArray[1];
+                        String day = datePartArray[2];
+                        Instant term = LocalDate.of(
+                                Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day))
+                                .atStartOfDay().toInstant(ZoneOffset.UTC);
+                        task.setTerm(term);
+                        task.setPriority(priority);
+                        List<Executor> tmpExecutors = new ArrayList<>();
+                        try{
+                            String[] executorsSurnames = executorsSurname.split("&");
+
+                        for (String surname : executorsSurnames) {
+                            Executor executor = executorsService.getBySurname(surname);
+                            executor.getTasks().add(task);
+                            tmpExecutors.add(executor);
+                        }
+                        }catch (Exception e){
+                            for (Executor executor : tmpExecutors) {
+                                executor.getTasks().remove(task);
+                            }
+                            throw new Exception("no such executor");
                     }
-                    TaskService.createGroupTask(projectName, date, priority, content, executorsSurnames);
-                    TaskService.showTasks();
-                    continue;
+                    taskService.saveTask(task);
+                    taskService.showTasks();
+                        continue;
                 }
                 System.out.println("You entered incorrect data...");
             } catch (Exception e) {
@@ -91,19 +117,35 @@ public class UIController {
     }
 
     private static void testData() {
-        ExecutorsService.getExecutors().add(new Executor("Alexeev"));
-        ExecutorsService.getExecutors().add(new Executor("Andreev"));
-        ExecutorsService.getExecutors().add(new Executor("Sergeev"));
+        executorsService.getExecutors().add(new Executor("Alexeev"));
+        executorsService.getExecutors().add(new Executor("Andreev"));
+        executorsService.getExecutors().add(new Executor("Sergeev"));
 
-        ProjectService.getProjects().add(new Project("Project1"));
-        ProjectService.getProjects().add(new Project("Project2"));
-        ProjectService.getProjects().add(new Project("Project3"));
+        projectService.getProjects().add(new Project("Project1"));
+        projectService.getProjects().add(new Project("Project2"));
+        projectService.getProjects().add(new Project("Project3"));
 
-        TaskService.getTasks().add(new OveralTask("Project1", "2018-12-20", TaskConstant.HIGH_PRIORITY, "Write application1..."));
-        TaskService.getTasks().add(new OveralTask("Project2", "2018-12-20", TaskConstant.MIDDLE_PRIORITY, "Write application2..."));
-        TaskService.getTasks().add(new OveralTask("Project3", "2018-12-20", TaskConstant.LOW_PRIORITY, "Write application3..."));
-        TaskService.getTasks().add(new OveralTask("Project1", "2018-12-20", TaskConstant.MIDDLE_PRIORITY, "Write application4..."));
-        TaskService.getTasks().add(new OveralTask("Project2", "2018-12-20", TaskConstant.LOW_PRIORITY, "Write application5..."));
+        taskService.getTasks().add(getTestTask("Project1", "2018-12-20", TaskConstant.HIGH_PRIORITY, "Write application1..."));
+
+        taskService.getTasks().add(getTestTask("Project2", "2018-12-20", TaskConstant.MIDDLE_PRIORITY, "Write application2..."));
+        taskService.getTasks().add(getTestTask("Project3", "2018-12-20", TaskConstant.LOW_PRIORITY, "Write application3..."));
+        taskService.getTasks().add(getTestTask("Project1", "2018-12-20", TaskConstant.MIDDLE_PRIORITY, "Write application4..."));
+        taskService.getTasks().add(getTestTask("Project2", "2018-12-20", TaskConstant.LOW_PRIORITY, "Write application5..."));
     }
+
+    private static Task getTestTask(String projectName, String sTerm, int priority, String content){
+        Task task = new Task();
+        task.setProjectName(projectName);
+        task.setPriority(priority);
+        String[] datePartArray = sTerm.split("-");
+        String year = datePartArray[0];
+        String month = datePartArray[1];
+        String day = datePartArray[2];
+        Instant term = LocalDate.of(
+                Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day))
+                .atStartOfDay().toInstant(ZoneOffset.UTC);
+        task.setTerm(term);
+        task.setContent(content);
+    return task;}
     //Project1, 2018-12-20, 2, create new Application, Alexeev //for convenient presentation
 }
