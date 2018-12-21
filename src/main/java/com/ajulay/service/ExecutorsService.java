@@ -1,49 +1,33 @@
 package com.ajulay.service;
 
+import com.ajulay.dao.ExecutorDao;
+import com.ajulay.dao.ExecutorDaoImpl;
 import com.ajulay.executor.Executor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ExecutorsService {
 
-    private static final List<Executor> executors = new ArrayList<>();
+  private static ExecutorDao dao = new ExecutorDaoImpl();
 
-    public static Executor createExecutor(String name) throws Exception {
-        if (name == null) throw new Exception("No name");
-        final Executor executor = new Executor(name);
-        executors.add(executor);
-        return executor;
+    public static Executor createExecutor(String surname) throws Exception {
+        return dao.create(surname);
     }
 
-    public static Executor deleteExecutor(String name) throws Exception {
-        for (Executor executor : executors) {
-            if (executor.getName().equals(name)) {
-                executors.remove(executor);
-                return executor;
-            }
-        }
-        throw new Exception("No executor");
+    public static Executor deleteExecutor(String surname) throws Exception {
+        return dao.delete(surname);
     }
 
-    public static void updateExecutor(Executor executor) throws Exception {
-        Executor oldExecutor = ExecutorsService.getBySurname(executor.getSurname());
-        oldExecutor.setName(executor.getName());
-        oldExecutor.setLastName(executor.getLastName());
-        oldExecutor.setTasks(executor.getTasks());
+    public static Executor updateExecutor(Executor executor) throws Exception {
+        return dao.delete(executor.getSurname());
     }
 
     public static Executor getBySurname(String surname) throws Exception {
-        for (Executor executor : executors) {
-            if (executor.getSurname().equals(surname)) {
-                return executor;
-            }
-        }
-        throw new Exception("No executor");
+        return dao.findById(surname);
     }
 
     public static List<Executor> getExecutors() {
-        return executors;
+        return dao.getExecutors();
     }
 
     public static void showExecutors() {
