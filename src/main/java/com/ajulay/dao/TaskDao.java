@@ -15,4 +15,6 @@ public interface TaskDao {
     Task findById(String id) throws Exception;
 
     List<Task> findAll();
+
+    List<Task> findByProjectId(String projectId);
 }

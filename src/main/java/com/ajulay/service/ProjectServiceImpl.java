@@ -20,7 +20,7 @@ public class ProjectServiceImpl implements ProjectService{
 
     public void showProjects() {
         for (Project project : projects) {
-            System.out.println(project.getName());
+            System.out.printf("Project name: %s, project id: %s.\n",project.getName(), project.getId());
         }
     }
 

@@ -13,7 +13,7 @@ public class Task {
 
     private final String id = UUID.randomUUID().toString();
 
-    private String projectName;
+    private String projectId;
 
     private Instant term;
 
@@ -54,12 +54,12 @@ public class Task {
         return id;
     }
 
-    public String getProjectName() {
-        return projectName;
+    public String getProjectId() {
+        return projectId;
     }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
     }
 
     public Enum getStatus() {
@@ -77,7 +77,7 @@ public class Task {
                         .withZone( ZoneId.systemDefault() );
         return "Task {" +
                 "id = " + getId() +
-                ", projectName = '" + getProjectName() + '\'' +
+                ", projectId = '" + getProjectId() + '\'' +
                 ", term = " + formatter.format(getTerm()) +
                 ", priority = " + getPriority() +
                 ", content = '" + getContent() + '\'' +

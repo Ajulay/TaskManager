@@ -15,4 +15,6 @@ public interface TaskService {
     List<Task> getTasks();
 
     void showTasks();
+
+    void showTasksByProject(String in);
 }

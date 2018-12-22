@@ -33,7 +33,17 @@ public class TaskServiceImpl implements TaskService{
     }
 
     public void showTasks() {
-        for (Task task : getTasks()) {
+        printTasks(getTasks());
+    }
+
+    @Override
+    public void showTasksByProject(String projectId) {
+       List<Task> tasks = dao.findByProjectId(projectId);
+       printTasks(tasks);
+    }
+
+    private void printTasks(List<Task> tasks){
+        for (Task task : tasks) {
             System.out.println(task.toString());
         }
     }

@@ -19,19 +19,18 @@ public class UIController {
     private static ProjectService projectService = new ProjectServiceImpl();
     private static TaskService taskService = new TaskServiceImpl();
 
-
     public static void run() {
         testData();
         Scanner scanner = new Scanner(System.in);
         System.out.println("TASK MANAGER\n" +
-                "to see projects write: pts\n" +
-                "to see executors write: ex\n" +
-                "to see tasks write: tsk\n" +
-                "to add overal task write: project_name, term, priority(1-3), content\n" +
-                "to add private task write: projectName, term, priority(1-3), content, executor_surname\n" +
-                "to add group task write: project_name, term, priority(1-3), content, executor_surname1, executor_surname2...\n" +
+                "to see projects write: /pts\n" +
+                "to see executors write: /ex\n" +
+                "to see tasks write: /tks\n" +
+                "to add group task write: project_name, term, priority(1-3), content (, executor_surname1, executor_surname2...)\n" +
                 "to change status task write: /st id(task), NEW (or ONWORKING, FINISHED, FAILED)" +
-                "to delete task write: /dt id(task)");
+                "to delete task write: /dt id(task)" +
+                "to see all tasks in project write: /ptks project_id");
+
 
         String[] taskData = null;
         while (true) {
@@ -42,19 +41,7 @@ public class UIController {
                 if (TaskConstant.EXIT.equals(in)) {
                     break;
                 }
-                if (TaskConstant.SHOW_PROJECTS_COMMAND.equals(in)) {
-                    projectService.showProjects();
-                    continue;
-                }
-                if (TaskConstant.SHOW_EXECUTORS_COMMAND.equals(in)) {
-                    executorsService.showExecutors();
-                    continue;
-                }
-                if (TaskConstant.SHOW_TASKS_COMMAND.equals(in)) {
-                    taskService.showTasks();
-                    continue;
-                }
-                if (in.startsWith(TaskConstant.SERVICE_COMMAND)) {
+                if (in.startsWith(TaskConstant.SERVICE_COMMAND_SIGN)) {
                     if (in.startsWith(TaskConstant.CHANGE_STATUS_COMMAND)) {
                         taskData = in.substring(in.indexOf(" ") + 1).split("&");
                         String taskId = taskData[0];
@@ -69,17 +56,36 @@ public class UIController {
                         taskService.showTasks();
                         continue;
                     }
+                    if (TaskConstant.SHOW_PROJECTS_COMMAND.equals(in)) {
+                        projectService.showProjects();
+                        continue;
+                    }
+                    if (TaskConstant.SHOW_EXECUTORS_COMMAND.equals(in)) {
+                        executorsService.showExecutors();
+                        continue;
+                    }
+                    if (TaskConstant.SHOW_TASKS_COMMAND.equals(in)) {
+                        taskService.showTasks();
+                        continue;
+                    }
+
+                    if(in.startsWith(TaskConstant.PROJECT_TASKS)){
+                        in = in.substring(in.indexOf(" ") + 1);
+                        taskService.showTasksByProject(in);
+                        continue;
+                    }
+
                 }
-                if (in.length() > TaskConstant.SERVICE_WORD_LENGTH) {
+                else {
                     taskData = in.split("&", TaskConstant.TASK_DATA_LENGTH);
-                    final String projectName = taskData[0];
+                    final String projectId = taskData[0];
                     final String sTerm = taskData[1];
                     final int priority = Integer.parseInt(taskData[2]);
                     final String content = taskData[3];
                     final String executorsSurname = taskData[4];
 
                         Task task = new Task();
-                        task.setProjectName(projectName);
+                        task.setProjectId(projectId);
                         task.setContent(content);
                         String[] datePartArray = sTerm.split("-");
                         String year = datePartArray[0];
@@ -121,21 +127,25 @@ public class UIController {
         executorsService.getExecutors().add(new Executor("Andreev"));
         executorsService.getExecutors().add(new Executor("Sergeev"));
 
-        projectService.getProjects().add(new Project("Project1"));
-        projectService.getProjects().add(new Project("Project2"));
-        projectService.getProjects().add(new Project("Project3"));
+        Project project1 = new Project("Project1");
+        Project project2 = new Project("Project2");
+        Project project3 = new Project("Project3");
 
-        taskService.getTasks().add(getTestTask("Project1", "2018-12-20", TaskConstant.HIGH_PRIORITY, "Write application1..."));
+        projectService.getProjects().add(project1);
+        projectService.getProjects().add(project2);
+        projectService.getProjects().add(project3);
 
-        taskService.getTasks().add(getTestTask("Project2", "2018-12-20", TaskConstant.MIDDLE_PRIORITY, "Write application2..."));
-        taskService.getTasks().add(getTestTask("Project3", "2018-12-20", TaskConstant.LOW_PRIORITY, "Write application3..."));
-        taskService.getTasks().add(getTestTask("Project1", "2018-12-20", TaskConstant.MIDDLE_PRIORITY, "Write application4..."));
-        taskService.getTasks().add(getTestTask("Project2", "2018-12-20", TaskConstant.LOW_PRIORITY, "Write application5..."));
+        taskService.getTasks().add(getTestTask(project1.getId(), "2018-12-20", TaskConstant.HIGH_PRIORITY, "Write application1..."));
+
+        taskService.getTasks().add(getTestTask(project2.getId(), "2018-12-20", TaskConstant.MIDDLE_PRIORITY, "Write application2..."));
+        taskService.getTasks().add(getTestTask(project3.getId(), "2018-12-20", TaskConstant.LOW_PRIORITY, "Write application3..."));
+        taskService.getTasks().add(getTestTask(project1.getId(), "2018-12-20", TaskConstant.MIDDLE_PRIORITY, "Write application4..."));
+        taskService.getTasks().add(getTestTask(project2.getId(), "2018-12-20", TaskConstant.LOW_PRIORITY, "Write application5..."));
     }
 
-    private static Task getTestTask(String projectName, String sTerm, int priority, String content){
+    private static Task getTestTask(String projectId, String sTerm, int priority, String content){
         Task task = new Task();
-        task.setProjectName(projectName);
+        task.setProjectId(projectId);
         task.setPriority(priority);
         String[] datePartArray = sTerm.split("-");
         String year = datePartArray[0];

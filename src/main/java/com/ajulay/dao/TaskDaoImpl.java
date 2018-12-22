@@ -3,6 +3,7 @@ package com.ajulay.dao;
 import com.ajulay.data.Data;
 import com.ajulay.task.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TaskDaoImpl  implements TaskDao{
@@ -30,7 +31,7 @@ public class TaskDaoImpl  implements TaskDao{
         Task oldTask = findById(task.getId());
         oldTask.setContent(task.getContent());
         oldTask.setPriority(task.getPriority());
-        oldTask.setProjectName(task.getProjectName());
+        oldTask.setProjectId(task.getProjectId());
         oldTask.setStatus(task.getStatus());
         oldTask.setTerm(task.getTerm());
         return oldTask;
@@ -48,5 +49,16 @@ public class TaskDaoImpl  implements TaskDao{
 
     public List<Task> findAll() {
         return Data.getTasks();
+    }
+
+    @Override
+    public List<Task> findByProjectId(String projectId) {
+        List<Task> tasks = new ArrayList<>();
+        for (Task task : findAll()) {
+            if(task.getProjectId().equals(projectId)){
+                tasks.add(task);
+            }
+        }
+        return tasks;
     }
 }
