@@ -155,5 +155,5 @@ public class UIController {
         task.setContent(content);
         return task;
     }
-    //Project1, 2018-12-20, 2, create new Application, Alexeev //for convenient presentation
+    //'Project_id', 2018-12-20, 2, create new Application, Alexeev //for convenient presentation
 }
