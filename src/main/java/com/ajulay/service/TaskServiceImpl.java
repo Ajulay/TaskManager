@@ -1,12 +1,13 @@
 package com.ajulay.service;
 
-import com.ajulay.dao.*;
-import com.ajulay.task.*;
+import com.ajulay.dao.TaskDao;
+import com.ajulay.dao.TaskDaoImpl;
+import com.ajulay.task.Task;
 import com.ajulay.task.util.Status;
 
 import java.util.List;
 
-public class TaskServiceImpl implements TaskService{
+public class TaskServiceImpl implements TaskService {
 
     private final TaskDao dao = new TaskDaoImpl();
 
@@ -38,11 +39,11 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public void showTasksByProject(String projectId) {
-       List<Task> tasks = dao.findByProjectId(projectId);
-       printTasks(tasks);
+        List<Task> tasks = dao.findByProjectId(projectId);
+        printTasks(tasks);
     }
 
-    private void printTasks(List<Task> tasks){
+    private void printTasks(List<Task> tasks) {
         for (Task task : tasks) {
             System.out.println(task.toString());
         }

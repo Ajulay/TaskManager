@@ -31,7 +31,6 @@ public class UIController {
                 "to delete task write: /dt id(task)" +
                 "to see all tasks in project write: /ptks project_id");
 
-
         String[] taskData = null;
         while (true) {
             try {
@@ -69,14 +68,13 @@ public class UIController {
                         continue;
                     }
 
-                    if(in.startsWith(TaskConstant.PROJECT_TASKS)){
+                    if (in.startsWith(TaskConstant.PROJECT_TASKS)) {
                         in = in.substring(in.indexOf(" ") + 1);
                         taskService.showTasksByProject(in);
                         continue;
                     }
 
-                }
-                else {
+                } else {
                     taskData = in.split("&", TaskConstant.TASK_DATA_LENGTH);
                     final String projectId = taskData[0];
                     final String sTerm = taskData[1];
@@ -84,36 +82,36 @@ public class UIController {
                     final String content = taskData[3];
                     final String executorsSurname = taskData[4];
 
-                        Task task = new Task();
-                        task.setProjectId(projectId);
-                        task.setContent(content);
-                        String[] datePartArray = sTerm.split("-");
-                        String year = datePartArray[0];
-                        String month = datePartArray[1];
-                        String day = datePartArray[2];
-                        Instant term = LocalDate.of(
-                                Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day))
-                                .atStartOfDay().toInstant(ZoneOffset.UTC);
-                        task.setTerm(term);
-                        task.setPriority(priority);
-                        List<Executor> tmpExecutors = new ArrayList<>();
-                        try{
-                            String[] executorsSurnames = executorsSurname.split("&");
+                    Task task = new Task();
+                    task.setProjectId(projectId);
+                    task.setContent(content);
+                    String[] datePartArray = sTerm.split("-");
+                    String year = datePartArray[0];
+                    String month = datePartArray[1];
+                    String day = datePartArray[2];
+                    Instant term = LocalDate.of(
+                            Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day))
+                            .atStartOfDay().toInstant(ZoneOffset.UTC);
+                    task.setTerm(term);
+                    task.setPriority(priority);
+                    List<Executor> tmpExecutors = new ArrayList<>();
+                    try {
+                        String[] executorsSurnames = executorsSurname.split("&");
 
                         for (String surname : executorsSurnames) {
                             Executor executor = executorsService.getBySurname(surname);
                             executor.getTasks().add(task);
                             tmpExecutors.add(executor);
                         }
-                        }catch (Exception e){
-                            for (Executor executor : tmpExecutors) {
-                                executor.getTasks().remove(task);
-                            }
-                            throw new Exception("no such executor");
+                    } catch (Exception e) {
+                        for (Executor executor : tmpExecutors) {
+                            executor.getTasks().remove(task);
+                        }
+                        throw new Exception("no such executor");
                     }
                     taskService.saveTask(task);
                     taskService.showTasks();
-                        continue;
+                    continue;
                 }
                 System.out.println("You entered incorrect data...");
             } catch (Exception e) {
@@ -136,14 +134,13 @@ public class UIController {
         projectService.getProjects().add(project3);
 
         taskService.getTasks().add(getTestTask(project1.getId(), "2018-12-20", TaskConstant.HIGH_PRIORITY, "Write application1..."));
-
         taskService.getTasks().add(getTestTask(project2.getId(), "2018-12-20", TaskConstant.MIDDLE_PRIORITY, "Write application2..."));
         taskService.getTasks().add(getTestTask(project3.getId(), "2018-12-20", TaskConstant.LOW_PRIORITY, "Write application3..."));
         taskService.getTasks().add(getTestTask(project1.getId(), "2018-12-20", TaskConstant.MIDDLE_PRIORITY, "Write application4..."));
         taskService.getTasks().add(getTestTask(project2.getId(), "2018-12-20", TaskConstant.LOW_PRIORITY, "Write application5..."));
     }
 
-    private static Task getTestTask(String projectId, String sTerm, int priority, String content){
+    private static Task getTestTask(String projectId, String sTerm, int priority, String content) {
         Task task = new Task();
         task.setProjectId(projectId);
         task.setPriority(priority);
@@ -156,6 +153,7 @@ public class UIController {
                 .atStartOfDay().toInstant(ZoneOffset.UTC);
         task.setTerm(term);
         task.setContent(content);
-    return task;}
+        return task;
+    }
     //Project1, 2018-12-20, 2, create new Application, Alexeev //for convenient presentation
 }

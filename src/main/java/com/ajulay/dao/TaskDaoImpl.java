@@ -6,7 +6,7 @@ import com.ajulay.task.Task;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskDaoImpl  implements TaskDao{
+public class TaskDaoImpl implements TaskDao {
 
     @Override
     public Task save(Task task) {
@@ -55,7 +55,7 @@ public class TaskDaoImpl  implements TaskDao{
     public List<Task> findByProjectId(String projectId) {
         List<Task> tasks = new ArrayList<>();
         for (Task task : findAll()) {
-            if(task.getProjectId().equals(projectId)){
+            if (task.getProjectId().equals(projectId)) {
                 tasks.add(task);
             }
         }
