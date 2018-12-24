@@ -1,7 +1,7 @@
 package com.ajulay.service;
 
 import com.ajulay.api.service.ITaskService;
-import com.ajulay.dao.TaskDao;
+import com.ajulay.dao.TaskDAO;
 import com.ajulay.entity.Status;
 import com.ajulay.entity.Task;
 
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class TaskService implements ITaskService {
 
-    private final TaskDao dao = new TaskDao();
+    private final TaskDAO dao = new TaskDAO();
 
     public Task saveTask(Task task) {
         return dao.save(task);
@@ -25,7 +25,7 @@ public class TaskService implements ITaskService {
                 task.setStatus(Status.valueOf(status.toUpperCase()));
                 return;
             }
-    }
+        }
         throw new Exception("No such task");
     }
 

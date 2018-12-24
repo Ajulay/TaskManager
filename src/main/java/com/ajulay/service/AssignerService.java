@@ -1,15 +1,15 @@
 package com.ajulay.service;
 
-import com.ajulay.api.dao.IAssignerDao;
+import com.ajulay.api.dao.IAssignerDAO;
 import com.ajulay.api.service.IAssignerService;
-import com.ajulay.dao.AssignerDao;
+import com.ajulay.dao.AssignerDAO;
 import com.ajulay.entity.Assigner;
 
 import java.util.List;
 
 public class AssignerService implements IAssignerService {
 
-    private final IAssignerDao assignerDao = new AssignerDao();
+    private final IAssignerDAO assignerDao = new AssignerDAO();
 
     public Assigner createAssigner(String surname) throws Exception {
         return assignerDao.create(surname);

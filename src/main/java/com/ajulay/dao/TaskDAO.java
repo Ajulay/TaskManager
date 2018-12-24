@@ -1,12 +1,12 @@
 package com.ajulay.dao;
 
-import com.ajulay.api.dao.ITaskDAO2;
+import com.ajulay.api.dao.ITaskDAO;
 import com.ajulay.entity.Task;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskDAO2 implements ITaskDAO2 {
+public class TaskDAO implements ITaskDAO {
 
     private final List<Task> tasks = new ArrayList<>();
 

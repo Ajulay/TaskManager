@@ -1,12 +1,12 @@
 package com.ajulay.dao;
 
-import com.ajulay.api.dao.IAssignerDAO2;
+import com.ajulay.api.dao.IAssignerDAO;
 import com.ajulay.entity.Assigner;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssignerDAO2 implements IAssignerDAO2 {
+public class AssignerDAO implements IAssignerDAO {
 
     private final List<Assigner> assigners = new ArrayList<>();
 

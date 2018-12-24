@@ -4,7 +4,7 @@ import com.ajulay.entity.Project;
 
 import java.util.List;
 
-public interface IProjectDAO2 {
+public interface IProjectDAO {
 
     Project create(String projectName);
 

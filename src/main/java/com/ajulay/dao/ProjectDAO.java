@@ -1,12 +1,12 @@
 package com.ajulay.dao;
 
-import com.ajulay.api.dao.IProjectDAO2;
+import com.ajulay.api.dao.IProjectDAO;
 import com.ajulay.entity.Project;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectDAO2 implements IProjectDAO2 {
+public class ProjectDAO implements IProjectDAO {
 
     private final List<Project> projects = new ArrayList<>();
 

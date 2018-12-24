@@ -1,17 +1,17 @@
 package com.ajulay.service;
 
+import com.ajulay.api.dao.IProjectDAO;
 import com.ajulay.api.service.IProjectService;
+import com.ajulay.dao.ProjectDAO;
 import com.ajulay.entity.Project;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectService implements IProjectService {
 
-    private final List<Project> projects = new ArrayList<>();
+   private IProjectDAO projectDAO = new ProjectDAO();
 
     public Project getByName(String projectName) throws Exception {
-        for (Project p : projects) {
+        for (Project p : getProjects()) {
             if (p.getName().equals(projectName)) {
                 return p;
             }
@@ -20,13 +20,13 @@ public class ProjectService implements IProjectService {
     }
 
     public void showProjects() {
-        for (Project project : projects) {
+        for (Project project : getProjects()) {
             System.out.printf("Project name: %s, project id: %s.\n",project.getName(), project.getId());
         }
     }
 
     public List<Project> getProjects() {
-        return projects;
+        return projectDAO.findAll();
     }
 
 }
