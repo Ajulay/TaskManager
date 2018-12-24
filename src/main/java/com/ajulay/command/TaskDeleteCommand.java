@@ -5,15 +5,17 @@ import com.ajulay.controller.UIController;
 
 import java.util.Scanner;
 
-public class DeleteTaskCommand extends AbstractCommand {
+public class TaskDeleteCommand extends AbstractCommand {
 
-    public DeleteTaskCommand(UIController uiController) {
+    public static final String COMMAND = "/dt";
+
+    public TaskDeleteCommand(UIController uiController) {
         super(uiController);
     }
 
     @Override
     public String inputCommand() {
-        return TaskConstant.DELETE_TASK;
+        return COMMAND;
     }
 
     @Override

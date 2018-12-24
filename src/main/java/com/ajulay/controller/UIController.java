@@ -43,59 +43,64 @@ public class UIController {
             try {
                 String in = scanner.nextLine();
                 if (in == null) continue;
-                in = in.replaceAll(", ", "&");
                 AbstractCommand command = null;
-                if (TaskConstant.EXIT.equals(in)) {
-                    break;
-                }
                 if (in.startsWith(TaskConstant.SERVICE_COMMAND_SIGN)) {
-                    if (in.startsWith(TaskConstant.CHANGE_STATUS_COMMAND)) {
-                        taskData = in.substring(in.indexOf(" ") + 1).split("&");
-                        String taskId = taskData[0];
-                        String status = taskData[1];
-                        taskService.changeStatus(taskId, status);
-                        taskService.showTasks();
-                        continue;
-                    }
-                    if (in.startsWith(TaskConstant.DELETE_TASK)) {
-                        taskData = new String[]{in.substring(in.indexOf(" ") + 1)};
-                        continue;
-                    }
-                    if (TaskConstant.SHOW_PROJECTS_COMMAND.equals(in)) {
-                        command = commands.get(TaskConstant.SHOW_PROJECTS_COMMAND);
+
+                    if (AppExitCommand.COMMAND.equals(in)) {
+                       command = commands.get(AppExitCommand.COMMAND);
                         System.out.println(command.getDescription());
                         command.execute();
-                        continue;
+                        break;
                     }
-                    if (TaskConstant.SHOW_ASSIGNERS_COMMAND.equals(in)) {
-                        command = commands.get(TaskConstant.SHOW_ASSIGNERS_COMMAND);
-                        System.out.println(command.getDescription());
-                        command.execute();
-                        continue;
-                    }
-                    if (TaskConstant.SHOW_TASKS_COMMAND.equals(in)) {
-                        command = commands.get(TaskConstant.SHOW_TASKS_COMMAND);
+
+                    if (AssignerFindAllCommand.COMMAND.equals(in)) {
+                        command = commands.get(AssignerFindAllCommand.COMMAND);
                         System.out.println(command.getDescription());
                         command.execute();
                         continue;
                     }
 
-                    if (in.startsWith(TaskConstant.PROJECT_TASKS)) {
-                        taskData = new String[]{in.substring(in.indexOf(" ") + 1)};
-                        command = commands.get(TaskConstant.PROJECT_TASKS);
+                    if (ProjectFindAllCommand.COMMAND.equals(in)){
+                        command = commands.get(ProjectFindAllCommand.COMMAND);
                         System.out.println(command.getDescription());
                         command.execute();
                         continue;
                     }
-                    if (in.startsWith(TaskConstant.ADD_NEW_TASK_COMMAND)){
-                        
+
+                    if(TaskChangeStatusCommand.COMMAND.equals(in)){
+                        command = commands.get(TaskChangeStatusCommand.COMMAND);
+                        System.out.println(command.getDescription());
+                        command.execute();
+                        continue;
                     }
-                } else {
-                    taskData = in.split("&", TaskConstant.TASK_DATA_LENGTH);
-                    command = commands.get(TaskConstant.ADD_NEW_TASK_COMMAND);
-                    System.out.println(command.getDescription());
-                    command.execute();
-                    continue;
+
+                    if(TaskCreateCommand.COMMAND.equals(in)){
+                        command = commands.get(TaskCreateCommand.COMMAND);
+                        System.out.println(command.getDescription());
+                        command.execute();
+                        continue;
+                    }
+
+                    if (TaskDeleteCommand.COMMAND.equals(in)) {
+                        command = commands.get(TaskDeleteCommand.COMMAND);
+                        System.out.println(command.getDescription());
+                        command.execute();
+                        continue;
+                    }
+
+                    if (TaskFindAllByProjectCommand.COMMAND.equals(in)) {
+                        command = commands.get(TaskFindAllByProjectCommand.COMMAND);
+                        System.out.println(command.getDescription());
+                        command.execute();
+                        continue;
+                    }
+
+                    if (TaskFindAllCommand.COMMAND.equals(in)) {
+                        command = commands.get(TaskFindAllCommand.COMMAND);
+                        System.out.println(command.getDescription());
+                        command.execute();
+                        continue;
+                    }
                 }
                 System.out.println("You entered incorrect data...");
             } catch (Exception e) {
@@ -105,12 +110,14 @@ public class UIController {
     }
 
     private void enterCommands() {
-        commands.put(TaskConstant.SHOW_ASSIGNERS_COMMAND, new ShowAllAssignersCommand(this));
-        commands.put(TaskConstant.SHOW_PROJECTS_COMMAND, new ShowAllProjectsCommand(this));
-        commands.put(TaskConstant.SHOW_TASKS_COMMAND, new ShowAllTasksCommand(this));
-        commands.put(TaskConstant.ADD_NEW_TASK_COMMAND, new AddNewTaskCommand(this));
-        commands.put(TaskConstant.PROJECT_TASKS, new ShowTasksByProject(this));
-        commands.put(TaskConstant.DELETE_TASK, new DeleteTaskCommand(this));
+        commands.put(AppExitCommand.COMMAND, new AppExitCommand(this));
+        commands.put(AssignerFindAllCommand.COMMAND, new AssignerFindAllCommand(this));
+        commands.put(ProjectFindAllCommand.COMMAND, new ProjectFindAllCommand(this));
+        commands.put(TaskChangeStatusCommand.COMMAND, new TaskChangeStatusCommand(this));
+        commands.put(TaskFindAllCommand.COMMAND, new TaskFindAllCommand(this));
+        commands.put(TaskCreateCommand.COMMAND, new TaskCreateCommand(this));
+        commands.put(TaskFindAllByProjectCommand.COMMAND, new TaskFindAllByProjectCommand(this));
+        commands.put(TaskDeleteCommand.COMMAND, new TaskDeleteCommand(this));
     }
 
     private void testData() {

@@ -14,7 +14,5 @@ public interface ITaskService {
 
     List<Task> getTasks();
 
-    void showTasks();
-
-    void showTasksByProject(String in);
+    List<Task> getTasksByProject(String project_id);
 }

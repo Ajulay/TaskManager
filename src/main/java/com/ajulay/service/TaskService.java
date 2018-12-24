@@ -33,19 +33,13 @@ public class TaskService implements ITaskService {
         return dao.findAll();
     }
 
-    public void showTasks() {
-        printTasks(getTasks());
-    }
-
     @Override
-    public void showTasksByProject(String projectId) {
-        List<Task> tasks = dao.findByProjectId(projectId);
-        printTasks(tasks);
+    public List<Task> getTasksByProject(String projectId) {
+        return dao.findByProjectId(projectId);
     }
-
-    private void printTasks(List<Task> tasks) {
-        for (Task task : tasks) {
-            System.out.println(task.toString());
-        }
-    }
+//    private void printTasks(List<Task> tasks) {
+//        for (Task task : tasks) {
+//            System.out.println(task.toString());
+//        }
+//    }
 }

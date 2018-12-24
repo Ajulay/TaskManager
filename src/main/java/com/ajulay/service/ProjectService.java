@@ -19,10 +19,9 @@ public class ProjectService implements IProjectService {
         throw new Exception("No such project");
     }
 
-    public void showProjects() {
-        for (Project project : getProjects()) {
-            System.out.printf("Project name: %s, project id: %s.\n",project.getName(), project.getId());
-        }
+    @Override
+    public Project getById(String projectId) throws Exception {
+        return projectDAO.findById(projectId);
     }
 
     public List<Project> getProjects() {

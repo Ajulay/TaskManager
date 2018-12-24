@@ -8,7 +8,8 @@ public interface IProjectService {
 
     Project getByName(String projectName) throws Exception;
 
-    void showProjects();
+    Project getById(String projectId) throws Exception;
 
     List<Project> getProjects();
+
 }
