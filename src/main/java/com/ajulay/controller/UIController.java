@@ -1,4 +1,4 @@
-package com.ajulay.gui;
+package com.ajulay.controller;
 
 
 import com.ajulay.api.service.IAssignerService;

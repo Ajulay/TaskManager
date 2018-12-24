@@ -1,6 +1,6 @@
 package com.ajulay;
 
-import com.ajulay.gui.UIController;
+import com.ajulay.controller.UIController;
 
 public class App {
 
