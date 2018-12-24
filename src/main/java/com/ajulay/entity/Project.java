@@ -1,4 +1,4 @@
-package com.ajulay.project;
+package com.ajulay.entity;
 
 import java.util.UUID;
 

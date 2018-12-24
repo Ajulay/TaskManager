@@ -1,20 +1,52 @@
 package com.ajulay.service;
 
-import com.ajulay.task.Task;
+import com.ajulay.api.service.ITaskService;
+import com.ajulay.dao.TaskDao;
+import com.ajulay.entity.Status;
+import com.ajulay.entity.Task;
 
 import java.util.List;
 
-public interface TaskService {
+public class TaskService implements ITaskService {
 
-    Task saveTask(Task task);
+    private final TaskDao dao = new TaskDao();
 
-    Task deleteTask(String id) throws Exception;
+    public Task saveTask(Task task) {
+        return dao.save(task);
+    }
 
-    void changeStatus(String taskId, String status) throws Exception;
+    public Task deleteTask(String id) throws Exception {
+        return dao.delete(id);
+    }
 
-    List<Task> getTasks();
+    public void changeStatus(String taskId, String status) throws Exception {
+        for (Task task : dao.findAll()) {
+            if (task.getId().equals(taskId)) {
+                task.setStatus(Status.valueOf(status.toUpperCase()));
+                return;
+            }
+    }
+        throw new Exception("No such task");
+    }
 
-    void showTasks();
+    public List<Task> getTasks() {
+        return dao.findAll();
+    }
 
-    void showTasksByProject(String in);
+    public void showTasks() {
+        printTasks(getTasks());
+    }
+
+    @Override
+    public void showTasksByProject(String projectId) {
+        List<Task> tasks = dao.findByProjectId(projectId);
+        printTasks(tasks);
+    }
+
+    private void printTasks(List<Task> tasks) {
+        // Page page = new Page(tasks);
+        for (Task task : tasks) {
+            System.out.println(task.toString());
+        }
+    }
 }

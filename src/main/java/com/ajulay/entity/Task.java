@@ -1,11 +1,7 @@
-package com.ajulay.task;
-
-import com.ajulay.task.util.Status;
+package com.ajulay.entity;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
@@ -21,7 +17,7 @@ public class Task {
 
     private String content;
 
-    private Enum status = Status.NEW;
+    private Enum status = Status.NEW_TASK;
 
     public Task() {
     }

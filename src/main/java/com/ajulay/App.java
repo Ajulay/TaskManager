@@ -5,6 +5,6 @@ import com.ajulay.gui.UIController;
 public class App {
 
     public static void main(String[] args) {
-        UIController.run();
+        new UIController().run();
     }
 }

@@ -1,12 +1,10 @@
-package com.ajulay.executor;
-
-import com.ajulay.task.Task;
+package com.ajulay.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Executor {
+public class Assigner {
 
     private final String id = UUID.randomUUID().toString();
 
@@ -18,10 +16,10 @@ public class Executor {
 
     private String lastName;
 
-    public Executor() {
+    public Assigner() {
     }
 
-    public Executor(String surname) {
+    public Assigner(String surname) {
         this.surname = surname;
     }
 

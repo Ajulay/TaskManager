@@ -1,4 +1,4 @@
-package com.ajulay.task.util;
+package com.ajulay.constants;
 
 public class TaskConstant {
 
@@ -15,4 +15,5 @@ public class TaskConstant {
     public static final String SERVICE_COMMAND_SIGN = "/";
     public static final String DELETE_TASK = "/dt";
     public static final String PROJECT_TASKS = "/ptks";
+    public static final int TASK_LIST_LENGTH = 2;
 }
