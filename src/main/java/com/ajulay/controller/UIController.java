@@ -4,12 +4,13 @@ package com.ajulay.controller;
 import com.ajulay.api.service.IAssignerService;
 import com.ajulay.api.service.IProjectService;
 import com.ajulay.api.service.ITaskService;
-
+import com.ajulay.constants.TaskConstant;
 import com.ajulay.entity.Assigner;
 import com.ajulay.entity.Project;
-import com.ajulay.service.*;
 import com.ajulay.entity.Task;
-import com.ajulay.constants.TaskConstant;
+import com.ajulay.service.AssignerService;
+import com.ajulay.service.ProjectService;
+import com.ajulay.service.TaskService;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -20,13 +21,13 @@ import java.util.Scanner;
 
 public class UIController {
 
-    private IAssignerService executorsService = new AssignerService();
-    private IProjectService projectService = new ProjectService();
-    private ITaskService taskService = new TaskService();
+    private final IAssignerService assignerService = new AssignerService();
+    private final IProjectService projectService = new ProjectService();
+    private final ITaskService taskService = new TaskService();
 
     public void run() {
         testData();
-        Scanner scanner = new Scanner(System.in);
+        final Scanner scanner = new Scanner(System.in);
         System.out.println("TASK MANAGER\n" +
                 "to see projects write: /pts\n" +
                 "to see executors write: /ex\n" +
@@ -65,7 +66,7 @@ public class UIController {
                         continue;
                     }
                     if (TaskConstant.SHOW_EXECUTORS_COMMAND.equals(in)) {
-                        executorsService.showAssigners();
+                        assignerService.showAssigners();
                         continue;
                     }
                     if (TaskConstant.SHOW_TASKS_COMMAND.equals(in)) {
@@ -90,21 +91,21 @@ public class UIController {
                     final Task task = new Task();
                     task.setProjectId(projectId);
                     task.setContent(content);
-                    String[] datePartArray = sTerm.split("-");
-                    String year = datePartArray[0];
-                    String month = datePartArray[1];
-                    String day = datePartArray[2];
-                    Instant term = LocalDate.of(
+                    final String[] datePartArray = sTerm.split("-");
+                    final String year = datePartArray[0];
+                    final String month = datePartArray[1];
+                    final String day = datePartArray[2];
+                    final Instant term = LocalDate.of(
                             Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day))
                             .atStartOfDay().toInstant(ZoneOffset.UTC);
                     task.setTerm(term);
                     task.setPriority(priority);
                     final List<Assigner> tmpExecutors = new ArrayList<>();
                     try {
-                        String[] executorsSurnames = executorsSurname.split("&");
+                        final String[] executorsSurnames = executorsSurname.split("&");
 
                         for (String surname : executorsSurnames) {
-                            Assigner executor = executorsService.getBySurname(surname);
+                            Assigner executor = assignerService.getBySurname(surname);
                             executor.getTasks().add(task);
                             tmpExecutors.add(executor);
                         }
@@ -126,9 +127,9 @@ public class UIController {
     }
 
     private void testData() {
-        executorsService.getAssigners().add(new Assigner("Alexeev"));
-        executorsService.getAssigners().add(new Assigner("Andreev"));
-        executorsService.getAssigners().add(new Assigner("Sergeev"));
+        assignerService.getAssigners().add(new Assigner("Alexeev"));
+        assignerService.getAssigners().add(new Assigner("Andreev"));
+        assignerService.getAssigners().add(new Assigner("Sergeev"));
 
         Project project1 = new Project("Project1");
         Project project2 = new Project("Project2");
@@ -145,14 +146,14 @@ public class UIController {
         taskService.getTasks().add(getTestTask(project2.getId(), "2018-12-20", TaskConstant.LOW_PRIORITY, "Write application5..."));
     }
 
-    private Task getTestTask(String projectId, String sTerm, int priority, String content) {
+    private Task getTestTask(final String projectId, final String sTerm, int priority, final String content) {
         final Task task = new Task();
         task.setProjectId(projectId);
         task.setPriority(priority);
-        String[] datePartArray = sTerm.split("-");
-        String year = datePartArray[0];
-        String month = datePartArray[1];
-        String day = datePartArray[2];
+        final String[] datePartArray = sTerm.split("-");
+        final String year = datePartArray[0];
+        final String month = datePartArray[1];
+        final String day = datePartArray[2];
         final Instant term = LocalDate.of(
                 Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day))
                 .atStartOfDay().toInstant(ZoneOffset.UTC);
@@ -160,5 +161,5 @@ public class UIController {
         task.setContent(content);
         return task;
     }
-    //'Project_id', 2018-12-20, 2, create new Application, Alexeev //for convenient presentation
+
 }

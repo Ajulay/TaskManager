@@ -1,18 +1,18 @@
 package com.ajulay.dao;
 
-import com.ajulay.api.dao.IProjectDao;
+import com.ajulay.api.dao.IProjectDAO2;
 import com.ajulay.entity.Project;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectDao implements IProjectDao {
+public class ProjectDAO2 implements IProjectDAO2 {
 
     private final List<Project> projects = new ArrayList<>();
 
     @Override
     public Project create(String projectName) {
-        Project project = new Project();
+        final Project project = new Project();
         project.setName(projectName);
         projects.add(project);
         return project;
@@ -20,7 +20,7 @@ public class ProjectDao implements IProjectDao {
 
     @Override
     public Project delete(String id) throws Exception {
-        List<Project> projects = findAll();
+        final List<Project> projects = findAll();
         for (Project project : projects) {
             if (project.getId().equals(id)) {
                 projects.remove(project);
@@ -32,7 +32,7 @@ public class ProjectDao implements IProjectDao {
 
     @Override
     public Project update(Project project) throws Exception {
-        Project oldProject = findById(project.getId());
+        final Project oldProject = findById(project.getId());
         oldProject.setName(project.getName());
 
         return oldProject;

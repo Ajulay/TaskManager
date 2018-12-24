@@ -5,7 +5,7 @@ import com.ajulay.entity.Assigner;
 
 import java.util.List;
 
-public interface IAssignerDao {
+public interface IAssignerDAO2 {
 
     Assigner create(String surname) throws Exception;
 

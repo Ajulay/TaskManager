@@ -9,7 +9,7 @@ import java.util.List;
 
 public class AssignerService implements IAssignerService {
 
-    private IAssignerDao assignerDao = new AssignerDao();
+    private final IAssignerDao assignerDao = new AssignerDao();
 
     public Assigner createAssigner(String surname) throws Exception {
         return assignerDao.create(surname);

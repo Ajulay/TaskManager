@@ -1,13 +1,12 @@
 package com.ajulay.dao;
 
-import com.ajulay.api.dao.IAssignerDao;
+import com.ajulay.api.dao.IAssignerDAO2;
 import com.ajulay.entity.Assigner;
-
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssignerDao implements IAssignerDao {
+public class AssignerDAO2 implements IAssignerDAO2 {
 
     private final List<Assigner> assigners = new ArrayList<>();
 
@@ -36,7 +35,6 @@ public class AssignerDao implements IAssignerDao {
         oldAssigner.setName(assigner.getName());
         oldAssigner.setLastName(assigner.getLastName());
         oldAssigner.setSurname(assigner.getSurname());
-
         return oldAssigner;
     }
 

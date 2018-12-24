@@ -44,7 +44,6 @@ public class TaskService implements ITaskService {
     }
 
     private void printTasks(List<Task> tasks) {
-        // Page page = new Page(tasks);
         for (Task task : tasks) {
             System.out.println(task.toString());
         }

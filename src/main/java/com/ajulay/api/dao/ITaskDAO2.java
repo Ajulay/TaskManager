@@ -4,7 +4,7 @@ import com.ajulay.entity.Task;
 
 import java.util.List;
 
-public interface ITaskDao {
+public interface ITaskDAO2 {
 
     Task save(Task task);
 

@@ -1,12 +1,12 @@
 package com.ajulay.dao;
 
-import com.ajulay.api.dao.ITaskDao;
+import com.ajulay.api.dao.ITaskDAO2;
 import com.ajulay.entity.Task;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskDao implements ITaskDao {
+public class TaskDAO2 implements ITaskDAO2 {
 
     private final List<Task> tasks = new ArrayList<>();
 
@@ -54,7 +54,7 @@ public class TaskDao implements ITaskDao {
 
     @Override
     public List<Task> findByProjectId(String projectId) {
-        List<Task> projectTasks = new ArrayList<>();
+        final List<Task> projectTasks = new ArrayList<>();
         for (Task task : tasks) {
             if (task.getProjectId().equals(projectId)) {
                 projectTasks.add(task);
