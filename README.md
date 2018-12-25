@@ -1,12 +1,12 @@
 #                      TaskManager
 
-###Prototype for development custom task managers in organisations.
+### Prototype for development custom task managers in organisations.
 
-####*Technologies:*
+#### *Technologies:*
 * Java 1.8
 * Maven 4.0.0
 
-####*Project base structure:*
+#### *Project base structure:*
 * App: Class with psvm;
 * Executor: Class-entity contains executor data;
 * Project: Class-entity contains project data;
@@ -19,7 +19,7 @@
 * ProjectDao: Class provides project data;
 * TaskDao: Class provides task data.
 
-####*Base functions:*    
+#### *Base functions:*    
 * to see projects write: /pts
 * to see executors write: /ex
 * to see tasks write: /tks
@@ -28,12 +28,12 @@
 * to delete task write: /dt id(task)
 * to see all tasks in project write: /ptks project_id  
 
-####*Build:*
+#### *Build:*
 
 ```bash
 mvn clean install
 ```
-####*Deployment:* 
+#### *Deployment:* 
 ```bash
 java -jar task-manager.jar
 ```
