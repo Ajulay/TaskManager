@@ -3,11 +3,12 @@ package com.ajulay.dao;
 import com.ajulay.api.dao.IAssigneeDAO;
 import com.ajulay.entity.Assignee;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * @inherite
+ */
 public class AssigneeDAO implements IAssigneeDAO {
 
     private final List<Assignee> assignees = new ArrayList<>();

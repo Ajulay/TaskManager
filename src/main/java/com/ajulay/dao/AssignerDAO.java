@@ -6,6 +6,9 @@ import com.ajulay.entity.Assigner;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @inherite
+ */
 public class AssignerDAO implements IAssignerDAO {
 
     private final List<Assigner> assigners = new ArrayList<>();

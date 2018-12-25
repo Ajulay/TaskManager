@@ -2,9 +2,11 @@ package com.ajulay.api.dao;
 
 import com.ajulay.entity.Assigner;
 
-
 import java.util.List;
 
+/**
+ * IAssignerDAO defines base data access methods for Assigner
+ */
 public interface IAssignerDAO {
 
     Assigner create(String surname) throws Exception;

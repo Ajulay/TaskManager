@@ -4,6 +4,9 @@ import com.ajulay.entity.Task;
 
 import java.util.List;
 
+/**
+ * ITaskService creates conditions for CRUD operations for Task
+ */
 public interface ITaskService {
 
     Task saveTask(Task task);

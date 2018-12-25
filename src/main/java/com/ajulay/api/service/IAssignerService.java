@@ -5,6 +5,9 @@ import com.ajulay.entity.Assigner;
 
 import java.util.List;
 
+/**
+ * IAssignerService creates conditions for CRUD operations for Assigner
+ */
 public interface IAssignerService {
 
     Assigner createAssigner(String surname) throws Exception;

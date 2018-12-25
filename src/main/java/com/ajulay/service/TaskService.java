@@ -7,6 +7,9 @@ import com.ajulay.enumirated.Status;
 
 import java.util.List;
 
+/**
+ * @inherite
+ */
 public class TaskService implements ITaskService {
 
     private final TaskDAO dao = new TaskDAO();

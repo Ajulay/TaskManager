@@ -4,6 +4,9 @@ import com.ajulay.entity.Project;
 
 import java.util.List;
 
+/**
+ * IProjectService creates conditions for CRUD operations for Project
+ */
 public interface IProjectService {
 
     Project getByName(String projectName) throws Exception;

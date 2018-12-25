@@ -4,11 +4,15 @@ import com.ajulay.api.dao.IProjectDAO;
 import com.ajulay.api.service.IProjectService;
 import com.ajulay.dao.ProjectDAO;
 import com.ajulay.entity.Project;
+
 import java.util.List;
 
+/**
+ * @inherite
+ */
 public class ProjectService implements IProjectService {
 
-   private final IProjectDAO projectDAO = new ProjectDAO();
+    private final IProjectDAO projectDAO = new ProjectDAO();
 
     public Project getByName(final String projectName) throws Exception {
         for (Project p : getProjects()) {

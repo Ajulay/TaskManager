@@ -6,6 +6,9 @@ import com.ajulay.entity.Project;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @inherite
+ */
 public class ProjectDAO implements IProjectDAO {
 
     private final List<Project> projects = new ArrayList<>();

@@ -4,6 +4,9 @@ import com.ajulay.entity.Assignee;
 
 import java.util.List;
 
+/**
+ * IAssigneeDAO defines base data access methods for Assignee
+ */
 public interface IAssigneeDAO {
 
     Assignee create(Assignee assignee);

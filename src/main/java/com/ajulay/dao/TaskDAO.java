@@ -6,6 +6,9 @@ import com.ajulay.entity.Task;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @inherite
+ */
 public class TaskDAO implements ITaskDAO {
 
     private final List<Task> tasks = new ArrayList<>();

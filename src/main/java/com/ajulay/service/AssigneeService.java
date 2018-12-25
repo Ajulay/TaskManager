@@ -7,6 +7,9 @@ import com.ajulay.entity.Assignee;
 
 import java.util.List;
 
+/**
+ * @inherite
+ */
 public class AssigneeService implements IAssigneeService {
 
     private final IAssigneeDAO assigneeDAO = new AssigneeDAO();

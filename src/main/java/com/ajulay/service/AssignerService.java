@@ -7,6 +7,9 @@ import com.ajulay.entity.Assigner;
 
 import java.util.List;
 
+/**
+ * @inherite
+ */
 public class AssignerService implements IAssignerService {
 
     private final IAssignerDAO assignerDao = new AssignerDAO();
@@ -35,6 +38,7 @@ public class AssignerService implements IAssignerService {
     public Assigner findById(String id) throws Exception {
         return assignerDao.findById(id);
     }
+
     public List<Assigner> getAssigners() {
         return assignerDao.findAll();
     }

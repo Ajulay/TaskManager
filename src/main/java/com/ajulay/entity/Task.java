@@ -19,7 +19,7 @@ public class Task {
 
     private String content;
 
-    private Enum status = Status.NEW_TASK;
+    private Enum status = Status.START;
 
     public Instant getTerm() {
         return term;

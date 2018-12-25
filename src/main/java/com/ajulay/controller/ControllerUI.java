@@ -4,7 +4,7 @@ import com.ajulay.api.service.IAssigneeService;
 import com.ajulay.api.service.IAssignerService;
 import com.ajulay.api.service.IProjectService;
 import com.ajulay.api.service.ITaskService;
-import com.ajulay.command.*;
+import com.ajulay.command.AbstractCommand;
 import com.ajulay.constants.TaskConstant;
 import com.ajulay.entity.Assigner;
 import com.ajulay.entity.Project;
@@ -21,6 +21,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * ControllerUI - class-controller for interacting
+ */
 public class ControllerUI {
 
     private final IAssignerService assignerService = new AssignerService();
@@ -33,28 +36,20 @@ public class ControllerUI {
 
     private final Map<String, AbstractCommand> commands = new HashMap<>();
 
-    public void register(Class... clazzes) {
+    public void register(Class... clazzes) throws InstantiationException, IllegalAccessException {
         for (Class clazz : clazzes) {
             register(clazz);
         }
     }
 
-    public void register(final Class clazz) {
+    public void register(final Class clazz) throws IllegalAccessException, InstantiationException {
         if (!AbstractCommand.class.isAssignableFrom(clazz)) return;
-        try {
-            final AbstractCommand command = (AbstractCommand) clazz.newInstance();
-            command.setController(this);
-            commands.put(command.inputCommand(), command);
-        } catch (InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
+        final AbstractCommand command = (AbstractCommand) clazz.newInstance();
+        command.setController(this);
+        commands.put(command.inputCommand(), command);
     }
 
     public void run() {
-        register(AppExitCommand.class, AppHelpCommand.class, AssignerFindAllCommand.class, ProjectFindAllCommand.class,
-                TaskChangeStatusCommand.class, TaskCreateCommand.class, TaskDeleteCommand.class,
-                TaskFindAllByProjectCommand.class, TaskFindAllCommand.class, AssignerFindAllByTask.class,
-                TaskFindAllByAssigner.class);
         testData();
         final Scanner scanner = new Scanner(System.in);
         System.out.println("TASK MANAGER\n" +

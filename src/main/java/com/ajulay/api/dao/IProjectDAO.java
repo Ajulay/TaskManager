@@ -4,6 +4,9 @@ import com.ajulay.entity.Project;
 
 import java.util.List;
 
+/**
+ * IProjectDAO defines base data access methods for Project
+ */
 public interface IProjectDAO {
 
     Project create(String projectName);

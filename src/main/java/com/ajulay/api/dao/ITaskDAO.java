@@ -4,6 +4,9 @@ import com.ajulay.entity.Task;
 
 import java.util.List;
 
+/**
+ * ITaskDAO defines base data access methods for Task
+ */
 public interface ITaskDAO {
 
     Task save(Task task);
