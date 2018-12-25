@@ -1,7 +1,6 @@
 package com.ajulay.command;
 
-import com.ajulay.constants.TaskConstant;
-import com.ajulay.controller.UIController;
+import com.ajulay.controller.ControllerUI;
 import com.ajulay.entity.Task;
 
 import java.util.Scanner;
@@ -10,7 +9,7 @@ public class TaskFindAllByProjectCommand extends AbstractCommand {
 
     public static final String COMMAND = "/ptks";
 
-    public TaskFindAllByProjectCommand(UIController uiController) {
+    public TaskFindAllByProjectCommand(ControllerUI uiController) {
         super(uiController);
     }
 

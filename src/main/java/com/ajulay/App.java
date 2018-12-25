@@ -1,10 +1,11 @@
 package com.ajulay;
 
-import com.ajulay.controller.UIController;
+import com.ajulay.controller.ControllerUI;
 
 public class App {
 
     public static void main(String[] args) {
-        new UIController().run();
+        ControllerUI controllerUI = new ControllerUI();
+        controllerUI.run();
     }
 }

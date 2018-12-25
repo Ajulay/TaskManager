@@ -1,14 +1,12 @@
 package com.ajulay.command;
 
-import com.ajulay.controller.UIController;
-
-import java.util.Map;
+import com.ajulay.controller.ControllerUI;
 
 public abstract class AbstractCommand {
 
-    private final UIController controller;
+    private final ControllerUI controller;
 
-    public AbstractCommand(UIController controller) {
+    public AbstractCommand(ControllerUI controller) {
         this.controller = controller;
     }
     public abstract String inputCommand();
@@ -17,7 +15,7 @@ public abstract class AbstractCommand {
 
     public abstract void execute() throws Exception;
 
-    public UIController getController() {
+    public ControllerUI getController() {
         return controller;
     }
 }

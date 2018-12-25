@@ -11,7 +11,7 @@ public class AssignerDAO implements IAssignerDAO {
     private final List<Assigner> assigners = new ArrayList<>();
 
     @Override
-    public Assigner create(String surname) throws Exception {
+    public Assigner create(final String surname) throws Exception {
         if (surname == null) throw new Exception("No name");
         final Assigner executor = new Assigner(surname);
         findAll().add(executor);
@@ -19,7 +19,7 @@ public class AssignerDAO implements IAssignerDAO {
     }
 
     @Override
-    public Assigner delete(String surname) throws Exception {
+    public Assigner delete(final String surname) throws Exception {
         for (Assigner executor : findAll()) {
             if (executor.getName().equals(surname)) {
                 findAll().remove(executor);
@@ -30,8 +30,8 @@ public class AssignerDAO implements IAssignerDAO {
     }
 
     @Override
-    public Assigner update(Assigner assigner) throws Exception {
-        Assigner oldAssigner = findById(assigner.getId());
+    public Assigner update(final Assigner assigner) throws Exception {
+        final Assigner oldAssigner = findById(assigner.getId());
         oldAssigner.setName(assigner.getName());
         oldAssigner.setLastName(assigner.getLastName());
         oldAssigner.setSurname(assigner.getSurname());
@@ -39,7 +39,7 @@ public class AssignerDAO implements IAssignerDAO {
     }
 
     @Override
-    public Assigner findById(String id) throws Exception {
+    public Assigner findById(final String id) throws Exception {
         for (Assigner assigner : findAll()) {
             if (assigner.getSurname().equals(id)) {
                 return assigner;

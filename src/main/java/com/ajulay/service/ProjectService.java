@@ -8,9 +8,9 @@ import java.util.List;
 
 public class ProjectService implements IProjectService {
 
-   private IProjectDAO projectDAO = new ProjectDAO();
+   private final IProjectDAO projectDAO = new ProjectDAO();
 
-    public Project getByName(String projectName) throws Exception {
+    public Project getByName(final String projectName) throws Exception {
         for (Project p : getProjects()) {
             if (p.getName().equals(projectName)) {
                 return p;
@@ -20,7 +20,7 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public Project getById(String projectId) throws Exception {
+    public Project getById(final String projectId) throws Exception {
         return projectDAO.findById(projectId);
     }
 

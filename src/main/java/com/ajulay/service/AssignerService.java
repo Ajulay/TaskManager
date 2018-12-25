@@ -11,30 +11,24 @@ public class AssignerService implements IAssignerService {
 
     private final IAssignerDAO assignerDao = new AssignerDAO();
 
-    public Assigner createAssigner(String surname) throws Exception {
+    public Assigner createAssigner(final String surname) throws Exception {
         return assignerDao.create(surname);
     }
 
-    public Assigner deleteAssigner(String surname) throws Exception {
+    public Assigner deleteAssigner(final String surname) throws Exception {
         return assignerDao.delete(surname);
     }
 
-    public Assigner updateAssigner(Assigner assigner) throws Exception {
+    public Assigner updateAssigner(final Assigner assigner) throws Exception {
         return assignerDao.delete(assigner.getSurname());
     }
 
-    public Assigner getBySurname(String surname) throws Exception {
+    public Assigner getBySurname(final String surname) throws Exception {
         return assignerDao.findById(surname);
     }
 
     public List<Assigner> getAssigners() {
         return assignerDao.findAll();
-    }
-
-    public void showAssigners() {
-        for (Assigner executor : getAssigners()) {
-            System.out.println(executor.getSurname());
-        }
     }
 
 }

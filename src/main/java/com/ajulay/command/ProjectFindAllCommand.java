@@ -1,16 +1,13 @@
 package com.ajulay.command;
 
-import com.ajulay.constants.TaskConstant;
-import com.ajulay.controller.UIController;
+import com.ajulay.controller.ControllerUI;
 import com.ajulay.entity.Project;
-
-import java.util.Map;
 
 public class ProjectFindAllCommand extends AbstractCommand {
 
     public static final String COMMAND = "/pts";
 
-    public ProjectFindAllCommand(UIController controller) {
+    public ProjectFindAllCommand(ControllerUI controller) {
         super(controller);
     }
 
@@ -21,13 +18,13 @@ public class ProjectFindAllCommand extends AbstractCommand {
 
     @Override
     public String getDescription() {
-        return "Show all projects";
+        return "show all projects";
     }
 
     @Override
     public void execute() {
         int index = 1;
-        for (Project project: getController().getProjectService().getProjects()) {
+        for (Project project : getController().getProjectService().getProjects()) {
             System.out.println(index++ + ". Project name: " + project.getName() + ", project id: " + project.getId());
         }
     }

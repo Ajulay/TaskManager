@@ -35,5 +35,5 @@ mvn clean install
 ```
 *Deployment:* 
 ```bash
-java -jar task-manager-0.0.1.jar
+java -jar task-manager.jar
 ```

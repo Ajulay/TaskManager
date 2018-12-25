@@ -1,7 +1,6 @@
 package com.ajulay.command;
 
-import com.ajulay.controller.UIController;
-import com.ajulay.entity.Task;
+import com.ajulay.controller.ControllerUI;
 
 import java.util.Scanner;
 
@@ -9,7 +8,7 @@ public class TaskChangeStatusCommand extends AbstractCommand {
 
     public static final String COMMAND = "/st";
 
-    public TaskChangeStatusCommand(UIController controller) {
+    public TaskChangeStatusCommand(ControllerUI controller) {
         super(controller);
     }
 
@@ -31,5 +30,6 @@ public class TaskChangeStatusCommand extends AbstractCommand {
         System.out.println("Enter task status: 'finished', 'failed' OR 'in_working'");
         String status = sc.nextLine();
         getController().getTaskService().changeStatus(taskId, status);
+        System.out.println("Status changed");
     }
 }

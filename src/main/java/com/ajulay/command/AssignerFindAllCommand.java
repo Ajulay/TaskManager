@@ -1,15 +1,13 @@
 package com.ajulay.command;
 
-import com.ajulay.constants.TaskConstant;
-import com.ajulay.controller.UIController;
+import com.ajulay.controller.ControllerUI;
 import com.ajulay.entity.Assigner;
-import com.ajulay.entity.Project;
 
 public class AssignerFindAllCommand extends AbstractCommand {
 
     public static final String COMMAND = "/exs";
 
-    public AssignerFindAllCommand(UIController controller) {
+    public AssignerFindAllCommand(ControllerUI controller) {
         super(controller);
     }
 
@@ -20,14 +18,14 @@ public class AssignerFindAllCommand extends AbstractCommand {
 
     @Override
     public String getDescription() {
-        return "Show all executors";
+        return "show all executors";
     }
 
     @Override
     public void execute() {
         int index = 1;
-        for (Assigner assigner: getController().getAssignerService().getAssigners()) {
-            System.out.println(index++ + ". Project name: " + assigner.getName() + ", project id: " + assigner.getId());
+        for (Assigner assigner : getController().getAssignerService().getAssigners()) {
+            System.out.println(index++ + ". Surname: " + assigner.getSurname() + ", id: " + assigner.getId());
         }
     }
 

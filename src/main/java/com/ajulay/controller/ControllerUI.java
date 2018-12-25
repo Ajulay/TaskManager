@@ -18,7 +18,7 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.*;
 
-public class UIController {
+public class ControllerUI {
 
     private final IAssignerService assignerService = new AssignerService();
     private final IProjectService projectService = new ProjectService();
@@ -31,14 +31,7 @@ public class UIController {
         testData();
         final Scanner scanner = new Scanner(System.in);
         System.out.println("TASK MANAGER\n" +
-                "to see projects write: /pts\n" +
-                "to see executors write: /ex\n" +
-                "to see tasks write: /tks\n" +
-                "to add task write: project_id, term, priority(1-3), content (, executor_surname1, executor_surname2...)\n" +
-                "to change status task write: /st id(task), NEW (or ONWORKING, FINISHED, FAILED)\n" +
-                "to delete task write: /dt id(task)\n" +
-                "to see all tasks in project write: /ptks project_id");
-
+                "for help type: /help");
         while (true) {
             try {
                 String in = scanner.nextLine();
@@ -101,6 +94,12 @@ public class UIController {
                         command.execute();
                         continue;
                     }
+                    if (AppHelpCommand.COMMAND.equals(in)){
+                        command = commands.get(AppHelpCommand.COMMAND);
+                        System.out.println(command.getDescription());
+                        command.execute();
+                        continue;
+                    }
                 }
                 System.out.println("You entered incorrect data...");
             } catch (Exception e) {
@@ -118,6 +117,7 @@ public class UIController {
         commands.put(TaskCreateCommand.COMMAND, new TaskCreateCommand(this));
         commands.put(TaskFindAllByProjectCommand.COMMAND, new TaskFindAllByProjectCommand(this));
         commands.put(TaskDeleteCommand.COMMAND, new TaskDeleteCommand(this));
+        commands.put(AppHelpCommand.COMMAND, new AppHelpCommand(this));
     }
 
     private void testData() {

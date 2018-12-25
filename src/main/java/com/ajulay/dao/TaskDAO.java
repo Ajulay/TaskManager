@@ -11,13 +11,13 @@ public class TaskDAO implements ITaskDAO {
     private final List<Task> tasks = new ArrayList<>();
 
     @Override
-    public Task save(Task task) {
+    public Task save(final Task task) {
         tasks.add(task);
         return task;
     }
 
     @Override
-    public Task delete(String id) throws Exception {
+    public Task delete(final String id) throws Exception {
         for (Task task : tasks) {
             if (task.getId().equals(id)) {
                 tasks.remove(task);
@@ -28,7 +28,7 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public Task update(Task task) throws Exception {
+    public Task update(final Task task) throws Exception {
         final Task oldTask = findById(task.getId());
         oldTask.setContent(task.getContent());
         oldTask.setPriority(task.getPriority());
@@ -39,7 +39,7 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public Task findById(String id) throws Exception {
+    public Task findById(final String id) throws Exception {
         for (Task task : tasks) {
             if (task.getId().equals(id)) {
                 return task;
@@ -53,7 +53,7 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public List<Task> findByProjectId(String projectId) {
+    public List<Task> findByProjectId(final String projectId) {
         final List<Task> projectTasks = new ArrayList<>();
         for (Task task : tasks) {
             if (task.getProjectId().equals(projectId)) {
@@ -62,4 +62,5 @@ public class TaskDAO implements ITaskDAO {
         }
         return projectTasks;
     }
+
 }

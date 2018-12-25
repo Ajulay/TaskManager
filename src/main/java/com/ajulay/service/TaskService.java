@@ -11,15 +11,15 @@ public class TaskService implements ITaskService {
 
     private final TaskDAO dao = new TaskDAO();
 
-    public Task saveTask(Task task) {
+    public Task saveTask(final Task task) {
         return dao.save(task);
     }
 
-    public Task deleteTask(String id) throws Exception {
+    public Task deleteTask(final String id) throws Exception {
         return dao.delete(id);
     }
 
-    public void changeStatus(String taskId, String status) throws Exception {
+    public void changeStatus(final String taskId, final String status) throws Exception {
         for (Task task : dao.findAll()) {
             if (task.getId().equals(taskId)) {
                 task.setStatus(Status.valueOf(status.toUpperCase()));
@@ -34,12 +34,8 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public List<Task> getTasksByProject(String projectId) {
+    public List<Task> getTasksByProject(final String projectId) {
         return dao.findByProjectId(projectId);
     }
-//    private void printTasks(List<Task> tasks) {
-//        for (Task task : tasks) {
-//            System.out.println(task.toString());
-//        }
-//    }
+
 }

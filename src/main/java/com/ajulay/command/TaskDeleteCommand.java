@@ -1,7 +1,6 @@
 package com.ajulay.command;
 
-import com.ajulay.constants.TaskConstant;
-import com.ajulay.controller.UIController;
+import com.ajulay.controller.ControllerUI;
 
 import java.util.Scanner;
 
@@ -9,7 +8,7 @@ public class TaskDeleteCommand extends AbstractCommand {
 
     public static final String COMMAND = "/dt";
 
-    public TaskDeleteCommand(UIController uiController) {
+    public TaskDeleteCommand(ControllerUI uiController) {
         super(uiController);
     }
 

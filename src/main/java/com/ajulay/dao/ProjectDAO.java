@@ -11,7 +11,7 @@ public class ProjectDAO implements IProjectDAO {
     private final List<Project> projects = new ArrayList<>();
 
     @Override
-    public Project create(String projectName) {
+    public Project create(final String projectName) {
         final Project project = new Project();
         project.setName(projectName);
         projects.add(project);
@@ -19,7 +19,7 @@ public class ProjectDAO implements IProjectDAO {
     }
 
     @Override
-    public Project delete(String id) throws Exception {
+    public Project delete(final String id) throws Exception {
         final List<Project> projects = findAll();
         for (Project project : projects) {
             if (project.getId().equals(id)) {
@@ -31,7 +31,7 @@ public class ProjectDAO implements IProjectDAO {
     }
 
     @Override
-    public Project update(Project project) throws Exception {
+    public Project update(final Project project) throws Exception {
         final Project oldProject = findById(project.getId());
         oldProject.setName(project.getName());
 
@@ -39,7 +39,7 @@ public class ProjectDAO implements IProjectDAO {
     }
 
     @Override
-    public Project findById(String id) throws Exception {
+    public Project findById(final String id) throws Exception {
         for (Project project : findAll()) {
             if (project.getId().equals(id)) {
                 return project;

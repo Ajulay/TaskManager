@@ -1,12 +1,12 @@
 package com.ajulay.command;
 
-import com.ajulay.controller.UIController;
+import com.ajulay.controller.ControllerUI;
 
 public class AppExitCommand extends AbstractCommand {
 
     public static final String COMMAND = "/exit";
 
-    public AppExitCommand(UIController controller) {
+    public AppExitCommand(ControllerUI controller) {
         super(controller);
     }
 
