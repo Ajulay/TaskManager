@@ -4,7 +4,16 @@ package com.ajulay.controller;
 import com.ajulay.api.service.IAssignerService;
 import com.ajulay.api.service.IProjectService;
 import com.ajulay.api.service.ITaskService;
-import com.ajulay.command.*;
+import com.ajulay.command.AbstractCommand;
+import com.ajulay.command.AppExitCommand;
+import com.ajulay.command.AppHelpCommand;
+import com.ajulay.command.AssignerFindAllCommand;
+import com.ajulay.command.ProjectFindAllCommand;
+import com.ajulay.command.TaskChangeStatusCommand;
+import com.ajulay.command.TaskCreateCommand;
+import com.ajulay.command.TaskDeleteCommand;
+import com.ajulay.command.TaskFindAllByProjectCommand;
+import com.ajulay.command.TaskFindAllCommand;
 import com.ajulay.constants.TaskConstant;
 import com.ajulay.entity.Assigner;
 import com.ajulay.entity.Project;
@@ -16,7 +25,9 @@ import com.ajulay.service.TaskService;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class ControllerUI {
 
@@ -35,7 +46,7 @@ public class ControllerUI {
     }
 
     public void register(final Class clazz) {
-        if(!AbstractCommand.class.isAssignableFrom(clazz)) return;
+        if (!AbstractCommand.class.isAssignableFrom(clazz)) return;
         try {
             final AbstractCommand command = (AbstractCommand) clazz.newInstance();
             command.setController(this);
@@ -43,7 +54,6 @@ public class ControllerUI {
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
-
     }
 
     public void run() {
@@ -61,10 +71,10 @@ public class ControllerUI {
                 AbstractCommand command = null;
                 if (in.startsWith(TaskConstant.SERVICE_COMMAND_SIGN)) {
 
-                        command = commands.get(in);
-                        System.out.println(command.getDescription());
-                        command.execute();
-                        continue;
+                    command = commands.get(in);
+                    System.out.println(command.getDescription());
+                    command.execute();
+                    continue;
 
                 }
                 System.out.println("You entered incorrect data...");
