@@ -21,8 +21,7 @@ public class AssigneeService implements IAssigneeService {
 
     @Override
     public Assignee deleteAssignee(final String id) throws Exception {
-        Assignee assignee = assigneeDAO.delete(id);
-        return assignee;
+        return assigneeDAO.delete(id);
     }
 
     @Override

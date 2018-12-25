@@ -16,4 +16,5 @@ public class AppExitCommand extends AbstractCommand {
     public void execute() throws Exception {
         System.exit(0);
     }
+
 }

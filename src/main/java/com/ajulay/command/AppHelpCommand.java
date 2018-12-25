@@ -22,4 +22,5 @@ public class AppHelpCommand extends AbstractCommand {
             System.out.println(cmd.inputCommand() + " - " + cmd.getDescription());
         }
     }
+
 }

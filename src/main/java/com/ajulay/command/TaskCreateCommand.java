@@ -67,7 +67,7 @@ public class TaskCreateCommand extends AbstractCommand {
         }
         System.out.println("Task added");
         getController().getTaskService().saveTask(task);
-        getController().getTaskService().getTasks();
+        getController().getTaskService().findTaskAll();
     }
 
 }

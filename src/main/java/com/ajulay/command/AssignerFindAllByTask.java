@@ -27,7 +27,7 @@ public class AssignerFindAllByTask extends AbstractCommand {
         final String taskId = sc.nextLine();
         final List<Assignee> assignees = getController().getAssigneeService().AssigneeFindAll();
         final List<Assigner> assigners = new ArrayList<>();
-        final Task task = getController().getTaskService().getTaskById(taskId);
+        final Task task = getController().getTaskService().findTaskById(taskId);
         for (Assignee assignee : assignees) {
             if (assignee.getTaskId().equals(taskId)) {
                 Assigner assigner = getController().getAssignerService().findById(assignee.getAssignerId());

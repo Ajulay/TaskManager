@@ -30,7 +30,7 @@ public class TaskFindAllByAssigner extends AbstractCommand {
         final Assigner assigner = getController().getAssignerService().findById(assignerId);
         for (Assignee assignee : assignees) {
             if (assignee.getAssignerId().equals(assignerId)) {
-                Task task = getController().getTaskService().getTaskById(assignee.getTaskId());
+                Task task = getController().getTaskService().findTaskById(assignee.getTaskId());
                 tasks.add(task);
             }
         }

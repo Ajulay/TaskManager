@@ -1,6 +1,5 @@
 package com.ajulay.command;
 
-import com.ajulay.controller.ControllerUI;
 import com.ajulay.entity.Task;
 
 public class TaskFindAllCommand extends AbstractCommand {
@@ -18,7 +17,7 @@ public class TaskFindAllCommand extends AbstractCommand {
     @Override
     public void execute() {
         int index = 1;
-        for (Task task : getController().getTaskService().getTasks()) {
+        for (Task task : getController().getTaskService().findTaskAll()) {
             System.out.println(index++ + ". Task term: " + task.getTerm() + ", task id: " + task.getId() +
                     ", task content: " + task.getContent() + ", status: " + task.getStatus().toString());
         }

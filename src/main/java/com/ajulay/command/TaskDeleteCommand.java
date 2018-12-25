@@ -19,5 +19,7 @@ public class TaskDeleteCommand extends AbstractCommand {
         System.out.println("Enter task id");
         final Scanner in = new Scanner(System.in);
         getController().getTaskService().deleteTask(in.nextLine());
+        System.out.println("task deleted...");
     }
+
 }

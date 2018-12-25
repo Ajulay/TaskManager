@@ -12,9 +12,9 @@ public interface ITaskService {
 
     void changeStatus(String taskId, String status) throws Exception;
 
-    List<Task> getTasks();
+    List<Task> findTaskAll();
 
-    List<Task> getTasksByProject(String project_id);
+    List<Task> findTaskAllByProject(String project_id);
 
-    Task getTaskById(String taskId) throws Exception;
+    Task findTaskById(String taskId) throws Exception;
 }

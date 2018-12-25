@@ -24,4 +24,5 @@ public class TaskChangeStatusCommand extends AbstractCommand {
         getController().getTaskService().changeStatus(taskId, status);
         System.out.println("Status changed");
     }
+
 }

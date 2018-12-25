@@ -2,8 +2,8 @@ package com.ajulay.service;
 
 import com.ajulay.api.service.ITaskService;
 import com.ajulay.dao.TaskDAO;
-import com.ajulay.enumirated.Status;
 import com.ajulay.entity.Task;
+import com.ajulay.enumirated.Status;
 
 import java.util.List;
 
@@ -29,17 +29,17 @@ public class TaskService implements ITaskService {
         throw new Exception("No such task");
     }
 
-    public List<Task> getTasks() {
+    public List<Task> findTaskAll() {
         return dao.findAll();
     }
 
     @Override
-    public List<Task> getTasksByProject(final String projectId) {
+    public List<Task> findTaskAllByProject(final String projectId) {
         return dao.findByProjectId(projectId);
     }
 
     @Override
-    public Task getTaskById(String taskId) throws Exception {
+    public Task findTaskById(String taskId) throws Exception {
         return dao.findById(taskId);
     }
 

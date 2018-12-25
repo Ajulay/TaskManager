@@ -19,4 +19,5 @@ public abstract class AbstractCommand {
     public void setController(ControllerUI controller) {
         this.controller = controller;
     }
+
 }
