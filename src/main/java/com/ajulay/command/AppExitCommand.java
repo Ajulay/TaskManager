@@ -4,15 +4,9 @@ import com.ajulay.controller.ControllerUI;
 
 public class AppExitCommand extends AbstractCommand {
 
-    public static final String COMMAND = "/exit";
-
-    public AppExitCommand(ControllerUI controller) {
-        super(controller);
-    }
-
     @Override
     public String inputCommand() {
-        return COMMAND;
+        return "/exit";
     }
 
     @Override

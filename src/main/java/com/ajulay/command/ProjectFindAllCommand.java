@@ -5,15 +5,9 @@ import com.ajulay.entity.Project;
 
 public class ProjectFindAllCommand extends AbstractCommand {
 
-    public static final String COMMAND = "/pts";
-
-    public ProjectFindAllCommand(ControllerUI controller) {
-        super(controller);
-    }
-
     @Override
     public String inputCommand() {
-        return COMMAND;
+        return "/pts";
     }
 
     @Override

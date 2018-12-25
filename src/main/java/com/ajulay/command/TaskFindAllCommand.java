@@ -5,15 +5,9 @@ import com.ajulay.entity.Task;
 
 public class TaskFindAllCommand extends AbstractCommand {
 
-    public static final String COMMAND = "/tks";
-
-    public TaskFindAllCommand(ControllerUI controller) {
-        super(controller);
-    }
-
     @Override
     public String inputCommand() {
-        return COMMAND;
+        return "/tks";
     }
 
     @Override

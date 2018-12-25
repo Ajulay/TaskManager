@@ -6,15 +6,9 @@ import java.util.Scanner;
 
 public class TaskChangeStatusCommand extends AbstractCommand {
 
-    public static final String COMMAND = "/st";
-
-    public TaskChangeStatusCommand(ControllerUI controller) {
-        super(controller);
-    }
-
     @Override
     public String inputCommand() {
-        return COMMAND;
+        return "/st";
     }
 
     @Override

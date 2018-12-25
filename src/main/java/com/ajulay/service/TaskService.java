@@ -2,7 +2,7 @@ package com.ajulay.service;
 
 import com.ajulay.api.service.ITaskService;
 import com.ajulay.dao.TaskDAO;
-import com.ajulay.entity.Status;
+import com.ajulay.enumirated.Status;
 import com.ajulay.entity.Task;
 
 import java.util.List;

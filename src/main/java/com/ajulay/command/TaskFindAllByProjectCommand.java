@@ -7,15 +7,9 @@ import java.util.Scanner;
 
 public class TaskFindAllByProjectCommand extends AbstractCommand {
 
-    public static final String COMMAND = "/ptks";
-
-    public TaskFindAllByProjectCommand(ControllerUI uiController) {
-        super(uiController);
-    }
-
     @Override
     public String inputCommand() {
-        return COMMAND;
+        return "/ptks";
     }
 
     @Override

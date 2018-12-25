@@ -21,13 +21,35 @@ import java.util.*;
 public class ControllerUI {
 
     private final IAssignerService assignerService = new AssignerService();
+
     private final IProjectService projectService = new ProjectService();
+
     private final ITaskService taskService = new TaskService();
+
     private final Map<String, AbstractCommand> commands = new HashMap<>();
-    private String[] taskData = null;
+
+    public void register(Class... clazzes) {
+        for (Class clazz : clazzes) {
+            register(clazz);
+        }
+    }
+
+    public void register(final Class clazz) {
+        if(!AbstractCommand.class.isAssignableFrom(clazz)) return;
+        try {
+            final AbstractCommand command = (AbstractCommand) clazz.newInstance();
+            command.setController(this);
+            commands.put(command.inputCommand(), command);
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public void run() {
-        enterCommands();
+        register(AppExitCommand.class, AppHelpCommand.class, AssignerFindAllCommand.class, ProjectFindAllCommand.class,
+                TaskChangeStatusCommand.class, TaskCreateCommand.class, TaskDeleteCommand.class,
+                TaskFindAllByProjectCommand.class, TaskFindAllCommand.class);
         testData();
         final Scanner scanner = new Scanner(System.in);
         System.out.println("TASK MANAGER\n" +
@@ -39,85 +61,17 @@ public class ControllerUI {
                 AbstractCommand command = null;
                 if (in.startsWith(TaskConstant.SERVICE_COMMAND_SIGN)) {
 
-                    if (AppExitCommand.COMMAND.equals(in)) {
-                       command = commands.get(AppExitCommand.COMMAND);
+                        command = commands.get(in);
                         System.out.println(command.getDescription());
                         command.execute();
-                        break;
-                    }
+                        continue;
 
-                    if (AssignerFindAllCommand.COMMAND.equals(in)) {
-                        command = commands.get(AssignerFindAllCommand.COMMAND);
-                        System.out.println(command.getDescription());
-                        command.execute();
-                        continue;
-                    }
-
-                    if (ProjectFindAllCommand.COMMAND.equals(in)){
-                        command = commands.get(ProjectFindAllCommand.COMMAND);
-                        System.out.println(command.getDescription());
-                        command.execute();
-                        continue;
-                    }
-
-                    if(TaskChangeStatusCommand.COMMAND.equals(in)){
-                        command = commands.get(TaskChangeStatusCommand.COMMAND);
-                        System.out.println(command.getDescription());
-                        command.execute();
-                        continue;
-                    }
-
-                    if(TaskCreateCommand.COMMAND.equals(in)){
-                        command = commands.get(TaskCreateCommand.COMMAND);
-                        System.out.println(command.getDescription());
-                        command.execute();
-                        continue;
-                    }
-
-                    if (TaskDeleteCommand.COMMAND.equals(in)) {
-                        command = commands.get(TaskDeleteCommand.COMMAND);
-                        System.out.println(command.getDescription());
-                        command.execute();
-                        continue;
-                    }
-
-                    if (TaskFindAllByProjectCommand.COMMAND.equals(in)) {
-                        command = commands.get(TaskFindAllByProjectCommand.COMMAND);
-                        System.out.println(command.getDescription());
-                        command.execute();
-                        continue;
-                    }
-
-                    if (TaskFindAllCommand.COMMAND.equals(in)) {
-                        command = commands.get(TaskFindAllCommand.COMMAND);
-                        System.out.println(command.getDescription());
-                        command.execute();
-                        continue;
-                    }
-                    if (AppHelpCommand.COMMAND.equals(in)){
-                        command = commands.get(AppHelpCommand.COMMAND);
-                        System.out.println(command.getDescription());
-                        command.execute();
-                        continue;
-                    }
                 }
                 System.out.println("You entered incorrect data...");
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
-    }
-
-    private void enterCommands() {
-        commands.put(AppExitCommand.COMMAND, new AppExitCommand(this));
-        commands.put(AssignerFindAllCommand.COMMAND, new AssignerFindAllCommand(this));
-        commands.put(ProjectFindAllCommand.COMMAND, new ProjectFindAllCommand(this));
-        commands.put(TaskChangeStatusCommand.COMMAND, new TaskChangeStatusCommand(this));
-        commands.put(TaskFindAllCommand.COMMAND, new TaskFindAllCommand(this));
-        commands.put(TaskCreateCommand.COMMAND, new TaskCreateCommand(this));
-        commands.put(TaskFindAllByProjectCommand.COMMAND, new TaskFindAllByProjectCommand(this));
-        commands.put(TaskDeleteCommand.COMMAND, new TaskDeleteCommand(this));
-        commands.put(AppHelpCommand.COMMAND, new AppHelpCommand(this));
     }
 
     private void testData() {
@@ -172,7 +126,4 @@ public class ControllerUI {
         return commands;
     }
 
-    public String[] getTaskData() {
-        return taskData;
-    }
 }

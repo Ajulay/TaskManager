@@ -6,15 +6,9 @@ import java.util.Collection;
 
 public class AppHelpCommand extends AbstractCommand {
 
-    public static final String COMMAND = "/help";
-
-    public AppHelpCommand(ControllerUI controller) {
-        super(controller);
-    }
-
     @Override
     public String inputCommand() {
-        return COMMAND;
+        return "/help";
     }
 
     @Override

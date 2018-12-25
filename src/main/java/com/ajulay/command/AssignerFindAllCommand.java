@@ -5,15 +5,9 @@ import com.ajulay.entity.Assigner;
 
 public class AssignerFindAllCommand extends AbstractCommand {
 
-    public static final String COMMAND = "/exs";
-
-    public AssignerFindAllCommand(ControllerUI controller) {
-        super(controller);
-    }
-
     @Override
     public String inputCommand() {
-        return COMMAND;
+        return "/exs";
     }
 
     @Override

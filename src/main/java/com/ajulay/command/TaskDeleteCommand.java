@@ -6,15 +6,9 @@ import java.util.Scanner;
 
 public class TaskDeleteCommand extends AbstractCommand {
 
-    public static final String COMMAND = "/dt";
-
-    public TaskDeleteCommand(ControllerUI uiController) {
-        super(uiController);
-    }
-
     @Override
     public String inputCommand() {
-        return COMMAND;
+        return "/dt";
     }
 
     @Override

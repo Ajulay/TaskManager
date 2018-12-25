@@ -12,15 +12,9 @@ import java.util.Scanner;
 
 public class TaskCreateCommand extends AbstractCommand {
 
-    public static final String COMMAND = "/tsk";
-
-    public TaskCreateCommand(ControllerUI uiController) {
-        super(uiController);
-    }
-
     @Override
     public String inputCommand() {
-        return COMMAND;
+        return "/tsk";
     }
 
     @Override

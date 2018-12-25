@@ -1,5 +1,7 @@
 package com.ajulay.entity;
 
+import com.ajulay.enumirated.Status;
+
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;

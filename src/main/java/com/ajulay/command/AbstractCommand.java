@@ -4,11 +4,8 @@ import com.ajulay.controller.ControllerUI;
 
 public abstract class AbstractCommand {
 
-    private final ControllerUI controller;
+    private ControllerUI controller;
 
-    public AbstractCommand(ControllerUI controller) {
-        this.controller = controller;
-    }
     public abstract String inputCommand();
 
     public abstract String getDescription();
@@ -17,5 +14,9 @@ public abstract class AbstractCommand {
 
     public ControllerUI getController() {
         return controller;
+    }
+
+    public void setController(ControllerUI controller) {
+        this.controller = controller;
     }
 }
