@@ -38,4 +38,9 @@ public class TaskService implements ITaskService {
         return dao.findByProjectId(projectId);
     }
 
+    @Override
+    public Task getTaskById(String taskId) throws Exception {
+        return dao.findById(taskId);
+    }
+
 }

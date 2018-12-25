@@ -8,8 +8,6 @@ public class Assigner {
 
     private final String id = UUID.randomUUID().toString();
 
-    private final List<Task> tasks = new ArrayList<>();
-
     private String name;
 
     private String surname;
@@ -45,10 +43,6 @@ public class Assigner {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
     }
 
     public String getId() {

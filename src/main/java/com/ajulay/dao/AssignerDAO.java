@@ -41,7 +41,7 @@ public class AssignerDAO implements IAssignerDAO {
     @Override
     public Assigner findById(final String id) throws Exception {
         for (Assigner assigner : findAll()) {
-            if (assigner.getSurname().equals(id)) {
+            if (assigner.getId().equals(id)) {
                 return assigner;
             }
         }

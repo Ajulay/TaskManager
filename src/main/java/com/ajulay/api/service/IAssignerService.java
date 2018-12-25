@@ -15,6 +15,8 @@ public interface IAssignerService {
 
     Assigner getBySurname(String surname) throws Exception;
 
+    Assigner findById(String id) throws Exception;
+
     List<Assigner> getAssigners();
 
 }

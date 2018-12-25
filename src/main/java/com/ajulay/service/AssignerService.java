@@ -24,9 +24,17 @@ public class AssignerService implements IAssignerService {
     }
 
     public Assigner getBySurname(final String surname) throws Exception {
-        return assignerDao.findById(surname);
+        for (Assigner assigner : getAssigners()) {
+            if (assigner.getSurname().equals(surname)) {
+                return assigner;
+            }
+        }
+        throw new Exception("no such executor");
     }
 
+    public Assigner findById(String id) throws Exception {
+        return assignerDao.findById(id);
+    }
     public List<Assigner> getAssigners() {
         return assignerDao.findAll();
     }

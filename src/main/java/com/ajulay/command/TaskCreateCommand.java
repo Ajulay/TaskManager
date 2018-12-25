@@ -2,6 +2,7 @@ package com.ajulay.command;
 
 import com.ajulay.constants.TaskConstant;
 import com.ajulay.controller.ControllerUI;
+import com.ajulay.entity.Assignee;
 import com.ajulay.entity.Assigner;
 import com.ajulay.entity.Task;
 
@@ -63,7 +64,7 @@ public class TaskCreateCommand extends AbstractCommand {
         System.out.println("Enter executor(s) (to finish write /end)");
         while (!TaskConstant.END_ENTER_ASSIGNER.equals((in = scanner.nextLine()))) {
             Assigner assigner = getController().getAssignerService().getBySurname(in);
-            assigner.getTasks().add(task);
+            Assignee assignee = getController().getAssigneeService().createAssignee(task.getId(), assigner.getId());
         }
         System.out.println("Task added");
         getController().getTaskService().saveTask(task);

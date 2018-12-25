@@ -16,7 +16,7 @@ public class AssigneeService implements IAssigneeService {
         final Assignee assignee = new Assignee();
         assignee.setTaskId(taskId);
         assignee.setAssignerId(assignerId);
-        return assignee;
+        return assigneeDAO.create(assignee);
     }
 
     @Override

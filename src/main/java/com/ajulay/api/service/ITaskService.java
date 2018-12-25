@@ -15,4 +15,6 @@ public interface ITaskService {
     List<Task> getTasks();
 
     List<Task> getTasksByProject(String project_id);
+
+    Task getTaskById(String taskId) throws Exception;
 }

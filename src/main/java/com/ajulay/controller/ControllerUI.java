@@ -1,23 +1,16 @@
 package com.ajulay.controller;
 
 
+import com.ajulay.api.service.IAssigneeService;
 import com.ajulay.api.service.IAssignerService;
 import com.ajulay.api.service.IProjectService;
 import com.ajulay.api.service.ITaskService;
-import com.ajulay.command.AbstractCommand;
-import com.ajulay.command.AppExitCommand;
-import com.ajulay.command.AppHelpCommand;
-import com.ajulay.command.AssignerFindAllCommand;
-import com.ajulay.command.ProjectFindAllCommand;
-import com.ajulay.command.TaskChangeStatusCommand;
-import com.ajulay.command.TaskCreateCommand;
-import com.ajulay.command.TaskDeleteCommand;
-import com.ajulay.command.TaskFindAllByProjectCommand;
-import com.ajulay.command.TaskFindAllCommand;
+import com.ajulay.command.*;
 import com.ajulay.constants.TaskConstant;
 import com.ajulay.entity.Assigner;
 import com.ajulay.entity.Project;
 import com.ajulay.entity.Task;
+import com.ajulay.service.AssigneeService;
 import com.ajulay.service.AssignerService;
 import com.ajulay.service.ProjectService;
 import com.ajulay.service.TaskService;
@@ -36,6 +29,8 @@ public class ControllerUI {
     private final IProjectService projectService = new ProjectService();
 
     private final ITaskService taskService = new TaskService();
+
+    private final IAssigneeService assigneeService = new AssigneeService();
 
     private final Map<String, AbstractCommand> commands = new HashMap<>();
 
@@ -59,7 +54,8 @@ public class ControllerUI {
     public void run() {
         register(AppExitCommand.class, AppHelpCommand.class, AssignerFindAllCommand.class, ProjectFindAllCommand.class,
                 TaskChangeStatusCommand.class, TaskCreateCommand.class, TaskDeleteCommand.class,
-                TaskFindAllByProjectCommand.class, TaskFindAllCommand.class);
+                TaskFindAllByProjectCommand.class, TaskFindAllCommand.class, AssignerFindAllByTask.class,
+                TaskFindAllByAssigner.class);
         testData();
         final Scanner scanner = new Scanner(System.in);
         System.out.println("TASK MANAGER\n" +
@@ -136,4 +132,7 @@ public class ControllerUI {
         return commands;
     }
 
+    public IAssigneeService getAssigneeService() {
+        return assigneeService;
+    }
 }
