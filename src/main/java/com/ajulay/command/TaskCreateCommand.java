@@ -1,7 +1,6 @@
 package com.ajulay.command;
 
 import com.ajulay.constants.TaskConstant;
-import com.ajulay.controller.ControllerUI;
 import com.ajulay.entity.Assignee;
 import com.ajulay.entity.Assigner;
 import com.ajulay.entity.Task;

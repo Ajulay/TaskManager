@@ -1,6 +1,5 @@
 package com.ajulay.command;
 
-import com.ajulay.controller.ControllerUI;
 import com.ajulay.entity.Task;
 
 import java.util.Scanner;

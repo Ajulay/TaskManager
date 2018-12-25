@@ -1,7 +1,5 @@
 package com.ajulay.command;
 
-import com.ajulay.controller.ControllerUI;
-
 public class AppExitCommand extends AbstractCommand {
 
     @Override

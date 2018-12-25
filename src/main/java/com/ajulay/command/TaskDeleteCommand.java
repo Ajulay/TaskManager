@@ -1,7 +1,5 @@
 package com.ajulay.command;
 
-import com.ajulay.controller.ControllerUI;
-
 import java.util.Scanner;
 
 public class TaskDeleteCommand extends AbstractCommand {
