@@ -24,7 +24,7 @@ public class AssignerDAO implements IAssignerDAO {
     @Override
     public Assigner delete(final String surname) throws Exception {
         for (Assigner executor : findAll()) {
-            if (executor.getName().equals(surname)) {
+            if (executor.getSurname().equals(surname)) {
                 findAll().remove(executor);
                 return executor;
             }
