@@ -37,7 +37,7 @@ public class ProjectServiceTest {
         for (int i = 0; i < controlNumber; i++) {
             final Project project = new Project();
         }
-        List<Project> projects = service.getProjects();
+        final List<Project> projects = service.getProjects();
 
         Assert.assertEquals(projects.size(), controlNumber);
     }
