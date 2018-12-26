@@ -1,7 +1,6 @@
 package com.ajulay.command;
 
-import com.ajulay.constants.TaskConstant;
-import com.ajulay.entity.Assignee;
+import com.ajulay.constants.ServiceConstant;
 import com.ajulay.entity.Assigner;
 import com.ajulay.entity.Task;
 
@@ -49,7 +48,7 @@ public class TaskCreateCommand extends AbstractCommand {
         System.out.println("Enter priority (1 - 3)");
         in = scanner.nextLine();
         if (in == null) {
-            task.setPriority(TaskConstant.LOW_PRIORITY);
+            task.setPriority(ServiceConstant.LOW_PRIORITY);
         } else {
             task.setPriority(Integer.parseInt(in));
         }
@@ -61,9 +60,9 @@ public class TaskCreateCommand extends AbstractCommand {
             task.setContent(in);
         }
         System.out.println("Enter executor(s) (to finish write /end)");
-        while (!TaskConstant.END_ENTER_ASSIGNER.equals((in = scanner.nextLine()))) {
+        while (!ServiceConstant.END_ENTER_ASSIGNER.equals((in = scanner.nextLine()))) {
             Assigner assigner = getController().getAssignerService().getBySurname(in);
-            Assignee assignee = getController().getAssigneeService().createAssignee(task.getId(), assigner.getId());
+            getController().getAssigneeService().createAssignee(task.getId(), assigner.getId());
         }
         System.out.println("Task added");
         getController().getTaskService().saveTask(task);

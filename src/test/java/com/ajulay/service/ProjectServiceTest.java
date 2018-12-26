@@ -36,7 +36,7 @@ public class ProjectServiceTest {
         final IProjectService service = new ProjectService();
         final int controlNumber = 5;
         for (int i = 0; i < controlNumber; i++) {
-            final Project project = service.saveProject(new Project());
+            service.saveProject(new Project());
         }
         final List<Project> projects = service.getProjects();
 
