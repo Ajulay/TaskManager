@@ -2,6 +2,7 @@ package com.ajulay.dao;
 
 import com.ajulay.api.dao.IAssigneeDAO;
 import com.ajulay.entity.Assignee;
+import com.ajulay.exception.NoSuchAssigneeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class AssigneeDAO implements IAssigneeDAO {
     }
 
     @Override
-    public Assignee delete(String id) throws Exception {
+    public Assignee delete(String id) throws NoSuchAssigneeException {
         for (Assignee assignee : assignees) {
             if (assignee.getId().equals(id)) {
                 assignees.remove(assignee);
@@ -28,11 +29,11 @@ public class AssigneeDAO implements IAssigneeDAO {
             }
         }
 
-        throw new Exception("no such assignee");
+        throw new NoSuchAssigneeException();
     }
 
     @Override
-    public Assignee update(Assignee assignee) throws Exception {
+    public Assignee update(Assignee assignee) throws NoSuchAssigneeException {
         for (Assignee asee : assignees) {
             if (asee.getId().equals(assignee.getId())) {
                 assignees.remove(asee);
@@ -40,17 +41,17 @@ public class AssigneeDAO implements IAssigneeDAO {
                 return assignee;
             }
         }
-        throw new Exception("no such assignee");
+        throw new NoSuchAssigneeException();
     }
 
     @Override
-    public Assignee findById(String id) throws Exception {
+    public Assignee findById(String id) throws NoSuchAssigneeException {
         for (Assignee assignee : assignees) {
             if (assignee.getId().equals(id)) {
                 return assignee;
             }
         }
-        throw new Exception("no such assignee");
+        throw new NoSuchAssigneeException();
     }
 
     @Override

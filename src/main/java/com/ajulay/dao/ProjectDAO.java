@@ -2,6 +2,7 @@ package com.ajulay.dao;
 
 import com.ajulay.api.dao.IProjectDAO;
 import com.ajulay.entity.Project;
+import com.ajulay.exception.NoSuchProjectException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class ProjectDAO implements IProjectDAO {
     }
 
     @Override
-    public Project delete(final String id) throws Exception {
+    public Project delete(final String id) throws NoSuchProjectException {
         final List<Project> projects = findAll();
         for (Project project : projects) {
             if (project.getId().equals(id)) {
@@ -28,11 +29,11 @@ public class ProjectDAO implements IProjectDAO {
                 return project;
             }
         }
-        throw new Exception("No such projects");
+        throw new NoSuchProjectException();
     }
 
     @Override
-    public Project update(final Project project) throws Exception {
+    public Project update(final Project project) throws NoSuchProjectException {
         final Project oldProject = findById(project.getId());
         oldProject.setName(project.getName());
 
@@ -40,13 +41,13 @@ public class ProjectDAO implements IProjectDAO {
     }
 
     @Override
-    public Project findById(final String id) throws Exception {
+    public Project findById(final String id) throws NoSuchProjectException {
         for (Project project : findAll()) {
             if (project.getId().equals(id)) {
                 return project;
             }
         }
-        throw new Exception("No such project");
+        throw new NoSuchProjectException();
     }
 
     @Override

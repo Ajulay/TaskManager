@@ -1,6 +1,7 @@
 package com.ajulay.api.dao;
 
 import com.ajulay.entity.Project;
+import com.ajulay.exception.NoSuchProjectException;
 
 import java.util.List;
 
@@ -11,11 +12,11 @@ public interface IProjectDAO {
 
     Project create(Project project);
 
-    Project delete(String id) throws Exception;
+    Project delete(String id) throws NoSuchProjectException;
 
-    Project update(Project project) throws Exception;
+    Project update(Project project) throws NoSuchProjectException;
 
-    Project findById(String id) throws Exception;
+    Project findById(String id) throws NoSuchProjectException;
 
     List<Project> findAll();
 

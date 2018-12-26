@@ -1,6 +1,7 @@
 package com.ajulay.api.dao;
 
 import com.ajulay.entity.Assignee;
+import com.ajulay.exception.NoSuchAssigneeException;
 
 import java.util.List;
 
@@ -11,11 +12,11 @@ public interface IAssigneeDAO {
 
     Assignee create(Assignee assignee);
 
-    Assignee delete(String id) throws Exception;
+    Assignee delete(String id) throws NoSuchAssigneeException;
 
-    Assignee update(Assignee assignee) throws Exception;
+    Assignee update(Assignee assignee) throws NoSuchAssigneeException;
 
-    Assignee findById(String id) throws Exception;
+    Assignee findById(String id) throws NoSuchAssigneeException;
 
     List<Assignee> findAll();
 }

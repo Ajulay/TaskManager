@@ -1,6 +1,7 @@
 package com.ajulay.api.dao;
 
 import com.ajulay.entity.Assigner;
+import com.ajulay.exception.NoSuchAssignerException;
 
 import java.util.List;
 
@@ -9,13 +10,13 @@ import java.util.List;
  */
 public interface IAssignerDAO {
 
-    Assigner create(String surname) throws Exception;
+    Assigner create(String surname);
 
-    Assigner delete(String surname) throws Exception;
+    Assigner delete(String surname) throws NoSuchAssignerException;
 
-    Assigner update(Assigner assigner) throws Exception;
+    Assigner update(Assigner assigner) throws NoSuchAssignerException;
 
-    Assigner findById(String surname) throws Exception;
+    Assigner findById(String surname) throws NoSuchAssignerException;
 
     List<Assigner> findAll();
 }
