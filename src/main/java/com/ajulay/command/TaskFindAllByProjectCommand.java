@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class TaskFindAllByProjectCommand extends AbstractCommand {
 
     @Override
-    public String inputCommand() {
+    public String getCommandKeyWord() {
         return "/ptks";
     }
 

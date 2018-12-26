@@ -15,4 +15,6 @@ public interface IProjectService {
 
     List<Project> getProjects();
 
+    Project saveProject(Project project);
+
 }

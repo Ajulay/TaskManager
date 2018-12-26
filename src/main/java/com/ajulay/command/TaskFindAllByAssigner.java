@@ -11,7 +11,7 @@ import java.util.Scanner;
 public class TaskFindAllByAssigner extends AbstractCommand {
 
     @Override
-    public String inputCommand() {
+    public String getCommandKeyWord() {
         return "/tass";
     }
 

@@ -14,9 +14,7 @@ public class ProjectDAO implements IProjectDAO {
     private final List<Project> projects = new ArrayList<>();
 
     @Override
-    public Project create(final String projectName) {
-        final Project project = new Project();
-        project.setName(projectName);
+    public Project create(final Project project) {
         projects.add(project);
         return project;
     }

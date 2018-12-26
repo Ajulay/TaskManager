@@ -5,7 +5,7 @@ import com.ajulay.entity.Task;
 public class TaskFindAllCommand extends AbstractCommand {
 
     @Override
-    public String inputCommand() {
+    public String getCommandKeyWord() {
         return "/tks";
     }
 

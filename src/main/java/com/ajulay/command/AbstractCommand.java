@@ -9,7 +9,7 @@ public abstract class AbstractCommand {
 
     private ControllerUI controller;
 
-    public abstract String inputCommand();
+    public abstract String getCommandKeyWord();
 
     public abstract String getDescription();
 

@@ -5,7 +5,7 @@ import com.ajulay.entity.Project;
 public class ProjectFindAllCommand extends AbstractCommand {
 
     @Override
-    public String inputCommand() {
+    public String getCommandKeyWord() {
         return "/pts";
     }
 

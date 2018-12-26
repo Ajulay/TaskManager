@@ -2,6 +2,7 @@ package com.ajulay.dao;
 
 import com.ajulay.api.dao.ITaskDAO;
 import com.ajulay.entity.Task;
+import com.ajulay.exception.NoSuchTaskException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +21,14 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public Task delete(final String id) throws Exception {
+    public Task delete(final String id) throws NoSuchTaskException {
         for (Task task : tasks) {
             if (task.getId().equals(id)) {
                 tasks.remove(task);
                 return task;
             }
         }
-        throw new Exception("No such task");
+        throw new NoSuchTaskException();
     }
 
     @Override
@@ -42,13 +43,13 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public Task findById(final String id) throws Exception {
+    public Task findById(final String id) throws NoSuchTaskException {
         for (Task task : tasks) {
             if (task.getId().equals(id)) {
                 return task;
             }
         }
-        throw new Exception("no such task");
+        throw new NoSuchTaskException();
     }
 
     public List<Task> findAll() {

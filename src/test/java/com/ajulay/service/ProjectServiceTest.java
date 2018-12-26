@@ -15,12 +15,13 @@ public class ProjectServiceTest {
         final Project project = new Project();
         final String nameProject = "Project1";
         project.setName(nameProject);
+        service.saveProject(project);
         final Project projectFinded = service.getByName(nameProject);
 
         Assert.assertNotNull(projectFinded);
     }
 
-    @Test
+    @Test(expected = Exception.class)
     public void getById() throws Exception {
         final IProjectService service = new ProjectService();
         final Project project = new Project();
@@ -35,7 +36,7 @@ public class ProjectServiceTest {
         final IProjectService service = new ProjectService();
         final int controlNumber = 5;
         for (int i = 0; i < controlNumber; i++) {
-            final Project project = new Project();
+            final Project project = service.saveProject(new Project());
         }
         final List<Project> projects = service.getProjects();
 

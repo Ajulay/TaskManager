@@ -5,17 +5,21 @@ import com.ajulay.controller.ControllerUI;
 
 public class App {
 
-    public static void main(String[] args) {
-        ControllerUI controllerUI = new ControllerUI();
+    private static final Class[] classes = {
+            AppExitCommand.class, AppHelpCommand.class, AssignerFindAllCommand.class,
+            ProjectFindAllCommand.class, TaskChangeStatusCommand.class, TaskCreateCommand.class,
+            TaskDeleteCommand.class, TaskFindAllByProjectCommand.class, TaskFindAllCommand.class,
+            AssignerFindAllByTask.class, TaskFindAllByAssigner.class
+    };
 
+    public static void main(String[] args) throws IllegalAccessException, InstantiationException {
+        final ControllerUI controllerUI = new ControllerUI();
+        controllerUI.register(classes);
         try {
-            controllerUI.register(AppExitCommand.class, AppHelpCommand.class, AssignerFindAllCommand.class, ProjectFindAllCommand.class,
-                    TaskChangeStatusCommand.class, TaskCreateCommand.class, TaskDeleteCommand.class,
-                    TaskFindAllByProjectCommand.class, TaskFindAllCommand.class, AssignerFindAllByTask.class,
-                    TaskFindAllByAssigner.class);
-        } catch (InstantiationException | IllegalAccessException e) {
+            controllerUI.run();
+        } catch (Exception e) {
             e.printStackTrace();
+            //TODO write custom exception
         }
-        controllerUI.run();
     }
 }

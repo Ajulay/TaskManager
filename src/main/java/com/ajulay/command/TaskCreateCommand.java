@@ -13,7 +13,7 @@ import java.util.Scanner;
 public class TaskCreateCommand extends AbstractCommand {
 
     @Override
-    public String inputCommand() {
+    public String getCommandKeyWord() {
         return "/tsk";
     }
 

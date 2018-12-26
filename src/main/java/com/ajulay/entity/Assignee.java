@@ -6,9 +6,9 @@ public class Assignee {
 
     private String id = UUID.randomUUID().toString();
 
-    private String TaskId;
+    private String taskId2;
 
-    private String AssignerId;
+    private String assignerId2;
 
     public String getId() {
         return id;
@@ -19,18 +19,18 @@ public class Assignee {
     }
 
     public String getTaskId() {
-        return TaskId;
+        return taskId2;
     }
 
     public void setTaskId(String taskId) {
-        TaskId = taskId;
+        taskId = taskId;
     }
 
     public String getAssignerId() {
-        return AssignerId;
+        return assignerId2;
     }
 
     public void setAssignerId(String assignerId) {
-        AssignerId = assignerId;
+        assignerId = assignerId;
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface IProjectDAO {
 
-    Project create(String projectName);
+    Project create(Project project);
 
     Project delete(String id) throws Exception;
 

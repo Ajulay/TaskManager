@@ -5,7 +5,7 @@ import com.ajulay.api.service.IAssignerService;
 import com.ajulay.api.service.IProjectService;
 import com.ajulay.api.service.ITaskService;
 import com.ajulay.command.AbstractCommand;
-import com.ajulay.constants.TaskConstant;
+import com.ajulay.constants.ServiceConstant;
 import com.ajulay.entity.Assigner;
 import com.ajulay.entity.Project;
 import com.ajulay.entity.Task;
@@ -46,31 +46,24 @@ public class ControllerUI {
         if (!AbstractCommand.class.isAssignableFrom(clazz)) return;
         final AbstractCommand command = (AbstractCommand) clazz.newInstance();
         command.setController(this);
-        commands.put(command.inputCommand(), command);
+        commands.put(command.getCommandKeyWord(), command);
     }
 
-    public void run() {
+    public void run() throws Exception {
         testData();
         final Scanner scanner = new Scanner(System.in);
         System.out.println("TASK MANAGER\n" +
                 "for help type: /help");
         while (true) {
-            try {
+
                 String in = scanner.nextLine();
                 if (in == null) continue;
-                AbstractCommand command = null;
-                if (in.startsWith(TaskConstant.SERVICE_COMMAND_SIGN)) {
-
-                    command = commands.get(in);
+            final AbstractCommand command = commands.get(in);
+            if (command != null) {
                     System.out.println(command.getDescription());
                     command.execute();
-                    continue;
-
                 }
-                System.out.println("You entered incorrect data...");
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+            System.out.println("You entered incorrect data.");
         }
     }
 
@@ -87,11 +80,11 @@ public class ControllerUI {
         projectService.getProjects().add(project2);
         projectService.getProjects().add(project3);
 
-        taskService.findTaskAll().add(getTestTask(project1.getId(), "2018-12-20", TaskConstant.HIGH_PRIORITY, "Write application1..."));
-        taskService.findTaskAll().add(getTestTask(project2.getId(), "2018-12-20", TaskConstant.MIDDLE_PRIORITY, "Write application2..."));
-        taskService.findTaskAll().add(getTestTask(project3.getId(), "2018-12-20", TaskConstant.LOW_PRIORITY, "Write application3..."));
-        taskService.findTaskAll().add(getTestTask(project1.getId(), "2018-12-20", TaskConstant.MIDDLE_PRIORITY, "Write application4..."));
-        taskService.findTaskAll().add(getTestTask(project2.getId(), "2018-12-20", TaskConstant.LOW_PRIORITY, "Write application5..."));
+        taskService.findTaskAll().add(getTestTask(project1.getId(), "2018-12-20", ServiceConstant.HIGH_PRIORITY, "Write application1..."));
+        taskService.findTaskAll().add(getTestTask(project2.getId(), "2018-12-20", ServiceConstant.MIDDLE_PRIORITY, "Write application2..."));
+        taskService.findTaskAll().add(getTestTask(project3.getId(), "2018-12-20", ServiceConstant.LOW_PRIORITY, "Write application3..."));
+        taskService.findTaskAll().add(getTestTask(project1.getId(), "2018-12-20", ServiceConstant.MIDDLE_PRIORITY, "Write application4..."));
+        taskService.findTaskAll().add(getTestTask(project2.getId(), "2018-12-20", ServiceConstant.LOW_PRIORITY, "Write application5..."));
     }
 
     private Task getTestTask(final String projectId, final String sTerm, int priority, final String content) {

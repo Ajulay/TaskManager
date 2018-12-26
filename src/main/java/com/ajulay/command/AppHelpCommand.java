@@ -5,7 +5,7 @@ import java.util.Collection;
 public class AppHelpCommand extends AbstractCommand {
 
     @Override
-    public String inputCommand() {
+    public String getCommandKeyWord() {
         return "/help";
     }
 
@@ -19,7 +19,7 @@ public class AppHelpCommand extends AbstractCommand {
         Collection<AbstractCommand> commands = getController().getCommands().values();
         commands.remove(this);
         for (AbstractCommand cmd : commands) {
-            System.out.println(cmd.inputCommand() + " - " + cmd.getDescription());
+            System.out.println(cmd.getCommandKeyWord() + " - " + cmd.getDescription());
         }
     }
 

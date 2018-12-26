@@ -5,7 +5,7 @@ import com.ajulay.entity.Assigner;
 public class AssignerFindAllCommand extends AbstractCommand {
 
     @Override
-    public String inputCommand() {
+    public String getCommandKeyWord() {
         return "/exs";
     }
 
