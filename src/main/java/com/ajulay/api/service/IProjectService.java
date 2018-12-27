@@ -1,6 +1,7 @@
 package com.ajulay.api.service;
 
 import com.ajulay.entity.Project;
+import com.ajulay.exception.checked.NoSuchProjectException;
 
 import java.util.List;
 
@@ -9,9 +10,9 @@ import java.util.List;
  */
 public interface IProjectService {
 
-    Project getByName(String projectName) throws Exception;
+    Project getByName(String projectName) throws NoSuchProjectException;
 
-    Project getById(String projectId) throws Exception;
+    Project getById(String projectId) throws NoSuchProjectException;
 
     List<Project> getProjects();
 

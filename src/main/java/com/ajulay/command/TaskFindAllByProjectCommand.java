@@ -2,8 +2,6 @@ package com.ajulay.command;
 
 import com.ajulay.entity.Task;
 
-import java.util.Scanner;
-
 public class TaskFindAllByProjectCommand extends AbstractCommand {
 
     @Override
@@ -18,9 +16,8 @@ public class TaskFindAllByProjectCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        final Scanner in = new Scanner(System.in);
         System.out.println("Enter project id...");
-        final String projectId = in.nextLine();
+        final String projectId = getController().nextLine();
         int index = 1;
         System.out.println("Project id: " + projectId);
         for (Task task : getController().getTaskService().findTaskAllByProject(projectId)) {

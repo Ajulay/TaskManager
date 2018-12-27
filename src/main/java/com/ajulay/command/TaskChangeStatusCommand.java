@@ -1,6 +1,6 @@
 package com.ajulay.command;
 
-import java.util.Scanner;
+import com.ajulay.exception.checked.NoSuchTaskException;
 
 public class TaskChangeStatusCommand extends AbstractCommand {
 
@@ -15,12 +15,11 @@ public class TaskChangeStatusCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws Exception {
-        final Scanner sc = new Scanner(System.in);
+    public void execute() throws NoSuchTaskException {
         System.out.println("Enter task id:");
-        String taskId = sc.nextLine();
+        String taskId = getController().nextLine();
         System.out.println("Enter task status: 'finished', 'failed' OR 'onprocess'");
-        String status = sc.nextLine();
+        String status = getController().nextLine();
         getController().getTaskService().changeStatus(taskId, status);
         System.out.println("Status changed");
     }

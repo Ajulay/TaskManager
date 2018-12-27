@@ -2,6 +2,7 @@ package com.ajulay.api.service;
 
 
 import com.ajulay.entity.Assigner;
+import com.ajulay.exception.checked.NoSuchAssignerException;
 
 import java.util.List;
 
@@ -10,15 +11,15 @@ import java.util.List;
  */
 public interface IAssignerService {
 
-    Assigner createAssigner(String surname) throws Exception;
+    Assigner createAssigner(String surname);
 
-    Assigner deleteAssigner(String surname) throws Exception;
+    Assigner deleteAssigner(String surname) throws NoSuchAssignerException;
 
-    Assigner updateAssigner(Assigner executor) throws Exception;
+    Assigner updateAssigner(Assigner executor) throws NoSuchAssignerException;
 
-    Assigner getBySurname(String surname) throws Exception;
+    Assigner getBySurname(String surname) throws NoSuchAssignerException;
 
-    Assigner findById(String id) throws Exception;
+    Assigner findById(String id) throws NoSuchAssignerException;
 
     List<Assigner> getAssigners();
 

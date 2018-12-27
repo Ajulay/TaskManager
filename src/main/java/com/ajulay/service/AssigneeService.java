@@ -5,8 +5,8 @@ import com.ajulay.api.service.IAssigneeService;
 import com.ajulay.constants.ServiceConstant;
 import com.ajulay.dao.AssigneeDAO;
 import com.ajulay.entity.Assignee;
-import com.ajulay.exception.NoIdException;
-import com.ajulay.exception.NoSuchAssigneeException;
+import com.ajulay.exception.checked.NoSuchAssigneeException;
+import com.ajulay.exception.unchecked.NullIdException;
 
 import java.util.List;
 
@@ -19,8 +19,11 @@ public class AssigneeService implements IAssigneeService {
 
     @Override
     public Assignee createAssignee(final String taskId, final String assignerId) {
-        if (taskId == null || ServiceConstant.EMPTY_VALUE.equals(taskId) ||
-                assignerId == null || ServiceConstant.EMPTY_VALUE.equals(assignerId)) throw new NoIdException();
+        if (taskId == null || assignerId == null ||
+                ServiceConstant.EMPTY_VALUE.equals(taskId) ||
+                ServiceConstant.EMPTY_VALUE.equals(assignerId)) {
+            throw new NullIdException();
+        }
         final Assignee assignee = new Assignee();
         assignee.setTaskId(taskId);
         assignee.setAssignerId(assignerId);
@@ -28,8 +31,10 @@ public class AssigneeService implements IAssigneeService {
     }
 
     @Override
-    public Assignee deleteAssignee(final String id) throws Exception {
-        if (id == null || ServiceConstant.EMPTY_VALUE.equals(id)) throw new NoIdException();
+    public Assignee deleteAssignee(final String id) throws NoSuchAssigneeException {
+        if (id == null || ServiceConstant.EMPTY_VALUE.equals(id)) {
+            throw new NullIdException();
+        }
         return assigneeDAO.delete(id);
     }
 
@@ -41,7 +46,9 @@ public class AssigneeService implements IAssigneeService {
 
     @Override
     public Assignee getById(final String id) throws NoSuchAssigneeException {
-        if (id == null || ServiceConstant.EMPTY_VALUE.equals(id)) throw new NoIdException();
+        if (id == null || ServiceConstant.EMPTY_VALUE.equals(id)) {
+            throw new NullIdException();
+        }
         return assigneeDAO.findById(id);
     }
 

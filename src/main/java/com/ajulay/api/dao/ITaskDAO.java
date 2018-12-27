@@ -1,6 +1,7 @@
 package com.ajulay.api.dao;
 
 import com.ajulay.entity.Task;
+import com.ajulay.exception.checked.NoSuchTaskException;
 
 import java.util.List;
 
@@ -11,11 +12,11 @@ public interface ITaskDAO {
 
     Task save(Task task);
 
-    Task delete(String id) throws Exception;
+    Task delete(String id) throws NoSuchTaskException;
 
-    Task update(Task task) throws Exception;
+    Task update(Task task) throws NoSuchTaskException;
 
-    Task findById(String id) throws Exception;
+    Task findById(String id) throws NoSuchTaskException;
 
     List<Task> findAll();
 

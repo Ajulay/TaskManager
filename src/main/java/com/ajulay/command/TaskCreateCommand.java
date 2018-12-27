@@ -3,11 +3,12 @@ package com.ajulay.command;
 import com.ajulay.constants.ServiceConstant;
 import com.ajulay.entity.Assigner;
 import com.ajulay.entity.Task;
+import com.ajulay.exception.checked.NoSuchAssignerException;
+import com.ajulay.exception.checked.NoSuchProjectException;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.Scanner;
 
 public class TaskCreateCommand extends AbstractCommand {
 
@@ -22,15 +23,14 @@ public class TaskCreateCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws Exception {
+    public void execute() throws NoSuchProjectException, NoSuchAssignerException {
         System.out.println("Enter: project_id (required)");
-        final Scanner scanner = new Scanner(System.in);
-        String in = scanner.nextLine();
+        String in = getController().nextLine();
         if (in == null || getController().getProjectService().getById(in) == null) return;
         final Task task = new Task();
         task.setProjectId(in);
         System.out.println("Enter term in format: yyyy-MM-dd");
-        in = scanner.nextLine();
+        in = getController().nextLine();
         Instant term = null;
         if (in == null) {
             term = Instant.now();
@@ -46,21 +46,21 @@ public class TaskCreateCommand extends AbstractCommand {
         task.setTerm(term);
 
         System.out.println("Enter priority (1 - 3)");
-        in = scanner.nextLine();
+        in = getController().nextLine();
         if (in == null) {
             task.setPriority(ServiceConstant.LOW_PRIORITY);
         } else {
             task.setPriority(Integer.parseInt(in));
         }
         System.out.println("Enter content");
-        in = scanner.nextLine();
+        in = getController().nextLine();
         if (in == null) {
             task.setContent("Enter content...");
         } else {
             task.setContent(in);
         }
         System.out.println("Enter executor(s) (to finish write /end)");
-        while (!ServiceConstant.END_ENTER_ASSIGNER.equals((in = scanner.nextLine()))) {
+        while (!ServiceConstant.END_ENTER_ASSIGNER.equals((in = getController().nextLine()))) {
             Assigner assigner = getController().getAssignerService().getBySurname(in);
             getController().getAssigneeService().createAssignee(task.getId(), assigner.getId());
         }

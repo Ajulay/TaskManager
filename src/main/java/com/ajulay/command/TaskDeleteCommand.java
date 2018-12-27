@@ -1,6 +1,6 @@
 package com.ajulay.command;
 
-import java.util.Scanner;
+import com.ajulay.exception.checked.NoSuchTaskException;
 
 public class TaskDeleteCommand extends AbstractCommand {
 
@@ -15,10 +15,9 @@ public class TaskDeleteCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws Exception {
+    public void execute() throws NoSuchTaskException {
         System.out.println("Enter task id");
-        final Scanner in = new Scanner(System.in);
-        getController().getTaskService().deleteTask(in.nextLine());
+        getController().getTaskService().deleteTask(getController().nextLine());
         System.out.println("task deleted...");
     }
 

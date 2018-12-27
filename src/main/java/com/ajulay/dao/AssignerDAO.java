@@ -2,7 +2,7 @@ package com.ajulay.dao;
 
 import com.ajulay.api.dao.IAssignerDAO;
 import com.ajulay.entity.Assigner;
-import com.ajulay.exception.NoSuchAssignerException;
+import com.ajulay.exception.checked.NoSuchAssignerException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,11 +34,14 @@ public class AssignerDAO implements IAssignerDAO {
 
     @Override
     public Assigner update(final Assigner assigner) throws NoSuchAssignerException {
-        final Assigner oldAssigner = findById(assigner.getId());
-        oldAssigner.setName(assigner.getName());
-        oldAssigner.setLastName(assigner.getLastName());
-        oldAssigner.setSurname(assigner.getSurname());
-        return oldAssigner;
+        for (Assigner asser : assigners) {
+            if (asser.getId().equals(assigner.getId())) {
+                assigners.remove(asser);
+                assigners.add(assigner);
+                return asser;
+            }
+        }
+        throw new NoSuchAssignerException();
     }
 
     @Override

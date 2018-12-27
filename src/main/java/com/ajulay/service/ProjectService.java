@@ -5,8 +5,8 @@ import com.ajulay.api.service.IProjectService;
 import com.ajulay.constants.ServiceConstant;
 import com.ajulay.dao.ProjectDAO;
 import com.ajulay.entity.Project;
-import com.ajulay.exception.NoProjectException;
-import com.ajulay.exception.NoSuchProjectException;
+import com.ajulay.exception.checked.NoSuchProjectException;
+import com.ajulay.exception.unchecked.NullDataForProjectException;
 
 import java.util.List;
 
@@ -18,7 +18,9 @@ public class ProjectService implements IProjectService {
     private final IProjectDAO projectDAO = new ProjectDAO();
 
     public Project getByName(final String projectName) throws NoSuchProjectException {
-        if (projectName == null || ServiceConstant.EMPTY_VALUE.equals(projectName)) throw new NoProjectException();
+        if (projectName == null || ServiceConstant.EMPTY_VALUE.equals(projectName)) {
+            throw new NullDataForProjectException();
+        }
         for (Project p : getProjects()) {
             if (p.getName().equals(projectName)) {
                 return p;
@@ -29,7 +31,9 @@ public class ProjectService implements IProjectService {
 
     @Override
     public Project getById(final String projectId) throws NoSuchProjectException {
-        if (projectId == null || ServiceConstant.EMPTY_VALUE.equals(projectId)) throw new NullPointerException();
+        if (projectId == null || ServiceConstant.EMPTY_VALUE.equals(projectId)) {
+            throw new NullPointerException();
+        }
         return projectDAO.findById(projectId);
     }
 

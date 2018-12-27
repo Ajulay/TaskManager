@@ -8,25 +8,27 @@
 
 #### *Project base structure:*
 * App: Class with psvm;
-* Executor: Class-entity contains executor data;
+* Assigner: Class-entity contains executor data;
+* Assignee: Class-entity contains relation between Assigner and Task;
 * Project: Class-entity contains project data;
 * Task: Class-entity contains task data;  
-* TaskConstant: Class contains base constants;
-* ExecutorsService: Class presents executor data; 
+* ServiceConstant: Class contains base constants;
+* Status: enum - START, INPROGRESS, FINISHED, FAILED;
+* AssignerService: Class presents assigner (executor) data; 
+* AssigneeService: Class presents assignee data;
 * ProjectService: Class presents project data;
 * TaskService: Class presents task data;
-* ExecutorDao: Class provides executor data; 
+* AssignerDao: Class provides assigner (executor) data; 
+* AssigneeDao: Class provides assignee data; 
 * ProjectDao: Class provides project data;
-* TaskDao: Class provides task data.
+* TaskDao: Class provides task data;
+* Exception: package com.ajulay.exception contains custom exceptions;
+* AbstractCommand: Class-interface for executing command;
+* Api: package com.ajulay.api contains base interfaces for data access.
 
 #### *Base functions:*    
-* to see projects write: /pts
-* to see executors write: /ex
-* to see tasks write: /tks
-* to add group task write: project_name, term, priority(1-3), content (, executor_surname1, executor_surname2...)
-* to change status task write: /st id(task), NEW (or ONWORKING, FINISHED, FAILED)
-* to delete task write: /dt id(task)
-* to see all tasks in project write: /ptks project_id  
+* to see base function type: /help;
+* to exit from application type: /exit. 
 
 #### *Build:*
 

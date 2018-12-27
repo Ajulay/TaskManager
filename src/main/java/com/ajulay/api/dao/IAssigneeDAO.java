@@ -1,7 +1,7 @@
 package com.ajulay.api.dao;
 
 import com.ajulay.entity.Assignee;
-import com.ajulay.exception.NoSuchAssigneeException;
+import com.ajulay.exception.checked.NoSuchAssigneeException;
 
 import java.util.List;
 

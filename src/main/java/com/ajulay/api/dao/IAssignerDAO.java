@@ -1,7 +1,7 @@
 package com.ajulay.api.dao;
 
 import com.ajulay.entity.Assigner;
-import com.ajulay.exception.NoSuchAssignerException;
+import com.ajulay.exception.checked.NoSuchAssignerException;
 
 import java.util.List;
 

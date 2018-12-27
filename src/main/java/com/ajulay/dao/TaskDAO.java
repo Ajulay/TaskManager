@@ -2,7 +2,7 @@ package com.ajulay.dao;
 
 import com.ajulay.api.dao.ITaskDAO;
 import com.ajulay.entity.Task;
-import com.ajulay.exception.NoSuchTaskException;
+import com.ajulay.exception.checked.NoSuchTaskException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +32,7 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public Task update(final Task task) throws Exception {
+    public Task update(final Task task) throws NoSuchTaskException {
         final Task oldTask = findById(task.getId());
         oldTask.setContent(task.getContent());
         oldTask.setPriority(task.getPriority());

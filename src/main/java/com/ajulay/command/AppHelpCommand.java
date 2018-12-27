@@ -15,7 +15,7 @@ public class AppHelpCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws Exception {
+    public void execute() {
         Collection<AbstractCommand> commands = getController().getCommands().values();
         commands.remove(this);
         for (AbstractCommand cmd : commands) {

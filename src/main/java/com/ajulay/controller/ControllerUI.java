@@ -9,6 +9,9 @@ import com.ajulay.constants.ServiceConstant;
 import com.ajulay.entity.Assigner;
 import com.ajulay.entity.Project;
 import com.ajulay.entity.Task;
+import com.ajulay.exception.checked.NoSuchAssignerException;
+import com.ajulay.exception.checked.NoSuchProjectException;
+import com.ajulay.exception.checked.NoSuchTaskException;
 import com.ajulay.service.AssigneeService;
 import com.ajulay.service.AssignerService;
 import com.ajulay.service.ProjectService;
@@ -36,6 +39,8 @@ public class ControllerUI {
 
     private final Map<String, AbstractCommand> commands = new HashMap<>();
 
+    private final Scanner scanner = new Scanner(System.in);
+
     public void register(Class... clazzes) throws InstantiationException, IllegalAccessException {
         for (Class clazz : clazzes) {
             register(clazz);
@@ -49,19 +54,22 @@ public class ControllerUI {
         commands.put(command.getCommandKeyWord(), command);
     }
 
-    public void run() throws Exception {
+    public String nextLine() {
+        return scanner.nextLine();
+    }
+
+    public void run() throws NoSuchTaskException, NoSuchProjectException, NoSuchAssignerException {
         testData();
-        final Scanner scanner = new Scanner(System.in);
         System.out.println("TASK MANAGER\n" +
                 "for help type: /help");
         while (true) {
-
-                String in = scanner.nextLine();
+            String in = nextLine();
                 if (in == null) continue;
             final AbstractCommand command = commands.get(in);
             if (command != null) {
                     System.out.println(command.getDescription());
                     command.execute();
+                continue;
                 }
             System.out.println("You entered incorrect data.");
         }
@@ -121,5 +129,9 @@ public class ControllerUI {
 
     public IAssigneeService getAssigneeService() {
         return assigneeService;
+    }
+
+    public Scanner getScanner() {
+        return scanner;
     }
 }

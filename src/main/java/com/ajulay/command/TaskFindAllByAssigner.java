@@ -3,10 +3,11 @@ package com.ajulay.command;
 import com.ajulay.entity.Assignee;
 import com.ajulay.entity.Assigner;
 import com.ajulay.entity.Task;
+import com.ajulay.exception.checked.NoSuchAssignerException;
+import com.ajulay.exception.checked.NoSuchTaskException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class TaskFindAllByAssigner extends AbstractCommand {
 
@@ -21,10 +22,9 @@ public class TaskFindAllByAssigner extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws Exception {
-        final Scanner sc = new Scanner(System.in);
+    public void execute() throws NoSuchAssignerException, NoSuchTaskException {
         System.out.println("Enter assigner id");
-        final String assignerId = sc.nextLine();
+        final String assignerId = getController().nextLine();
         final List<Assignee> assignees = getController().getAssigneeService().AssigneeFindAll();
         final List<Task> tasks = new ArrayList<>();
         final Assigner assigner = getController().getAssignerService().findById(assignerId);

@@ -1,6 +1,7 @@
 package com.ajulay.api.service;
 
 import com.ajulay.entity.Assignee;
+import com.ajulay.exception.checked.NoSuchAssigneeException;
 
 import java.util.List;
 
@@ -9,13 +10,13 @@ import java.util.List;
  */
 public interface IAssigneeService {
 
-    Assignee createAssignee(String taskId, String assignerId) throws Exception;
+    Assignee createAssignee(String taskId, String assignerId);
 
-    Assignee deleteAssignee(String id) throws Exception;
+    Assignee deleteAssignee(String id) throws NoSuchAssigneeException;
 
-    Assignee updateAssignee(Assignee assignee) throws Exception;
+    Assignee updateAssignee(Assignee assignee) throws NoSuchAssigneeException;
 
-    Assignee getById(String id) throws Exception;
+    Assignee getById(String id) throws NoSuchAssigneeException;
 
     List<Assignee> AssigneeFindAll();
 

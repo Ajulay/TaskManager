@@ -1,7 +1,7 @@
 package com.ajulay.api.dao;
 
 import com.ajulay.entity.Project;
-import com.ajulay.exception.NoSuchProjectException;
+import com.ajulay.exception.checked.NoSuchProjectException;
 
 import java.util.List;
 

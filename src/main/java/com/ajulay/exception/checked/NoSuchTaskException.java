@@ -1,4 +1,4 @@
-package com.ajulay.exception;
+package com.ajulay.exception.checked;
 
 public class NoSuchTaskException extends Exception {
 

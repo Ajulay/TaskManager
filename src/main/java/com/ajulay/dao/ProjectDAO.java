@@ -2,7 +2,7 @@ package com.ajulay.dao;
 
 import com.ajulay.api.dao.IProjectDAO;
 import com.ajulay.entity.Project;
-import com.ajulay.exception.NoSuchProjectException;
+import com.ajulay.exception.checked.NoSuchProjectException;
 
 import java.util.ArrayList;
 import java.util.List;
