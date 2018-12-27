@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @inherite
+ * {@inheritDoc}
  */
 public class ProjectDAO implements IProjectDAO {
 

@@ -10,7 +10,7 @@ import com.ajulay.exception.unchecked.NullDataForProjectException;
 import java.util.List;
 
 /**
- * @inherite
+ * {@inheritDoc}
  */
 public class ProjectService implements IProjectService {
 

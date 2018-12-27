@@ -11,7 +11,7 @@ import com.ajulay.exception.unchecked.NullIdException;
 import java.util.List;
 
 /**
- * @inherite
+ * {@inheritDoc}
  */
 public class TaskService implements ITaskService {
 
