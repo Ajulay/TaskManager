@@ -9,9 +9,6 @@ import com.ajulay.constants.ServiceConstant;
 import com.ajulay.entity.Assigner;
 import com.ajulay.entity.Project;
 import com.ajulay.entity.Task;
-import com.ajulay.exception.checked.NoSuchAssignerException;
-import com.ajulay.exception.checked.NoSuchProjectException;
-import com.ajulay.exception.checked.NoSuchTaskException;
 import com.ajulay.service.AssigneeService;
 import com.ajulay.service.AssignerService;
 import com.ajulay.service.ProjectService;
@@ -58,7 +55,7 @@ public class ControllerUI {
         return scanner.nextLine();
     }
 
-    public void run() throws NoSuchTaskException, NoSuchProjectException, NoSuchAssignerException {
+    public void run() throws Exception {
         testData();
         System.out.println("TASK MANAGER\n" +
                 "for help type: /help");
