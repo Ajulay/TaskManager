@@ -15,15 +15,15 @@ public class AssigneeDAO implements IAssigneeDAO {
     private final List<Assignee> assignees = new ArrayList<>();
 
     @Override
-    public Assignee create(Assignee assignee) {
+    public Assignee create(final Assignee assignee) {
         assignees.add(assignee);
         return assignee;
     }
 
     @Override
-    public Assignee delete(String id) throws NoSuchAssigneeException {
-        for (Assignee assignee : assignees) {
-            if (assignee.getId().equals(id)) {
+    public Assignee delete(final String id) throws NoSuchAssigneeException {
+        for (final Assignee assignee : assignees) {
+            if (id.equals(assignee.getId())) {
                 assignees.remove(assignee);
                 return assignee;
             }
@@ -33,8 +33,8 @@ public class AssigneeDAO implements IAssigneeDAO {
     }
 
     @Override
-    public Assignee update(Assignee assignee) throws NoSuchAssigneeException {
-        for (Assignee asee : assignees) {
+    public Assignee update(final Assignee assignee) throws NoSuchAssigneeException {
+        for (final Assignee asee : assignees) {
             if (asee.getId().equals(assignee.getId())) {
                 assignees.remove(asee);
                 assignees.add(assignee);
@@ -45,9 +45,9 @@ public class AssigneeDAO implements IAssigneeDAO {
     }
 
     @Override
-    public Assignee findById(String id) throws NoSuchAssigneeException {
-        for (Assignee assignee : assignees) {
-            if (assignee.getId().equals(id)) {
+    public Assignee findById(final String id) throws NoSuchAssigneeException {
+        for (final Assignee assignee : assignees) {
+            if (id.equals(assignee.getId())) {
                 return assignee;
             }
         }

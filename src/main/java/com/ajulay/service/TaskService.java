@@ -1,7 +1,6 @@
 package com.ajulay.service;
 
 import com.ajulay.api.service.ITaskService;
-import com.ajulay.constants.ServiceConstant;
 import com.ajulay.dao.TaskDAO;
 import com.ajulay.entity.Task;
 import com.ajulay.enumirated.Status;
@@ -24,20 +23,18 @@ public class TaskService implements ITaskService {
     }
 
     public Task deleteTask(final String id) throws NoSuchTaskException {
-        if (id == null || ServiceConstant.EMPTY_VALUE.equals(id)) {
+        if (id.isEmpty()) {
             throw new NullIdException();
         }
         return dao.delete(id);
     }
 
     public void changeStatus(final String taskId, final String status) throws NoSuchTaskException {
-        if (taskId == null || status == null ||
-                ServiceConstant.EMPTY_VALUE.equals(taskId) ||
-                ServiceConstant.EMPTY_VALUE.equals(status)) {
+        if (taskId.isEmpty() || status.isEmpty()) {
             throw new NullIdException();
         }
         for (Task task : dao.findAll()) {
-            if (task.getId().equals(taskId)) {
+            if (taskId.equals(task.getId())) {
                 task.setStatus(Status.valueOf(status.toUpperCase()));
                 return;
             }
@@ -51,7 +48,7 @@ public class TaskService implements ITaskService {
 
     @Override
     public List<Task> findTaskAllByProject(final String projectId) {
-        if (projectId == null || ServiceConstant.EMPTY_VALUE.equals(projectId)) {
+        if (projectId.isEmpty()) {
             throw new NullIdException();
         }
         return dao.findByProjectId(projectId);
@@ -59,7 +56,7 @@ public class TaskService implements ITaskService {
 
     @Override
     public Task findTaskById(String taskId) throws NoSuchTaskException {
-        if (taskId == null || ServiceConstant.EMPTY_VALUE.equals(taskId)) {
+        if (taskId.isEmpty()) {
             throw new NullDataForTaskException();
         }
         return dao.findById(taskId);

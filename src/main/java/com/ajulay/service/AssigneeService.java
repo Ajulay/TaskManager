@@ -2,7 +2,6 @@ package com.ajulay.service;
 
 import com.ajulay.api.dao.IAssigneeDAO;
 import com.ajulay.api.service.IAssigneeService;
-import com.ajulay.constants.ServiceConstant;
 import com.ajulay.dao.AssigneeDAO;
 import com.ajulay.entity.Assignee;
 import com.ajulay.exception.checked.NoSuchAssigneeException;
@@ -19,9 +18,7 @@ public class AssigneeService implements IAssigneeService {
 
     @Override
     public Assignee createAssignee(final String taskId, final String assignerId) {
-        if (taskId == null || assignerId == null ||
-                ServiceConstant.EMPTY_VALUE.equals(taskId) ||
-                ServiceConstant.EMPTY_VALUE.equals(assignerId)) {
+        if (taskId.isEmpty() || assignerId.isEmpty()) {
             throw new NullIdException();
         }
         final Assignee assignee = new Assignee();
@@ -32,7 +29,7 @@ public class AssigneeService implements IAssigneeService {
 
     @Override
     public Assignee deleteAssignee(final String id) throws NoSuchAssigneeException {
-        if (id == null || ServiceConstant.EMPTY_VALUE.equals(id)) {
+        if (id.isEmpty()) {
             throw new NullIdException();
         }
         return assigneeDAO.delete(id);
@@ -46,7 +43,7 @@ public class AssigneeService implements IAssigneeService {
 
     @Override
     public Assignee getById(final String id) throws NoSuchAssigneeException {
-        if (id == null || ServiceConstant.EMPTY_VALUE.equals(id)) {
+        if (id.isEmpty()) {
             throw new NullIdException();
         }
         return assigneeDAO.findById(id);

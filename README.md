@@ -13,7 +13,7 @@
 * Project: Class-entity contains project data;
 * Task: Class-entity contains task data;  
 * ServiceConstant: Class contains base constants;
-* Status: enum - START, INPROGRESS, FINISHED, FAILED;
+* Status: enum - START, IN_PROGRESS, FINISHED, FAILED;
 * AssignerService: Class presents assigner (executor) data; 
 * AssigneeService: Class presents assignee data;
 * ProjectService: Class presents project data;

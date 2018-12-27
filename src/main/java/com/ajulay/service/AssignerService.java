@@ -2,7 +2,6 @@ package com.ajulay.service;
 
 import com.ajulay.api.dao.IAssignerDAO;
 import com.ajulay.api.service.IAssignerService;
-import com.ajulay.constants.ServiceConstant;
 import com.ajulay.dao.AssignerDAO;
 import com.ajulay.entity.Assigner;
 import com.ajulay.exception.checked.NoSuchAssignerException;
@@ -19,14 +18,14 @@ public class AssignerService implements IAssignerService {
     private final IAssignerDAO assignerDao = new AssignerDAO();
 
     public Assigner createAssigner(final String surname) {
-        if (surname == null || ServiceConstant.EMPTY_VALUE.equals(surname)) {
+        if (surname.isEmpty()) {
             throw new NullDataForAssignerException();
         }
         return assignerDao.create(surname);
     }
 
     public Assigner deleteAssigner(final String surname) throws NoSuchAssignerException {
-        if (surname == null || ServiceConstant.EMPTY_VALUE.equals(surname)) {
+        if (surname.isEmpty()) {
             throw new NullDataForAssignerException();
         }
         return assignerDao.delete(surname);
@@ -42,11 +41,11 @@ public class AssignerService implements IAssignerService {
     }
 
     public Assigner getBySurname(final String surname) throws NoSuchAssignerException {
-        if (surname == null || ServiceConstant.EMPTY_VALUE.equals(surname)) {
+        if (surname.isEmpty()) {
             throw new NullDataForAssignerException();
         }
         for (Assigner assigner : getAssigners()) {
-            if (assigner.getSurname().equals(surname)) {
+            if (surname.equals(assigner.getSurname())) {
                 return assigner;
             }
         }
@@ -54,7 +53,7 @@ public class AssignerService implements IAssignerService {
     }
 
     public Assigner findById(String id) throws NoSuchAssignerException {
-        if (id == null || ServiceConstant.EMPTY_VALUE.equals(id)) {
+        if (id.isEmpty()) {
             throw new NullIdException();
         }
         return assignerDao.findById(id);

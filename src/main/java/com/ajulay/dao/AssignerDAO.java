@@ -24,7 +24,7 @@ public class AssignerDAO implements IAssignerDAO {
     @Override
     public Assigner delete(final String surname) throws NoSuchAssignerException {
         for (Assigner assigner : findAll()) {
-            if (assigner.getSurname().equals(surname)) {
+            if (surname.equals(assigner.getSurname())) {
                 findAll().remove(assigner);
                 return assigner;
             }
@@ -34,7 +34,7 @@ public class AssignerDAO implements IAssignerDAO {
 
     @Override
     public Assigner update(final Assigner assigner) throws NoSuchAssignerException {
-        for (Assigner asser : assigners) {
+        for (final Assigner asser : assigners) {
             if (asser.getId().equals(assigner.getId())) {
                 assigners.remove(asser);
                 assigners.add(assigner);
@@ -46,8 +46,8 @@ public class AssignerDAO implements IAssignerDAO {
 
     @Override
     public Assigner findById(final String id) throws NoSuchAssignerException {
-        for (Assigner assigner : findAll()) {
-            if (assigner.getId().equals(id)) {
+        for (final Assigner assigner : findAll()) {
+            if (id.equals(assigner.getId())) {
                 return assigner;
             }
         }

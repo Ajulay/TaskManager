@@ -44,8 +44,8 @@ public class TaskDAO implements ITaskDAO {
 
     @Override
     public Task findById(final String id) throws NoSuchTaskException {
-        for (Task task : tasks) {
-            if (task.getId().equals(id)) {
+        for (final Task task : tasks) {
+            if (id.equals(task.getId())) {
                 return task;
             }
         }
@@ -59,8 +59,8 @@ public class TaskDAO implements ITaskDAO {
     @Override
     public List<Task> findByProjectId(final String projectId) {
         final List<Task> projectTasks = new ArrayList<>();
-        for (Task task : tasks) {
-            if (task.getProjectId().equals(projectId)) {
+        for (final Task task : tasks) {
+            if (projectId.equals(task.getProjectId())) {
                 projectTasks.add(task);
             }
         }

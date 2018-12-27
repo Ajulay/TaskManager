@@ -23,7 +23,7 @@ public class ProjectDAO implements IProjectDAO {
     @Override
     public Project delete(final String id) throws NoSuchProjectException {
         final List<Project> projects = findAll();
-        for (Project project : projects) {
+        for (final Project project : projects) {
             if (project.getId().equals(id)) {
                 projects.remove(project);
                 return project;
@@ -42,8 +42,8 @@ public class ProjectDAO implements IProjectDAO {
 
     @Override
     public Project findById(final String id) throws NoSuchProjectException {
-        for (Project project : findAll()) {
-            if (project.getId().equals(id)) {
+        for (final Project project : findAll()) {
+            if (id.equals(project.getId())) {
                 return project;
             }
         }
