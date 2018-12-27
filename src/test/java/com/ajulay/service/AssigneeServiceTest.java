@@ -6,6 +6,7 @@ import com.ajulay.api.service.ITaskService;
 import com.ajulay.entity.Assignee;
 import com.ajulay.entity.Assigner;
 import com.ajulay.entity.Task;
+import com.ajulay.exception.checked.NoSuchAssigneeException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -47,7 +48,7 @@ public class AssigneeServiceTest {
     }
 
     @Test
-    public void getById() throws Exception {
+    public void getById() throws NoSuchAssigneeException {
         final IAssigneeService service = new AssigneeService();
         final ITaskService taskService = new TaskService();
         final IAssignerService assignerService = new AssignerService();
@@ -64,7 +65,7 @@ public class AssigneeServiceTest {
     }
 
     @Test
-    public void assigneeFindAll() throws Exception {
+    public void assigneeFindAll() {
         final IAssigneeService service = new AssigneeService();
         final ITaskService taskService = new TaskService();
         final IAssignerService assignerService = new AssignerService();
@@ -76,7 +77,7 @@ public class AssigneeServiceTest {
             service.createAssignee(taskId, assignerId);
         }
 
-        Assert.assertEquals(service.AssigneeFindAll().size(), 10);
+        Assert.assertEquals(service.findAllAssignee().size(), 10);
     }
 
 }

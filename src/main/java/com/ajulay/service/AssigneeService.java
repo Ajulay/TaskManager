@@ -53,7 +53,7 @@ public class AssigneeService implements IAssigneeService {
     }
 
     @Override
-    public List<Assignee> AssigneeFindAll() {
+    public List<Assignee> findAllAssignee() {
         return assigneeDAO.findAll();
     }
 

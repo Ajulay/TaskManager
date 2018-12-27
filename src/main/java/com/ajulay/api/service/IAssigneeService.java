@@ -18,6 +18,6 @@ public interface IAssigneeService {
 
     Assignee getById(String id) throws NoSuchAssigneeException;
 
-    List<Assignee> AssigneeFindAll();
+    List<Assignee> findAllAssignee();
 
 }
