@@ -29,14 +29,6 @@ public class DataLoadCommand extends AbstractCommand {
         final List<Assigner> assigners = (List<Assigner>) ois.readObject();
         final List<Assignee> assignees = (List<Assignee>) ois.readObject();
         final List<Task> tasks = (List<Task>) ois.readObject();
-        if (projects.size() > 0) System.out.println(projects.toString());
-        else System.out.println("No projects");
-        if (assignees.size() > 0) System.out.println(assignees.toString());
-        else System.out.println("No assignees");
-        if (assigners.size() > 0) System.out.println(assigners.toString());
-        else System.out.println("No assigners");
-        if (tasks.size() > 0) System.out.println(tasks.toString());
-        else System.out.println("No tasks");
         getController().getProjectService().merge(projects);
         getController().getAssigneeService().merge(assignees);
         getController().getAssignerService().merge(assigners);
