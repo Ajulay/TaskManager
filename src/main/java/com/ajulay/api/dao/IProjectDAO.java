@@ -20,4 +20,5 @@ public interface IProjectDAO {
 
     List<Project> findAll();
 
+    boolean merge(List<Project> projects);
 }

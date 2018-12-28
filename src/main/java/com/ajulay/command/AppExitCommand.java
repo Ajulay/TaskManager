@@ -14,6 +14,7 @@ public class AppExitCommand extends AbstractCommand {
 
     @Override
     public void execute() {
+        getController().getCommands().get(DataSaveCommand.COMMAND);
         System.exit(0);
     }
 

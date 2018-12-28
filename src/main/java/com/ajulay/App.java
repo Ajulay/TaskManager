@@ -9,7 +9,8 @@ public class App {
             AppExitCommand.class, AppHelpCommand.class, AssignerFindAllCommand.class,
             ProjectFindAllCommand.class, TaskChangeStatusCommand.class, TaskCreateCommand.class,
             TaskDeleteCommand.class, TaskFindAllByProjectCommand.class, TaskFindAllCommand.class,
-            AssignerFindAllByTask.class, TaskFindAllByAssigner.class
+            AssignerFindAllByTask.class, TaskFindAllByAssigner.class, DataSaveCommand.class,
+            DataLoadCommand.class, BinaryDataClearCommand.class
     };
 
     public static void main(String[] args) throws Exception {

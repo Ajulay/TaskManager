@@ -54,4 +54,11 @@ public class ProjectDAO implements IProjectDAO {
     public List<Project> findAll() {
         return projects;
     }
+
+    @Override
+    public boolean merge(List<Project> projects) {
+        this.projects.clear();
+        this.projects.addAll(projects);
+        return true;
+    }
 }

@@ -3,7 +3,7 @@ package com.ajulay.command;
 import com.ajulay.controller.ControllerUI;
 
 /**
- * AbstractCommand is base class for executing commands
+ * Base class for executing commands
  */
 public abstract class AbstractCommand {
 

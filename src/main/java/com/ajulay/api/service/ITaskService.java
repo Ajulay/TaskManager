@@ -21,4 +21,6 @@ public interface ITaskService {
     List<Task> findTaskAllByProject(String project_id);
 
     Task findTaskById(String taskId) throws NoSuchTaskException;
+
+    boolean merge(List<Task> tasks);
 }

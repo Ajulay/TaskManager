@@ -54,4 +54,9 @@ public class AssigneeService implements IAssigneeService {
         return assigneeDAO.findAll();
     }
 
+    @Override
+    public boolean merge(List<Assignee> assignees) {
+        return assigneeDAO.merge(assignees);
+    }
+
 }

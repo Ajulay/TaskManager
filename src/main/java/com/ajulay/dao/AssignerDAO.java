@@ -58,4 +58,12 @@ public class AssignerDAO implements IAssignerDAO {
     public List<Assigner> findAll() {
         return assigners;
     }
+
+    @Override
+    public boolean merge(List<Assigner> assigners) {
+        this.assigners.clear();
+        this.assigners.addAll(assigners);
+        return true;
+    }
+
 }

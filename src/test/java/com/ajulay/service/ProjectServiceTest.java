@@ -5,6 +5,7 @@ import com.ajulay.entity.Project;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ProjectServiceTest {
@@ -42,4 +43,14 @@ public class ProjectServiceTest {
 
         Assert.assertEquals(projects.size(), controlNumber);
     }
+
+    @Test
+    public void merge() {
+        final IProjectService service = new ProjectService();
+        service.saveProject(new Project());
+        final List<Project> projects = Arrays.asList(new Project(), new Project(), new Project());
+
+        Assert.assertEquals(projects.size(), 3);
+    }
+
 }

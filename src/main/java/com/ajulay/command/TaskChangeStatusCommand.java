@@ -18,7 +18,7 @@ public class TaskChangeStatusCommand extends AbstractCommand {
     public void execute() throws NoSuchTaskException {
         System.out.println("Enter task id:");
         String taskId = getController().nextLine();
-        System.out.println("Enter task status: 'finished', 'failed' OR 'onprocess'");
+        System.out.println("Enter task status: 'finished', 'failed' OR 'in_progress'");
         String status = getController().nextLine();
         getController().getTaskService().changeStatus(taskId, status);
         System.out.println("Status changed");

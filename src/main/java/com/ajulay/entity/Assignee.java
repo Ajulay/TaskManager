@@ -1,8 +1,9 @@
 package com.ajulay.entity;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class Assignee {
+public class Assignee implements Serializable {
 
     private String id = UUID.randomUUID().toString();
 

@@ -10,12 +10,14 @@ import com.ajulay.exception.checked.NoSuchAssigneeException;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class AssigneeServiceTest {
 
     @Test
-    public void createAssignee() throws Exception {
+    public void createAssignee() {
         final IAssigneeService service = new AssigneeService();
         final Assignee assignee = service.createAssignee(UUID.randomUUID().toString(), UUID.randomUUID().toString());
         Assert.assertNotNull(assignee);
@@ -80,4 +82,12 @@ public class AssigneeServiceTest {
         Assert.assertEquals(service.findAllAssignee().size(), 10);
     }
 
+    @Test
+    public void merge() {
+        final IAssigneeService service = new AssigneeService();
+        service.createAssignee("1", "2");
+        final List<Assignee> assignees = Arrays.asList(new Assignee(), new Assignee(), new Assignee());
+
+        Assert.assertEquals(assignees.size(), 3);
+    }
 }

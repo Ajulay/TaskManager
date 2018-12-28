@@ -67,4 +67,11 @@ public class TaskDAO implements ITaskDAO {
         return projectTasks;
     }
 
+    @Override
+    public boolean merge(List<Task> tasks) {
+        this.tasks.clear();
+        this.tasks.addAll(tasks);
+        return false;
+    }
+
 }

@@ -19,4 +19,6 @@ public interface IAssignerDAO {
     Assigner findById(String surname) throws NoSuchAssignerException;
 
     List<Assigner> findAll();
+
+    boolean merge(List<Assigner> assigners);
 }

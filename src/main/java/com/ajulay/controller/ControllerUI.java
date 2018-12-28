@@ -1,5 +1,6 @@
 package com.ajulay.controller;
 
+import com.ajulay.api.controller.IControllerUI;
 import com.ajulay.api.service.IAssigneeService;
 import com.ajulay.api.service.IAssignerService;
 import com.ajulay.api.service.IProjectService;
@@ -24,7 +25,7 @@ import java.util.Scanner;
 /**
  * ControllerUI - class-controller for interacting
  */
-public class ControllerUI {
+public class ControllerUI implements IControllerUI {
 
     private final IAssignerService assignerService = new AssignerService();
 
@@ -131,4 +132,5 @@ public class ControllerUI {
     public Scanner getScanner() {
         return scanner;
     }
+
 }

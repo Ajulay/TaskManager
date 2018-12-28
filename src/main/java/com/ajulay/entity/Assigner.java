@@ -1,8 +1,9 @@
 package com.ajulay.entity;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class Assigner {
+public class Assigner implements Serializable {
 
     private final String id = UUID.randomUUID().toString();
 
@@ -45,5 +46,15 @@ public class Assigner {
 
     public String getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return "Assigner{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
     }
 }

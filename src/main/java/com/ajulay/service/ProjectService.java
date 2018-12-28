@@ -46,4 +46,9 @@ public class ProjectService implements IProjectService {
         return projectDAO.create(project);
     }
 
+    @Override
+    public boolean merge(List<Project> projects) {
+        return projectDAO.merge(projects);
+    }
+
 }

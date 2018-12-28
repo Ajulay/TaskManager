@@ -1,8 +1,9 @@
 package com.ajulay.entity;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class Project {
+public class Project implements Serializable {
 
     private final String id = UUID.randomUUID().toString();
 
@@ -25,5 +26,13 @@ public class Project {
 
     public String getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

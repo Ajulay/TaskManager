@@ -62,4 +62,9 @@ public class TaskService implements ITaskService {
         return dao.findById(taskId);
     }
 
+    @Override
+    public boolean merge(List<Task> tasks) {
+        return dao.merge(tasks);
+    }
+
 }

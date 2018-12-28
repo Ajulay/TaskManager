@@ -2,12 +2,13 @@ package com.ajulay.entity;
 
 import com.ajulay.enumirated.Status;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
-public class Task {
+public class Task implements Serializable {
 
     private final String id = UUID.randomUUID().toString();
 

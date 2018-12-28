@@ -7,6 +7,9 @@ import com.ajulay.enumirated.Status;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class TaskServiceTest {
 
     @Test
@@ -63,6 +66,15 @@ public class TaskServiceTest {
         }
 
         Assert.assertEquals(service.findTaskAllByProject(project.getId()).size(), controlNumber / 2);
+    }
+
+    @Test
+    public void merge() {
+        final ITaskService service = new TaskService();
+        service.saveTask(new Task());
+        final List<Task> tasks = Arrays.asList(new Task(), new Task(), new Task());
+
+        Assert.assertEquals(tasks.size(), 3);
     }
 
 }

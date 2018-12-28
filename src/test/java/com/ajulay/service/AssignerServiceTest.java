@@ -5,6 +5,9 @@ import com.ajulay.entity.Assigner;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class AssignerServiceTest {
 
     @Test
@@ -53,4 +56,14 @@ public class AssignerServiceTest {
 
         Assert.assertEquals(service.getAssigners().size(), controlNumber);
     }
+
+    @Test
+    public void merge() {
+        final IAssignerService service = new AssignerService();
+        service.createAssigner("Petrov44");
+        final List<Assigner> assigners = Arrays.asList(new Assigner(), new Assigner(), new Assigner());
+
+        Assert.assertEquals(assigners.size(), 3);
+    }
+
 }

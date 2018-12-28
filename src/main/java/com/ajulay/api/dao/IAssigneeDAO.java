@@ -19,4 +19,6 @@ public interface IAssigneeDAO {
     Assignee findById(String id) throws NoSuchAssigneeException;
 
     List<Assignee> findAll();
+
+    boolean merge(List<Assignee> assignees);
 }

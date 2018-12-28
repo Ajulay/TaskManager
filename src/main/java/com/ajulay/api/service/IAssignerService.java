@@ -23,4 +23,6 @@ public interface IAssignerService {
 
     List<Assigner> getAssigners();
 
+    boolean merge(List<Assigner> assigners);
+
 }

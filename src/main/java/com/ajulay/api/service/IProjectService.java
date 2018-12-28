@@ -18,4 +18,5 @@ public interface IProjectService {
 
     Project saveProject(Project project);
 
+    boolean merge(List<Project> projects);
 }

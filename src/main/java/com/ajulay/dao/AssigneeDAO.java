@@ -59,4 +59,11 @@ public class AssigneeDAO implements IAssigneeDAO {
         return assignees;
     }
 
+    @Override
+    public boolean merge(List<Assignee> assignees) {
+        this.assignees.clear();
+        this.assignees.addAll(assignees);
+        return true;
+    }
+
 }

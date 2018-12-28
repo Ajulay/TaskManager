@@ -63,4 +63,9 @@ public class AssignerService implements IAssignerService {
         return assignerDao.findAll();
     }
 
+    @Override
+    public boolean merge(List<Assigner> assigners) {
+        return assignerDao.merge(assigners);
+    }
+
 }

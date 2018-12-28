@@ -20,4 +20,6 @@ public interface IAssigneeService {
 
     List<Assignee> findAllAssignee();
 
+    boolean merge(List<Assignee> assignees);
+
 }
