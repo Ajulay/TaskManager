@@ -87,7 +87,8 @@ public class AssigneeServiceTest {
         final IAssigneeService service = new AssigneeService();
         service.createAssignee("1", "2");
         final List<Assignee> assignees = Arrays.asList(new Assignee(), new Assignee(), new Assignee());
+        service.merge(assignees);
 
-        Assert.assertEquals(assignees.size(), 3);
+        Assert.assertEquals(service.findAllAssignee().size(), 3);
     }
 }

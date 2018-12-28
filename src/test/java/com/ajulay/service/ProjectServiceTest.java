@@ -49,8 +49,9 @@ public class ProjectServiceTest {
         final IProjectService service = new ProjectService();
         service.saveProject(new Project());
         final List<Project> projects = Arrays.asList(new Project(), new Project(), new Project());
+        service.merge(projects);
 
-        Assert.assertEquals(projects.size(), 3);
+        Assert.assertEquals(service.getProjects().size(), 3);
     }
 
 }

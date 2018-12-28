@@ -73,8 +73,10 @@ public class TaskServiceTest {
         final ITaskService service = new TaskService();
         service.saveTask(new Task());
         final List<Task> tasks = Arrays.asList(new Task(), new Task(), new Task());
+        service.merge(tasks);
 
-        Assert.assertEquals(tasks.size(), 3);
+        Assert.assertEquals(service.findTaskAll().size(), 3);
+
     }
 
 }

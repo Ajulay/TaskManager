@@ -62,8 +62,9 @@ public class AssignerServiceTest {
         final IAssignerService service = new AssignerService();
         service.createAssigner("Petrov44");
         final List<Assigner> assigners = Arrays.asList(new Assigner(), new Assigner(), new Assigner());
+        service.merge(assigners);
 
-        Assert.assertEquals(assigners.size(), 3);
+        Assert.assertEquals(service.getAssigners().size(), 3);
     }
 
 }
