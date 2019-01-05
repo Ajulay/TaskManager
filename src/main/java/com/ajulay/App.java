@@ -10,7 +10,8 @@ public class App {
             ProjectFindAllCommand.class, TaskChangeStatusCommand.class, TaskCreateCommand.class,
             TaskDeleteCommand.class, TaskFindAllByProjectCommand.class, TaskFindAllCommand.class,
             AssignerFindAllByTask.class, TaskFindAllByAssigner.class, DataSaveCommand.class,
-            DataLoadCommand.class, BinaryDataClearCommand.class
+            DataLoadCommand.class, DataBinaryClearCommand.class, RegistrationCommand.class,
+            LoginCommand.class, ProjectCreateCommand.class
     };
 
     public static void main(String[] args) throws Exception {

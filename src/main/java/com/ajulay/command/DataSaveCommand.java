@@ -1,9 +1,9 @@
 package com.ajulay.command;
 
 import com.ajulay.entity.Assignee;
-import com.ajulay.entity.Assigner;
 import com.ajulay.entity.Project;
 import com.ajulay.entity.Task;
+import com.ajulay.entity.User;
 
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
@@ -32,14 +32,13 @@ public class DataSaveCommand extends AbstractCommand {
 
         final Path dir = Paths.get("data");
         final Path path = Paths.get(dir.toString(), "AppData.txt");
+        if (path.toFile().exists()) Files.delete(path);
         if (dir.toFile().exists()) Files.delete(dir);
-        else {
-            Files.createDirectories(dir);
-            Files.createFile(path);
-        }
+        Files.createDirectories(dir);
+        Files.createFile(path);
         final OutputStream out = new FileOutputStream(path.toFile());
         final List<Project> projects = getController().getProjectService().getProjects();
-        final List<Assigner> assigners = getController().getAssignerService().getAssigners();
+        final List<User> assigners = getController().getAssignerService().getAssigners();
         final List<Assignee> assignees = getController().getAssigneeService().findAllAssignee();
         final List<Task> tasks = getController().getTaskService().findTaskAll();
         final ObjectOutputStream oos = new ObjectOutputStream(out);

@@ -4,7 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class BinaryDataClearCommand extends AbstractCommand {
+public class DataBinaryClearCommand extends AbstractCommand {
 
     @Override
     public String getCommandKeyWord() {
@@ -23,9 +23,7 @@ public class BinaryDataClearCommand extends AbstractCommand {
         if (path.toFile().exists()) {
             Files.delete(path);
             Files.delete(dir);
-
         }
-
     }
 
 }

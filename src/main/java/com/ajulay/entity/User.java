@@ -1,11 +1,17 @@
 package com.ajulay.entity;
 
+import com.ajulay.enumirated.Role;
+
 import java.io.Serializable;
 import java.util.UUID;
 
-public class Assigner implements Serializable {
+public class User implements Serializable {
 
     private final String id = UUID.randomUUID().toString();
+
+    private String login;
+
+    private String password;
 
     private String name;
 
@@ -13,12 +19,7 @@ public class Assigner implements Serializable {
 
     private String lastName;
 
-    public Assigner() {
-    }
-
-    public Assigner(String surname) {
-        this.surname = surname;
-    }
+    private Role role;
 
     public String getName() {
         return name;
@@ -44,17 +45,45 @@ public class Assigner implements Serializable {
         this.lastName = lastName;
     }
 
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password.hashCode() + "";
+    }
+
     public String getId() {
         return id;
     }
 
     @Override
     public String toString() {
-        return "Assigner{" +
+        return "User{" +
                 "id='" + id + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", role=" + role +
                 '}';
     }
+
 }

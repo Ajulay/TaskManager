@@ -1,7 +1,7 @@
 package com.ajulay.service;
 
 import com.ajulay.api.service.IAssignerService;
-import com.ajulay.entity.Assigner;
+import com.ajulay.entity.User;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -14,7 +14,7 @@ public class AssignerServiceTest {
     public void createAssigner() throws Exception {
         final IAssignerService service = new AssignerService();
         final String surname = "Ivlevich";
-        final Assigner assigner = service.createAssigner(surname);
+        final User assigner = service.createAssigner(surname);
 
         Assert.assertTrue(assigner != null && assigner.getSurname().equals(surname));
     }
@@ -23,8 +23,8 @@ public class AssignerServiceTest {
     public void deleteAssigner() throws Exception {
         final IAssignerService service = new AssignerService();
         final String surname = "Ivlevich";
-        final Assigner assigner = service.createAssigner(surname);
-        final Assigner deletedAssigner = service.deleteAssigner(surname);
+        final User assigner = service.createAssigner(surname);
+        final User deletedAssigner = service.deleteAssigner(surname);
 
         Assert.assertEquals(assigner, deletedAssigner);
     }
@@ -39,8 +39,8 @@ public class AssignerServiceTest {
     public void findById() throws Exception {
         final IAssignerService service = new AssignerService();
         final String surname = "Ivlevich";
-        final Assigner assigner = service.createAssigner(surname);
-        final Assigner findedAssigner = service.findById(assigner.getId());
+        final User assigner = service.createAssigner(surname);
+        final User findedAssigner = service.findById(assigner.getId());
 
         Assert.assertEquals(assigner, findedAssigner);
     }
@@ -61,7 +61,7 @@ public class AssignerServiceTest {
     public void merge() {
         final IAssignerService service = new AssignerService();
         service.createAssigner("Petrov44");
-        final List<Assigner> assigners = Arrays.asList(new Assigner(), new Assigner(), new Assigner());
+        final List<User> assigners = Arrays.asList(new User(), new User(), new User());
         service.merge(assigners);
 
         Assert.assertEquals(service.getAssigners().size(), 3);

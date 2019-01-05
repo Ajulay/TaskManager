@@ -4,8 +4,8 @@ import com.ajulay.api.service.IAssigneeService;
 import com.ajulay.api.service.IAssignerService;
 import com.ajulay.api.service.ITaskService;
 import com.ajulay.entity.Assignee;
-import com.ajulay.entity.Assigner;
 import com.ajulay.entity.Task;
+import com.ajulay.entity.User;
 import com.ajulay.exception.checked.NoSuchAssigneeException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -36,10 +36,10 @@ public class AssigneeServiceTest {
         final IAssignerService assignerService = new AssignerService();
         final Task task = taskService.saveTask(new Task());
         final String taskId = task.getId();
-        final Assigner assigner = assignerService.createAssigner("Petrov");
+        final User assigner = assignerService.createAssigner("Petrov");
         final String assignerId = assigner.getId();
         final Assignee assignee = service.createAssignee(taskId, assignerId);
-        final Assigner assigner2 = assignerService.createAssigner("Ivanov");
+        final User assigner2 = assignerService.createAssigner("Ivanov");
         final String assigner2Id = assigner2.getId();
         final String assigneeId = assignee.getId();
         final Assignee assignee2 = service.getById(assigneeId);
@@ -56,7 +56,7 @@ public class AssigneeServiceTest {
         final IAssignerService assignerService = new AssignerService();
         final Task task = taskService.saveTask(new Task());
         final String taskId = task.getId();
-        final Assigner assigner = assignerService.createAssigner("Ivlev");
+        final User assigner = assignerService.createAssigner("Ivlev");
         final String assignerId = assigner.getId();
         final Assignee assignee = service.createAssignee(taskId, assignerId);
         final String assigneeId = assignee.getId();
@@ -74,7 +74,7 @@ public class AssigneeServiceTest {
         for (int i = 1; i <= 10; i++) {
             final Task task = taskService.saveTask(new Task());
             final String taskId = task.getId();
-            final Assigner assigner = assignerService.createAssigner("Ivlev" + i);
+            final User assigner = assignerService.createAssigner("Ivlev" + i);
             final String assignerId = assigner.getId();
             service.createAssignee(taskId, assignerId);
         }
@@ -91,4 +91,5 @@ public class AssigneeServiceTest {
 
         Assert.assertEquals(service.findAllAssignee().size(), 3);
     }
+
 }

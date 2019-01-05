@@ -1,7 +1,7 @@
 package com.ajulay.api.service;
 
 
-import com.ajulay.entity.Assigner;
+import com.ajulay.entity.User;
 import com.ajulay.exception.checked.NoSuchAssignerException;
 
 import java.util.List;
@@ -11,18 +11,22 @@ import java.util.List;
  */
 public interface IAssignerService {
 
-    Assigner createAssigner(String surname);
+    User createAssigner(String surname);
 
-    Assigner deleteAssigner(String surname) throws NoSuchAssignerException;
+    User deleteAssigner(String surname) throws NoSuchAssignerException;
 
-    Assigner updateAssigner(Assigner executor) throws NoSuchAssignerException;
+    User updateAssigner(User executor) throws NoSuchAssignerException;
 
-    Assigner getBySurname(String surname) throws NoSuchAssignerException;
+    User getBySurname(String surname) throws NoSuchAssignerException;
 
-    Assigner findById(String id) throws NoSuchAssignerException;
+    User findById(String id) throws NoSuchAssignerException;
 
-    List<Assigner> getAssigners();
+    List<User> getAssigners();
 
-    boolean merge(List<Assigner> assigners);
+    boolean merge(List<User> assigners);
+
+    User findByLogin(String login) throws NoSuchAssignerException;
+
+    Boolean isLoginExists(String in);
 
 }

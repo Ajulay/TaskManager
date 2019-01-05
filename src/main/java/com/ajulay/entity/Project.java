@@ -9,12 +9,7 @@ public class Project implements Serializable {
 
     private String name;
 
-    public Project() {
-    }
-
-    public Project(String name) {
-        this.name = name;
-    }
+    private String authorId;
 
     public String getName() {
         return name;
@@ -26,6 +21,14 @@ public class Project implements Serializable {
 
     public String getId() {
         return id;
+    }
+
+    public String getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
     }
 
     @Override

@@ -7,9 +7,9 @@ public class Assignee implements Serializable {
 
     private String id = UUID.randomUUID().toString();
 
-    private String taskId2;
+    private String taskId;
 
-    private String assignerId2;
+    private String assignerId;
 
     public String getId() {
         return id;
@@ -20,18 +20,28 @@ public class Assignee implements Serializable {
     }
 
     public String getTaskId() {
-        return taskId2;
+        return taskId;
     }
 
     public void setTaskId(String taskId) {
-        taskId = taskId;
+        this.taskId = taskId;
     }
 
     public String getAssignerId() {
-        return assignerId2;
+        return assignerId;
     }
 
     public void setAssignerId(String assignerId) {
-        assignerId = assignerId;
+        this.assignerId = assignerId;
     }
+
+    @Override
+    public String toString() {
+        return "Assignee{" +
+                "id='" + id + '\'' +
+                ", taskId='" + taskId + '\'' +
+                ", assignerId='" + assignerId + '\'' +
+                '}';
+    }
+
 }

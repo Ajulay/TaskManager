@@ -1,6 +1,10 @@
 package com.ajulay.command;
 
-import com.ajulay.entity.Assigner;
+import com.ajulay.entity.User;
+import com.ajulay.enumirated.Role;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AssignerFindAllCommand extends AbstractCommand {
 
@@ -17,8 +21,13 @@ public class AssignerFindAllCommand extends AbstractCommand {
     @Override
     public void execute() {
         int index = 1;
-        for (Assigner assigner : getController().getAssignerService().getAssigners()) {
-            System.out.println(index++ + ". Surname: " + assigner.getSurname() + ", id: " + assigner.getId());
+        List<User> assigners = getController().getAssignerService().getAssigners();
+        if (Role.MANAGER.equals(getController().getCurrentUser().getRole())) {
+            assigners = assigners.stream().filter(u -> !u.getRole().equals(Role.ADMIN)).collect(Collectors.toList());
+        }
+        for (User assigner : assigners) {
+            System.out.println(index++ + ". Surname: " + assigner.getSurname() + ", id: " + assigner.getId() + ", role: " +
+                    assigner.getRole());
         }
     }
 

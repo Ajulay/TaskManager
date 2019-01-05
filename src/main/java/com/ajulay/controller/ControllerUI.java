@@ -5,19 +5,17 @@ import com.ajulay.api.service.IAssigneeService;
 import com.ajulay.api.service.IAssignerService;
 import com.ajulay.api.service.IProjectService;
 import com.ajulay.api.service.ITaskService;
-import com.ajulay.command.AbstractCommand;
-import com.ajulay.constants.ServiceConstant;
-import com.ajulay.entity.Assigner;
-import com.ajulay.entity.Project;
-import com.ajulay.entity.Task;
+import com.ajulay.command.*;
+import com.ajulay.entity.User;
+import com.ajulay.enumirated.Role;
+import com.ajulay.exception.checked.NoSuchAssignerException;
+import com.ajulay.exception.checked.NoSuchProjectException;
+import com.ajulay.exception.checked.NoSuchTaskException;
 import com.ajulay.service.AssigneeService;
 import com.ajulay.service.AssignerService;
 import com.ajulay.service.ProjectService;
 import com.ajulay.service.TaskService;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -39,6 +37,8 @@ public class ControllerUI implements IControllerUI {
 
     private final Scanner scanner = new Scanner(System.in);
 
+    private User currentUser;
+
     public void register(Class... clazzes) throws InstantiationException, IllegalAccessException {
         for (Class clazz : clazzes) {
             register(clazz);
@@ -57,56 +57,61 @@ public class ControllerUI implements IControllerUI {
     }
 
     public void run() throws Exception {
-        testData();
-        System.out.println("TASK MANAGER\n" +
-                "for help type: /help");
+        final AbstractCommand loadCommand = commands.get(new DataLoadCommand().getCommandKeyWord());
+        System.out.println(loadCommand.getDescription());
+        loadCommand.execute();
+        Thread.sleep(1000);
+        System.out.println("TASK MANAGER");
+        Thread.sleep(1000);
         while (true) {
+            System.out.println("type /login (If You have no login type: /reg)");
+            final String login = nextLine();
+            try {
+                if (login.equals(RegistrationCommand.COMMAND) || login.equals(LoginCommand.COMMAND)) {
+                    final AbstractCommand command = commands.get(login);
+                    command.execute();
+                    if (login.equals(RegistrationCommand.COMMAND)) {
+                        AbstractCommand saveCommand = commands.get(new DataSaveCommand().getCommandKeyWord());
+                        saveCommand.execute();
+                    }
+                    System.out.println("[Ok]");
+                    break;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println(e.getMessage());
+            }
+            System.out.println("You entered incorrect data... Try again.");
+        }
+        commands.remove(RegistrationCommand.COMMAND);
+        commands.remove(LoginCommand.COMMAND);
+        if (Role.WORKER.equals(currentUser.getRole())) {
+            commands.remove(new AssignerFindAllByTask().getCommandKeyWord());
+            commands.remove(new AssignerFindAllCommand().getCommandKeyWord());
+            commands.remove(new DataBinaryClearCommand().getCommandKeyWord());
+            commands.remove(new ProjectCreateCommand().getCommandKeyWord());
+            commands.remove(new ProjectFindAllCommand().getCommandKeyWord());
+            commands.remove(new TaskCreateCommand().getCommandKeyWord());
+            commands.remove(new TaskDeleteCommand().getCommandKeyWord());
+            commands.remove(new TaskFindAllByAssigner().getCommandKeyWord());
+            commands.remove(new TaskFindAllByProjectCommand().getCommandKeyWord());
+        }
+        while (true) {
+            System.out.println("User: " + currentUser.getSurname() + ", role: " + currentUser.getRole());
             String in = nextLine();
-                if (in == null) continue;
+            if (in == null) continue;
             final AbstractCommand command = commands.get(in);
             if (command != null) {
-                    System.out.println(command.getDescription());
+                System.out.println(command.getDescription());
+                try {
                     command.execute();
-                continue;
+                } catch (NoSuchTaskException | NoSuchAssignerException | NoSuchProjectException e) {
+                    System.out.println(e.getMessage());
                 }
-            System.out.println("You entered incorrect data.");
+                continue;
+            }
+            System.out.println("You entered incorrect data... Try again.");
         }
-    }
-
-    private void testData() {
-        assignerService.getAssigners().add(new Assigner("Alexeev"));
-        assignerService.getAssigners().add(new Assigner("Andreev"));
-        assignerService.getAssigners().add(new Assigner("Sergeev"));
-
-        Project project1 = new Project("Project1");
-        Project project2 = new Project("Project2");
-        Project project3 = new Project("Project3");
-
-        projectService.getProjects().add(project1);
-        projectService.getProjects().add(project2);
-        projectService.getProjects().add(project3);
-
-        taskService.findTaskAll().add(getTestTask(project1.getId(), "2018-12-20", ServiceConstant.HIGH_PRIORITY, "Write application1..."));
-        taskService.findTaskAll().add(getTestTask(project2.getId(), "2018-12-20", ServiceConstant.MIDDLE_PRIORITY, "Write application2..."));
-        taskService.findTaskAll().add(getTestTask(project3.getId(), "2018-12-20", ServiceConstant.LOW_PRIORITY, "Write application3..."));
-        taskService.findTaskAll().add(getTestTask(project1.getId(), "2018-12-20", ServiceConstant.MIDDLE_PRIORITY, "Write application4..."));
-        taskService.findTaskAll().add(getTestTask(project2.getId(), "2018-12-20", ServiceConstant.LOW_PRIORITY, "Write application5..."));
-    }
-
-    private Task getTestTask(final String projectId, final String sTerm, int priority, final String content) {
-        final Task task = new Task();
-        task.setProjectId(projectId);
-        task.setPriority(priority);
-        final String[] datePartArray = sTerm.split("-");
-        final String year = datePartArray[0];
-        final String month = datePartArray[1];
-        final String day = datePartArray[2];
-        final Instant term = LocalDate.of(
-                Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day))
-                .atStartOfDay().toInstant(ZoneOffset.UTC);
-        task.setTerm(term);
-        task.setContent(content);
-        return task;
     }
 
     public IAssignerService getAssignerService() {
@@ -131,6 +136,14 @@ public class ControllerUI implements IControllerUI {
 
     public Scanner getScanner() {
         return scanner;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
     }
 
 }

@@ -1,8 +1,8 @@
 package com.ajulay.command;
 
 import com.ajulay.constants.ServiceConstant;
-import com.ajulay.entity.Assigner;
 import com.ajulay.entity.Task;
+import com.ajulay.entity.User;
 import com.ajulay.exception.checked.NoSuchAssignerException;
 import com.ajulay.exception.checked.NoSuchProjectException;
 
@@ -24,6 +24,7 @@ public class TaskCreateCommand extends AbstractCommand {
 
     @Override
     public void execute() throws NoSuchProjectException, NoSuchAssignerException {
+
         System.out.println("Enter: project_id (required)");
         String in = getController().nextLine();
         if (in == null || getController().getProjectService().getById(in) == null) return;
@@ -44,7 +45,6 @@ public class TaskCreateCommand extends AbstractCommand {
                     .atStartOfDay().toInstant(ZoneOffset.UTC);
         }
         task.setTerm(term);
-
         System.out.println("Enter priority (1 - 3)");
         in = getController().nextLine();
         if (in == null) {
@@ -61,7 +61,7 @@ public class TaskCreateCommand extends AbstractCommand {
         }
         System.out.println("Enter executor(s) (to finish write /end)");
         while (!ServiceConstant.END_ENTER_ASSIGNER.equals((in = getController().nextLine()))) {
-            Assigner assigner = getController().getAssignerService().getBySurname(in);
+            User assigner = getController().getAssignerService().getBySurname(in);
             getController().getAssigneeService().createAssignee(task.getId(), assigner.getId());
         }
         System.out.println("Task added");
