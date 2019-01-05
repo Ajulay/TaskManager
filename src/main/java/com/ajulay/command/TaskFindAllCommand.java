@@ -24,35 +24,36 @@ public class TaskFindAllCommand extends AbstractCommand {
 
     @Override
     public void execute() throws NoSuchTaskException {
-        List<Project> projects = getController().getProjectService().getProjects();
+        final List<Project> projects = getController().getProjectService().getProjects();
         final User user = getController().getCurrentUser();
+        final List<Task> resultTasks = new ArrayList<>();
         List<Task> tasks = getController().getTaskService().findTaskAll();
-        final List<Task> tmpTasks = new ArrayList<>();
         if (Role.MANAGER.equals(user.getRole())) {
             final List<Project> tmpProjects = new ArrayList<>();
-            for (Project project : projects) {
+            for (final Project project : projects) {
                 if (project.getAuthorId().equals(user.getId())) {
                     tmpProjects.add(project);
                 }
             }
-
             for (final Project project : tmpProjects) {
-                tmpTasks.addAll(getController().getTaskService().findTaskAllByProject(project.getId()));
+                final List<Task> actualTasks = getController().getTaskService().findTaskAllByProject(project.getId());
+                resultTasks.addAll(actualTasks);
             }
-            tasks = tmpTasks;
+            tasks = resultTasks;
         } else if (Role.WORKER.equals(user.getRole())) {
             final List<Assignee> allAssignees = getController().getAssigneeService().findAllAssignee();
-            for (Assignee assignee : allAssignees) {
+            for (final Assignee assignee : allAssignees) {
                 if (assignee.getAssignerId().equals(user.getId())) {
                     final Task task = getController().getTaskService().findTaskById(assignee.getTaskId());
-                    tmpTasks.add(task);
+                    resultTasks.add(task);
                 }
             }
-            tasks = tmpTasks;
+            tasks = resultTasks;
         }
         int index = 1;
-        for (Task task : tasks) {
-            System.out.println(index++ + ". Task term: " + task.getTerm() + ", task id: " + task.getId() +
+        for (final Task task : tasks) {
+            final String term = task.getTerm().toString().substring(0, 10);
+            System.out.println(index++ + ". Task term: " + term + ", task id: " + task.getId() +
                     ", task content: " + task.getContent() + ", status: " + task.getStatus().toString());
         }
     }

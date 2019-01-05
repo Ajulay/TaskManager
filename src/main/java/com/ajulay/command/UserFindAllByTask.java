@@ -28,26 +28,26 @@ public class UserFindAllByTask extends AbstractCommand {
     public void execute() throws NoSuchTaskException, NoSuchAssignerException, NoSuchProjectException {
         System.out.println("Enter task id");
         final String taskId = getController().nextLine();
-        final User user = getController().getCurrentUser();
+        final User currentUser = getController().getCurrentUser();
         final List<Assignee> assignees = getController().getAssigneeService().findAllAssignee();
         final List<User> assigners = new ArrayList<>();
         final Task task = getController().getTaskService().findTaskById(taskId);
-        if (Role.MANAGER.equals(user.getRole())) {
+        if (Role.MANAGER.equals(currentUser.getRole())) {
             final Project project = getController().getProjectService().getById(task.getProjectId());
-            if (!user.getId().equals(project.getAuthorId())) {
+            if (!currentUser.getId().equals(project.getAuthorId())) {
                 throw new NoSuchTaskException("Manager can see task of his projects only");
             }
         }
-        for (Assignee assignee : assignees) {
+        for (final Assignee assignee : assignees) {
             if (assignee.getTaskId().equals(taskId)) {
-                User assigner = getController().getUserService().findById(assignee.getAssignerId());
+                final User assigner = getController().getUserService().findById(assignee.getAssignerId());
                 assigners.add(assigner);
             }
         }
         System.out.println("Task content:\n" + task.getContent());
         int index = 1;
-        for (User aser : assigners) {
-            System.out.println(index++ + ". Surname: " + aser.getSurname());
+        for (final User user : assigners) {
+            System.out.println(index++ + ". Surname: " + user.getSurname());
         }
     }
 

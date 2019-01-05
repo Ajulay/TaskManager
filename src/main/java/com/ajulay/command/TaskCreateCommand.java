@@ -33,7 +33,7 @@ public class TaskCreateCommand extends AbstractCommand {
         System.out.println("Enter term in format: yyyy-MM-dd");
         in = getController().nextLine();
         Instant term = null;
-        if (in == null) {
+        if (in.isEmpty()) {
             term = Instant.now();
         } else {
             final String[] datePartArray = in.split("-");
@@ -47,14 +47,14 @@ public class TaskCreateCommand extends AbstractCommand {
         task.setTerm(term);
         System.out.println("Enter priority (1 - 3)");
         in = getController().nextLine();
-        if (in == null) {
+        if (in.isEmpty()) {
             task.setPriority(ServiceConstant.LOW_PRIORITY);
         } else {
             task.setPriority(Integer.parseInt(in));
         }
         System.out.println("Enter content");
         in = getController().nextLine();
-        if (in == null) {
+        if (in.isEmpty()) {
             task.setContent("Enter content...");
         } else {
             task.setContent(in);

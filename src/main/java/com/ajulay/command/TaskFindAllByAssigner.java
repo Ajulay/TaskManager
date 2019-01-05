@@ -29,13 +29,13 @@ public class TaskFindAllByAssigner extends AbstractCommand {
         final List<Task> tasks = new ArrayList<>();
         final List<Assignee> assignees = getController().getAssigneeService().findAllAssignee();
         final User currentUser = getController().getCurrentUser();
-        System.out.println("Enter assigner id");
-        final String assignerId = getController().nextLine();
-        User assigner = getController().getUserService().findById(assignerId);
+        System.out.println("Enter user id");
+        final String userId = getController().nextLine();
+        final User user = getController().getUserService().findById(userId);
         if (Role.MANAGER.equals(currentUser.getRole())) {
-            for (final Assignee asee : assignees) {
-                if (asee.getAssignerId().equals(assignerId)) {
-                    final Task task = getController().getTaskService().findTaskById(asee.getTaskId());
+            for (final Assignee assignee : assignees) {
+                if (assignee.getAssignerId().equals(userId)) {
+                    final Task task = getController().getTaskService().findTaskById(assignee.getTaskId());
                     final Project project = getController().getProjectService().getById(task.getProjectId());
                     if (project.getAuthorId().equals(currentUser.getId())) {
                         tasks.add(task);
@@ -44,13 +44,13 @@ public class TaskFindAllByAssigner extends AbstractCommand {
             }
         } else {
             for (final Assignee assignee : assignees) {
-                if (assignee.getAssignerId().equals(assignerId)) {
-                    Task task = getController().getTaskService().findTaskById(assignee.getTaskId());
+                if (assignee.getAssignerId().equals(userId)) {
+                    final Task task = getController().getTaskService().findTaskById(assignee.getTaskId());
                     tasks.add(task);
                 }
             }
         }
-        System.out.println("Executor surname: " + assigner.getSurname());
+        System.out.println("Executor surname: " + user.getSurname());
         int index = 1;
         for (Task task : tasks) {
             final String term = task.getTerm().toString().substring(0, 10);

@@ -25,12 +25,11 @@ public class RegistrationCommand extends AbstractCommand {
             final String login = getController().nextLine();
             if (!getController().getUserService().isLoginExists(login)) {
                 user.setLogin(login);
-                String confirmedPassword = null;
                 while (true) {
                     System.out.println("Enter password (required):");
                     final String password = getController().nextLine();
                     System.out.println("Confirm password (required):");
-                    confirmedPassword = getController().nextLine();
+                    final String confirmedPassword = getController().nextLine();
                     if (!password.equals(confirmedPassword)) {
                         System.out.println("passwords are not equals");
                         continue;

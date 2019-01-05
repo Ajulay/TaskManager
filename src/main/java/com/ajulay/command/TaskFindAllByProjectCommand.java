@@ -32,8 +32,9 @@ public class TaskFindAllByProjectCommand extends AbstractCommand {
             }
         }
         int index = 1;
-        for (Task task : getController().getTaskService().findTaskAllByProject(projectId)) {
-            System.out.println(index++ + ". Task term: " + task.getTerm() + ", task id: " + task.getId() +
+        for (final Task task : getController().getTaskService().findTaskAllByProject(projectId)) {
+            final String term = task.getTerm().toString().substring(0, 10);
+            System.out.println(index++ + ". Task term: " + term + ", task id: " + task.getId() +
                     ", task content: " + task.getContent());
         }
     }

@@ -25,7 +25,7 @@ public class UserFindAllCommand extends AbstractCommand {
         if (Role.MANAGER.equals(getController().getCurrentUser().getRole())) {
             assigners = assigners.stream().filter(u -> !u.getRole().equals(Role.ADMIN)).collect(Collectors.toList());
         }
-        for (User assigner : assigners) {
+        for (final User assigner : assigners) {
             System.out.println(index++ + ". Surname: " + assigner.getSurname() + ", id: " + assigner.getId() + ", role: " +
                     assigner.getRole());
         }

@@ -40,12 +40,11 @@ public class TaskChangeStatusCommand extends AbstractCommand {
             assignees = assignees.stream().filter(a -> a.getAssignerId().equals(user.getId()) && a.getTaskId().equals(taskId))
                     .collect(Collectors.toList());
             if (assignees.size() == 0) {
-                System.out.println("Worker can change status of his task only");
-                return;
+                throw new NoSuchTaskException("Worker can change status of his task only");
             }
         }
         System.out.println("Enter task status: 'finished', 'failed' OR 'in_progress'");
-        String status = getController().nextLine();
+        final String status = getController().nextLine();
         getController().getTaskService().changeStatus(taskId, status);
         System.out.println("Status changed");
     }

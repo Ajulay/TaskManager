@@ -23,8 +23,7 @@ public class ProjectFindAllCommand extends AbstractCommand {
     public void execute() {
         int index = 1;
         List<Project> userProjects = new ArrayList<>();
-        User currentUser = getController().getCurrentUser();
-
+        final User currentUser = getController().getCurrentUser();
         if (Role.ADMIN.equals(currentUser.getRole())) {
             userProjects = getController().getProjectService().getProjects();
         } else {
@@ -33,7 +32,6 @@ public class ProjectFindAllCommand extends AbstractCommand {
                     userProjects.add(project);
                 }
             }
-
         }
         for (Project project : userProjects) {
             System.out.println(index++ + ". Project name: " + project.getName() + ", project id: " + project.getId() +
