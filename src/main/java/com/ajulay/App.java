@@ -6,10 +6,10 @@ import com.ajulay.controller.ControllerUI;
 public class App {
 
     private static final Class[] classes = {
-            AppExitCommand.class, AppHelpCommand.class, AssignerFindAllCommand.class,
+            AppExitCommand.class, AppHelpCommand.class, UserFindAllCommand.class,
             ProjectFindAllCommand.class, TaskChangeStatusCommand.class, TaskCreateCommand.class,
             TaskDeleteCommand.class, TaskFindAllByProjectCommand.class, TaskFindAllCommand.class,
-            AssignerFindAllByTask.class, TaskFindAllByAssigner.class, DataSaveCommand.class,
+            UserFindAllByTask.class, TaskFindAllByAssigner.class, DataSaveCommand.class,
             DataLoadCommand.class, DataBinaryClearCommand.class, RegistrationCommand.class,
             LoginCommand.class, ProjectCreateCommand.class
     };

@@ -38,7 +38,7 @@ public class DataSaveCommand extends AbstractCommand {
         Files.createFile(path);
         final OutputStream out = new FileOutputStream(path.toFile());
         final List<Project> projects = getController().getProjectService().getProjects();
-        final List<User> assigners = getController().getAssignerService().getAssigners();
+        final List<User> assigners = getController().getUserService().getUsers();
         final List<Assignee> assignees = getController().getAssigneeService().findAllAssignee();
         final List<Task> tasks = getController().getTaskService().findTaskAll();
         final ObjectOutputStream oos = new ObjectOutputStream(out);

@@ -14,7 +14,7 @@ public class ProjectCreateCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws Exception {
+    public void execute() {
         System.out.println("Enter project name");
         String projectName = getController().nextLine();
         Project project = new Project();

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * IAssignerDAO defines base data access methods for Assigner
  */
-public interface IAssignerDAO {
+public interface IUserDAO {
 
     User create(String surname);
 

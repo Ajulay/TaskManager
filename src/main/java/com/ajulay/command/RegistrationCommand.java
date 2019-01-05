@@ -23,7 +23,7 @@ public class RegistrationCommand extends AbstractCommand {
         while (true) {
             System.out.println("Enter login (required):");
             final String login = getController().nextLine();
-            if (!getController().getAssignerService().isLoginExists(login)) {
+            if (!getController().getUserService().isLoginExists(login)) {
                 user.setLogin(login);
                 String confirmedPassword = null;
                 while (true) {
@@ -44,7 +44,7 @@ public class RegistrationCommand extends AbstractCommand {
                 System.out.println("Enter role (required): manager or worker");
                 final String role = getController().nextLine();
                 user.setRole(Role.valueOf(role.toUpperCase()));
-                getController().getAssignerService().getAssigners().add(user);
+                getController().getUserService().getUsers().add(user);
                 getController().setCurrentUser(user);
                 return;
             }

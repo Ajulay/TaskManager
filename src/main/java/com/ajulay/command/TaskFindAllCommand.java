@@ -40,8 +40,7 @@ public class TaskFindAllCommand extends AbstractCommand {
                 tmpTasks.addAll(getController().getTaskService().findTaskAllByProject(project.getId()));
             }
             tasks = tmpTasks;
-        }
-        if (Role.WORKER.equals(user.getRole())) {
+        } else if (Role.WORKER.equals(user.getRole())) {
             final List<Assignee> allAssignees = getController().getAssigneeService().findAllAssignee();
             for (Assignee assignee : allAssignees) {
                 if (assignee.getAssignerId().equals(user.getId())) {
@@ -51,12 +50,11 @@ public class TaskFindAllCommand extends AbstractCommand {
             }
             tasks = tmpTasks;
         }
-
         int index = 1;
         for (Task task : tasks) {
             System.out.println(index++ + ". Task term: " + task.getTerm() + ", task id: " + task.getId() +
                     ", task content: " + task.getContent() + ", status: " + task.getStatus().toString());
-
         }
     }
+
 }

@@ -29,7 +29,7 @@ public class DataLoadCommand extends AbstractCommand {
     public void execute() throws Exception {
         Path path = Paths.get("data/AppData.txt");
         if (!Files.exists(path)) {
-            User user = getController().getAssignerService().createAssigner("admin");
+            User user = getController().getUserService().createUser("admin");
             user.setRole(Role.ADMIN);
             user.setLogin("admin");
             user.setPassword("admin");
@@ -43,7 +43,7 @@ public class DataLoadCommand extends AbstractCommand {
         final List<Task> tasks = (List<Task>) ois.readObject();
         getController().getProjectService().merge(projects);
         getController().getAssigneeService().merge(assignees);
-        getController().getAssignerService().merge(assigners);
+        getController().getUserService().merge(assigners);
         getController().getTaskService().merge(tasks);
         ois.close();
         fis.close();

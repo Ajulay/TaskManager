@@ -1,6 +1,6 @@
 package com.ajulay.service;
 
-import com.ajulay.api.service.IAssignerService;
+import com.ajulay.api.service.IUserService;
 import com.ajulay.entity.User;
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,34 +12,34 @@ public class AssignerServiceTest {
 
     @Test
     public void createAssigner() throws Exception {
-        final IAssignerService service = new AssignerService();
+        final IUserService service = new UserService();
         final String surname = "Ivlevich";
-        final User assigner = service.createAssigner(surname);
+        final User assigner = service.createUser(surname);
 
         Assert.assertTrue(assigner != null && assigner.getSurname().equals(surname));
     }
 
     @Test
     public void deleteAssigner() throws Exception {
-        final IAssignerService service = new AssignerService();
+        final IUserService service = new UserService();
         final String surname = "Ivlevich";
-        final User assigner = service.createAssigner(surname);
-        final User deletedAssigner = service.deleteAssigner(surname);
+        final User assigner = service.createUser(surname);
+        final User deletedAssigner = service.deleteUser(surname);
 
         Assert.assertEquals(assigner, deletedAssigner);
     }
 
     @Test(expected = Exception.class)
     public void updateAssigner() throws Exception {
-        final IAssignerService service = new AssignerService();
+        final IUserService service = new UserService();
         service.findById("5");
     }
 
     @Test
     public void findById() throws Exception {
-        final IAssignerService service = new AssignerService();
+        final IUserService service = new UserService();
         final String surname = "Ivlevich";
-        final User assigner = service.createAssigner(surname);
+        final User assigner = service.createUser(surname);
         final User findedAssigner = service.findById(assigner.getId());
 
         Assert.assertEquals(assigner, findedAssigner);
@@ -47,24 +47,24 @@ public class AssignerServiceTest {
 
     @Test
     public void getAssigners() throws Exception {
-        final IAssignerService service = new AssignerService();
+        final IUserService service = new UserService();
         final int controlNumber = 5;
         for (int i = 1; i <= controlNumber; i++) {
             final String surname = "Ivlevich" + i;
-            service.createAssigner(surname);
+            service.createUser(surname);
         }
 
-        Assert.assertEquals(service.getAssigners().size(), controlNumber);
+        Assert.assertEquals(service.getUsers().size(), controlNumber);
     }
 
     @Test
     public void merge() {
-        final IAssignerService service = new AssignerService();
-        service.createAssigner("Petrov44");
+        final IUserService service = new UserService();
+        service.createUser("Petrov44");
         final List<User> assigners = Arrays.asList(new User(), new User(), new User());
         service.merge(assigners);
 
-        Assert.assertEquals(service.getAssigners().size(), 3);
+        Assert.assertEquals(service.getUsers().size(), 3);
     }
 
 }

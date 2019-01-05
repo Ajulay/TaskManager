@@ -1,6 +1,6 @@
 package com.ajulay.dao;
 
-import com.ajulay.api.dao.IAssignerDAO;
+import com.ajulay.api.dao.IUserDAO;
 import com.ajulay.entity.User;
 import com.ajulay.exception.checked.NoSuchAssignerException;
 
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * {@inheritDoc}
  */
-public class AssignerDAO implements IAssignerDAO {
+public class UserDAO implements IUserDAO {
 
     private final List<User> assigners = new ArrayList<>();
 

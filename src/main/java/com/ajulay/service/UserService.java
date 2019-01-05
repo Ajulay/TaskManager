@@ -1,8 +1,8 @@
 package com.ajulay.service;
 
-import com.ajulay.api.dao.IAssignerDAO;
-import com.ajulay.api.service.IAssignerService;
-import com.ajulay.dao.AssignerDAO;
+import com.ajulay.api.dao.IUserDAO;
+import com.ajulay.api.service.IUserService;
+import com.ajulay.dao.UserDAO;
 import com.ajulay.entity.User;
 import com.ajulay.exception.checked.NoSuchAssignerException;
 import com.ajulay.exception.unchecked.NullDataForAssignerException;
@@ -13,25 +13,25 @@ import java.util.List;
 /**
  * {@inheritDoc}
  */
-public class AssignerService implements IAssignerService {
+public class UserService implements IUserService {
 
-    private final IAssignerDAO assignerDao = new AssignerDAO();
+    private final IUserDAO assignerDao = new UserDAO();
 
-    public User createAssigner(final String surname) {
+    public User createUser(final String surname) {
         if (surname.isEmpty()) {
             throw new NullDataForAssignerException();
         }
         return assignerDao.create(surname);
     }
 
-    public User deleteAssigner(final String surname) throws NoSuchAssignerException {
+    public User deleteUser(final String surname) throws NoSuchAssignerException {
         if (surname.isEmpty()) {
             throw new NullDataForAssignerException();
         }
         return assignerDao.delete(surname);
     }
 
-    public User updateAssigner(final User assigner) throws NoSuchAssignerException {
+    public User updateUser(final User assigner) throws NoSuchAssignerException {
         if (assigner == null) throw new NullPointerException();
         final User oldAssigner = findById(assigner.getId());
         oldAssigner.setName(assigner.getName());
@@ -44,7 +44,7 @@ public class AssignerService implements IAssignerService {
         if (surname.isEmpty()) {
             throw new NullDataForAssignerException();
         }
-        for (User assigner : getAssigners()) {
+        for (User assigner : getUsers()) {
             if (surname.equals(assigner.getSurname())) {
                 return assigner;
             }
@@ -59,7 +59,7 @@ public class AssignerService implements IAssignerService {
         return assignerDao.findById(id);
     }
 
-    public List<User> getAssigners() {
+    public List<User> getUsers() {
         return assignerDao.findAll();
     }
 

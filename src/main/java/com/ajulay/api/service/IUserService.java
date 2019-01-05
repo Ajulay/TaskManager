@@ -9,19 +9,19 @@ import java.util.List;
 /**
  * IAssignerService creates conditions for CRUD operations for Assigner
  */
-public interface IAssignerService {
+public interface IUserService {
 
-    User createAssigner(String surname);
+    User createUser(String surname);
 
-    User deleteAssigner(String surname) throws NoSuchAssignerException;
+    User deleteUser(String surname) throws NoSuchAssignerException;
 
-    User updateAssigner(User executor) throws NoSuchAssignerException;
+    User updateUser(User executor) throws NoSuchAssignerException;
 
     User getBySurname(String surname) throws NoSuchAssignerException;
 
     User findById(String id) throws NoSuchAssignerException;
 
-    List<User> getAssigners();
+    List<User> getUsers();
 
     boolean merge(List<User> assigners);
 

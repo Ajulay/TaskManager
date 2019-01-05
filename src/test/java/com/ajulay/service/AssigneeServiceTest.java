@@ -1,8 +1,8 @@
 package com.ajulay.service;
 
 import com.ajulay.api.service.IAssigneeService;
-import com.ajulay.api.service.IAssignerService;
 import com.ajulay.api.service.ITaskService;
+import com.ajulay.api.service.IUserService;
 import com.ajulay.entity.Assignee;
 import com.ajulay.entity.Task;
 import com.ajulay.entity.User;
@@ -33,13 +33,13 @@ public class AssigneeServiceTest {
     public void updateAssignee() throws Exception {
         final IAssigneeService service = new AssigneeService();
         final ITaskService taskService = new TaskService();
-        final IAssignerService assignerService = new AssignerService();
+        final IUserService assignerService = new UserService();
         final Task task = taskService.saveTask(new Task());
         final String taskId = task.getId();
-        final User assigner = assignerService.createAssigner("Petrov");
+        final User assigner = assignerService.createUser("Petrov");
         final String assignerId = assigner.getId();
         final Assignee assignee = service.createAssignee(taskId, assignerId);
-        final User assigner2 = assignerService.createAssigner("Ivanov");
+        final User assigner2 = assignerService.createUser("Ivanov");
         final String assigner2Id = assigner2.getId();
         final String assigneeId = assignee.getId();
         final Assignee assignee2 = service.getById(assigneeId);
@@ -53,10 +53,10 @@ public class AssigneeServiceTest {
     public void getById() throws NoSuchAssigneeException {
         final IAssigneeService service = new AssigneeService();
         final ITaskService taskService = new TaskService();
-        final IAssignerService assignerService = new AssignerService();
+        final IUserService assignerService = new UserService();
         final Task task = taskService.saveTask(new Task());
         final String taskId = task.getId();
-        final User assigner = assignerService.createAssigner("Ivlev");
+        final User assigner = assignerService.createUser("Ivlev");
         final String assignerId = assigner.getId();
         final Assignee assignee = service.createAssignee(taskId, assignerId);
         final String assigneeId = assignee.getId();
@@ -70,11 +70,11 @@ public class AssigneeServiceTest {
     public void assigneeFindAll() {
         final IAssigneeService service = new AssigneeService();
         final ITaskService taskService = new TaskService();
-        final IAssignerService assignerService = new AssignerService();
+        final IUserService assignerService = new UserService();
         for (int i = 1; i <= 10; i++) {
             final Task task = taskService.saveTask(new Task());
             final String taskId = task.getId();
-            final User assigner = assignerService.createAssigner("Ivlev" + i);
+            final User assigner = assignerService.createUser("Ivlev" + i);
             final String assignerId = assigner.getId();
             service.createAssignee(taskId, assignerId);
         }

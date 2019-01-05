@@ -31,7 +31,7 @@ public class TaskFindAllByAssigner extends AbstractCommand {
         final User currentUser = getController().getCurrentUser();
         System.out.println("Enter assigner id");
         final String assignerId = getController().nextLine();
-        User assigner = getController().getAssignerService().findById(assignerId);
+        User assigner = getController().getUserService().findById(assignerId);
         if (Role.MANAGER.equals(currentUser.getRole())) {
             for (final Assignee asee : assignees) {
                 if (asee.getAssignerId().equals(assignerId)) {

@@ -12,7 +12,7 @@ import com.ajulay.exception.checked.NoSuchTaskException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssignerFindAllByTask extends AbstractCommand {
+public class UserFindAllByTask extends AbstractCommand {
 
     @Override
     public String getCommandKeyWord() {
@@ -40,7 +40,7 @@ public class AssignerFindAllByTask extends AbstractCommand {
         }
         for (Assignee assignee : assignees) {
             if (assignee.getTaskId().equals(taskId)) {
-                User assigner = getController().getAssignerService().findById(assignee.getAssignerId());
+                User assigner = getController().getUserService().findById(assignee.getAssignerId());
                 assigners.add(assigner);
             }
         }

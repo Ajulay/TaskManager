@@ -61,7 +61,7 @@ public class TaskCreateCommand extends AbstractCommand {
         }
         System.out.println("Enter executor(s) (to finish write /end)");
         while (!ServiceConstant.END_ENTER_ASSIGNER.equals((in = getController().nextLine()))) {
-            User assigner = getController().getAssignerService().getBySurname(in);
+            User assigner = getController().getUserService().getBySurname(in);
             getController().getAssigneeService().createAssignee(task.getId(), assigner.getId());
         }
         System.out.println("Task added");
