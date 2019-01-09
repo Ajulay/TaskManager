@@ -12,7 +12,7 @@ import com.ajulay.exception.checked.NoSuchTaskException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskFindAllByAssigner extends AbstractCommand {
+public class TaskFindAllByAssignerCommand extends AbstractCommand {
 
     @Override
     public String getCommandKeyWord() {

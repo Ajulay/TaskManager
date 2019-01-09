@@ -23,4 +23,5 @@ public interface ITaskDAO {
     List<Task> findByProjectId(String projectId);
 
     boolean merge(List<Task> tasks);
+
 }

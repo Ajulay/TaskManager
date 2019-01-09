@@ -21,4 +21,5 @@ public interface IAssigneeDAO {
     List<Assignee> findAll();
 
     boolean merge(List<Assignee> assignees);
+
 }

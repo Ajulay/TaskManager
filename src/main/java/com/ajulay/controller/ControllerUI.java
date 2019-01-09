@@ -86,14 +86,14 @@ public class ControllerUI implements IControllerUI {
         commands.remove(RegistrationCommand.COMMAND);
         commands.remove(LoginCommand.COMMAND);
         if (Role.WORKER.equals(currentUser.getRole())) {
-            commands.remove(new UserFindAllByTask().getCommandKeyWord());
+            commands.remove(new UserFindAllByTaskCommand().getCommandKeyWord());
             commands.remove(new UserFindAllCommand().getCommandKeyWord());
             commands.remove(new DataBinaryClearCommand().getCommandKeyWord());
             commands.remove(new ProjectCreateCommand().getCommandKeyWord());
             commands.remove(new ProjectFindAllCommand().getCommandKeyWord());
             commands.remove(new TaskCreateCommand().getCommandKeyWord());
             commands.remove(new TaskDeleteCommand().getCommandKeyWord());
-            commands.remove(new TaskFindAllByAssigner().getCommandKeyWord());
+            commands.remove(new TaskFindAllByAssignerCommand().getCommandKeyWord());
             commands.remove(new TaskFindAllByProjectCommand().getCommandKeyWord());
         }
         while (true) {

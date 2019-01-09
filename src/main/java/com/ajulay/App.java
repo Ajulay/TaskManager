@@ -9,7 +9,7 @@ public class App {
             AppExitCommand.class, AppHelpCommand.class, UserFindAllCommand.class,
             ProjectFindAllCommand.class, TaskChangeStatusCommand.class, TaskCreateCommand.class,
             TaskDeleteCommand.class, TaskFindAllByProjectCommand.class, TaskFindAllCommand.class,
-            UserFindAllByTask.class, TaskFindAllByAssigner.class, DataSaveCommand.class,
+            UserFindAllByTaskCommand.class, TaskFindAllByAssignerCommand.class, DataSaveCommand.class,
             DataLoadCommand.class, DataBinaryClearCommand.class, RegistrationCommand.class,
             LoginCommand.class, ProjectCreateCommand.class
     };
@@ -17,7 +17,7 @@ public class App {
     public static void main(String[] args) throws Exception {
         final ControllerUI controllerUI = new ControllerUI();
         controllerUI.register(classes);
-            controllerUI.run();
+        controllerUI.run();
     }
 
 }
