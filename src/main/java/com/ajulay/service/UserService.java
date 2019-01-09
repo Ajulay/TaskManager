@@ -64,17 +64,18 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public boolean merge(List<User> assigners) {
-        return assignerDao.merge(assigners);
+    public boolean merge(final List<User> users) {
+        if (users == null) return true;
+        return assignerDao.merge(users);
     }
 
     @Override
-    public User findByLogin(String login) throws NoSuchAssignerException {
+    public User findByLogin(final String login) throws NoSuchAssignerException {
         return assignerDao.findByLogin(login);
     }
 
     @Override
-    public Boolean isLoginExists(String in) {
+    public Boolean isLoginExists(final String in) {
         try {
             assignerDao.findByLogin(in);
         } catch (NoSuchAssignerException e) {

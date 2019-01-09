@@ -55,7 +55,7 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Task findTaskById(String taskId) throws NoSuchTaskException {
+    public Task findTaskById(final String taskId) throws NoSuchTaskException {
         if (taskId.isEmpty()) {
             throw new NullDataForTaskException();
         }
@@ -63,7 +63,8 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public boolean merge(List<Task> tasks) {
+    public boolean merge(final List<Task> tasks) {
+        if (tasks == null) return true;
         return dao.merge(tasks);
     }
 

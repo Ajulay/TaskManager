@@ -55,7 +55,8 @@ public class AssigneeService implements IAssigneeService {
     }
 
     @Override
-    public boolean merge(List<Assignee> assignees) {
+    public boolean merge(final List<Assignee> assignees) {
+        if (assignees == null) return true;
         return assigneeDAO.merge(assignees);
     }
 

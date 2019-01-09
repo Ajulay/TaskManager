@@ -1,9 +1,6 @@
 package com.ajulay.command;
 
-import com.ajulay.entity.Assignee;
-import com.ajulay.entity.Project;
-import com.ajulay.entity.Task;
-import com.ajulay.entity.User;
+import com.ajulay.entity.Domain;
 
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
@@ -11,7 +8,6 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 
 public class DataSaveCommand extends AbstractCommand {
 
@@ -37,15 +33,9 @@ public class DataSaveCommand extends AbstractCommand {
         Files.createDirectories(dir);
         Files.createFile(path);
         final OutputStream out = new FileOutputStream(path.toFile());
-        final List<Project> projects = getController().getProjectService().getProjects();
-        final List<User> assigners = getController().getUserService().getUsers();
-        final List<Assignee> assignees = getController().getAssigneeService().findAllAssignee();
-        final List<Task> tasks = getController().getTaskService().findTaskAll();
+        final Domain domain = getController().createDomain();
         final ObjectOutputStream oos = new ObjectOutputStream(out);
-        oos.writeObject(projects);
-        oos.writeObject(assignees);
-        oos.writeObject(assigners);
-        oos.writeObject(tasks);
+        oos.writeObject(domain);
         oos.close();
         out.close();
     }

@@ -1,9 +1,6 @@
 package com.ajulay.command;
 
-import com.ajulay.entity.Assignee;
-import com.ajulay.entity.Project;
-import com.ajulay.entity.Task;
-import com.ajulay.entity.User;
+import com.ajulay.entity.*;
 import com.ajulay.enumirated.Role;
 
 import java.io.FileInputStream;
@@ -37,10 +34,11 @@ public class DataLoadCommand extends AbstractCommand {
         }
         final FileInputStream fis = new FileInputStream("data/AppData.txt");
         final ObjectInputStream ois = new ObjectInputStream(fis);
-        final List<Project> projects = (List<Project>) ois.readObject();
-        final List<Assignee> assignees = (List<Assignee>) ois.readObject();
-        final List<User> assigners = (List<User>) ois.readObject();
-        final List<Task> tasks = (List<Task>) ois.readObject();
+        final Domain domain = (Domain) ois.readObject();
+        final List<Project> projects = domain.getProjects();
+        final List<Assignee> assignees = domain.getAssignees();
+        final List<User> assigners = domain.getAssigners();
+        final List<Task> tasks = domain.getTasks();
         getController().getProjectService().merge(projects);
         getController().getAssigneeService().merge(assignees);
         getController().getUserService().merge(assigners);

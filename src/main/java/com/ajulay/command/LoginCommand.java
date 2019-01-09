@@ -24,7 +24,7 @@ public class LoginCommand extends AbstractCommand {
         User user = getController().getUserService().findByLogin(login);
         System.out.println("Enter password");
         final String password = getController().nextLine();
-        if (!user.getPassword().equals(password.hashCode() + "")) {
+        if (!user.getPassword().equals(password)) {
             throw new Exception("incorrect password");
         }
         getController().setCurrentUser(user);

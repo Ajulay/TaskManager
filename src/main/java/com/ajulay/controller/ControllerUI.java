@@ -6,7 +6,7 @@ import com.ajulay.api.service.IProjectService;
 import com.ajulay.api.service.ITaskService;
 import com.ajulay.api.service.IUserService;
 import com.ajulay.command.*;
-import com.ajulay.entity.User;
+import com.ajulay.entity.*;
 import com.ajulay.enumirated.Role;
 import com.ajulay.exception.checked.NoSuchAssignerException;
 import com.ajulay.exception.checked.NoSuchProjectException;
@@ -17,6 +17,7 @@ import com.ajulay.service.TaskService;
 import com.ajulay.service.UserService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -95,6 +96,8 @@ public class ControllerUI implements IControllerUI {
             commands.remove(new TaskDeleteCommand().getCommandKeyWord());
             commands.remove(new TaskFindAllByAssignerCommand().getCommandKeyWord());
             commands.remove(new TaskFindAllByProjectCommand().getCommandKeyWord());
+            commands.remove(new DataLoadJsonCommand().getCommandKeyWord());
+            commands.remove(new DataSaveXmlCommand().getCommandKeyWord());
         }
         while (true) {
             System.out.println("User: " + currentUser.getSurname() + ", role: " + currentUser.getRole());
@@ -115,6 +118,31 @@ public class ControllerUI implements IControllerUI {
             }
             System.out.println("You entered incorrect data... Try again.");
         }
+    }
+
+    public Domain createDomain() {
+        final Domain domain = new Domain();
+        final List<Project> projects = getProjectService().getProjects();
+        final List<User> assigners = getUserService().getUsers();
+        final List<Assignee> assignees = getAssigneeService().findAllAssignee();
+        final List<Task> tasks = getTaskService().findTaskAll();
+        domain.setProjects(projects);
+        domain.setAssigners(assigners);
+        domain.setAssignees(assignees);
+        domain.setTasks(tasks);
+        return domain;
+    }
+
+    public Boolean loadDomain(final Domain domain) {
+        final List<Project> projects = domain.getProjects();
+        final List<Assignee> assignees = domain.getAssignees();
+        final List<User> assigners = domain.getAssigners();
+        final List<Task> tasks = domain.getTasks();
+        getProjectService().merge(projects);
+        getAssigneeService().merge(assignees);
+        getUserService().merge(assigners);
+        getTaskService().merge(tasks);
+        return true;
     }
 
     public IUserService getUserService() {

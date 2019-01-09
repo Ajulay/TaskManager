@@ -41,13 +41,14 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public Project saveProject(Project project) {
+    public Project saveProject(final Project project) {
         if (project == null) throw new NullPointerException();
         return projectDAO.create(project);
     }
 
     @Override
-    public boolean merge(List<Project> projects) {
+    public boolean merge(final List<Project> projects) {
+        if (projects == null) return true;
         return projectDAO.merge(projects);
     }
 

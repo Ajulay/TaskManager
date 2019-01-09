@@ -1,17 +1,17 @@
 package com.ajulay.command;
 
 import com.ajulay.entity.Domain;
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 
 import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class DataSaveJsonCommand extends AbstractCommand {
+public class DataSaveXmlCommand extends AbstractCommand {
 
-    public static final String COMMAND = "/json";
+    public static final String COMMAND = "/sxml";
 
     @Override
     public String getCommandKeyWord() {
@@ -25,19 +25,18 @@ public class DataSaveJsonCommand extends AbstractCommand {
 
     @Override
     public void execute() throws Exception {
-        final Path dir = Paths.get("dataJson");
-        final Path path = Paths.get(dir.toString(), "AppDataJson.txt");
+        final Path dir = Paths.get("dataxml");
+        final Path path = Paths.get(dir.toString(), "AppDataXml.txt");
         if (path.toFile().exists()) Files.delete(path);
         if (dir.toFile().exists()) Files.delete(dir);
         Files.createDirectories(dir);
         Files.createFile(path);
-        final ObjectMapper mapper = new ObjectMapper();
-        final FileWriter fw = new FileWriter("dataJson/AppDataJson.txt");
+        final XmlMapper mapper = new XmlMapper();
+        final FileWriter fw = new FileWriter(path.toFile());
         final Domain domain = getController().createDomain();
-        JsonGenerator jsonGenerator = mapper.getJsonFactory().createJsonGenerator(fw);
-        jsonGenerator.writeObject(domain);
-        jsonGenerator.close();
-        // fw.write(lastBuilder.build().toString());
+        final ToXmlGenerator generator = mapper.getFactory().createGenerator(fw);
+        generator.writeObject(domain);
+        generator.close();
         fw.close();
     }
 
