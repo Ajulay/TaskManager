@@ -8,29 +8,29 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-public class AssignerServiceTest {
+public class UserServiceTest {
 
     @Test
-    public void createAssigner() throws Exception {
+    public void createUser() throws Exception {
         final IUserService service = new UserService();
         final String surname = "Ivlevich";
-        final User assigner = service.createUser(surname);
+        final User user = service.createUser(surname);
 
-        Assert.assertTrue(assigner != null && assigner.getSurname().equals(surname));
+        Assert.assertTrue(user != null && user.getSurname().equals(surname));
     }
 
     @Test
-    public void deleteAssigner() throws Exception {
+    public void deleteUser() throws Exception {
         final IUserService service = new UserService();
         final String surname = "Ivlevich";
-        final User assigner = service.createUser(surname);
-        final User deletedAssigner = service.deleteUser(surname);
+        final User user = service.createUser(surname);
+        final User deletedUser = service.deleteUser(surname);
 
-        Assert.assertEquals(assigner, deletedAssigner);
+        Assert.assertEquals(user, deletedUser);
     }
 
     @Test(expected = Exception.class)
-    public void updateAssigner() throws Exception {
+    public void updateUser() throws Exception {
         final IUserService service = new UserService();
         service.findById("5");
     }
@@ -39,14 +39,14 @@ public class AssignerServiceTest {
     public void findById() throws Exception {
         final IUserService service = new UserService();
         final String surname = "Ivlevich";
-        final User assigner = service.createUser(surname);
-        final User findedAssigner = service.findById(assigner.getId());
+        final User user = service.createUser(surname);
+        final User findedUser = service.findById(user.getId());
 
-        Assert.assertEquals(assigner, findedAssigner);
+        Assert.assertEquals(user, findedUser);
     }
 
     @Test
-    public void getAssigners() throws Exception {
+    public void getUsers() throws Exception {
         final IUserService service = new UserService();
         final int controlNumber = 5;
         for (int i = 1; i <= controlNumber; i++) {

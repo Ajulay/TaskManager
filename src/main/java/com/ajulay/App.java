@@ -11,7 +11,7 @@ public class App {
             TaskDeleteCommand.class, TaskFindAllByProjectCommand.class, TaskFindAllCommand.class,
             UserFindAllByTaskCommand.class, TaskFindAllByAssignerCommand.class, DataSaveCommand.class,
             DataLoadCommand.class, DataBinaryClearCommand.class, RegistrationCommand.class,
-            LoginCommand.class, ProjectCreateCommand.class
+            LoginCommand.class, ProjectCreateCommand.class, DataSaveJsonCommand.class
     };
 
     public static void main(String[] args) throws Exception {
