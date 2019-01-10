@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Domain implements Serializable {
     private List<Project> projects;
-    private List<User> assigners;
+    private List<User> users;
     private List<Assignee> assignees;
     private List<Task> tasks;
 
@@ -17,12 +17,12 @@ public class Domain implements Serializable {
         this.projects = projects;
     }
 
-    public List<User> getAssigners() {
-        return assigners;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setAssigners(List<User> assigners) {
-        this.assigners = assigners;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     public List<Assignee> getAssignees() {

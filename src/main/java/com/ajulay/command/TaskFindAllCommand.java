@@ -25,7 +25,7 @@ public class TaskFindAllCommand extends AbstractCommand {
     @Override
     public void execute() throws NoSuchTaskException {
         final List<Project> projects = getController().getProjectService().getProjects();
-        final User user = getController().getCurrentUser();
+        final User user = getController().getUserService().getCurrentUser();
         final List<Task> resultTasks = new ArrayList<>();
         List<Task> tasks = getController().getTaskService().findTaskAll();
         if (Role.MANAGER.equals(user.getRole())) {

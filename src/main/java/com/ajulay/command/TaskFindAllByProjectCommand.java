@@ -24,7 +24,7 @@ public class TaskFindAllByProjectCommand extends AbstractCommand {
         System.out.println("Enter project id...");
         final String projectId = getController().nextLine();
         System.out.println("Project id: " + projectId);
-        final User user = getController().getCurrentUser();
+        final User user = getController().getUserService().getCurrentUser();
         if (Role.MANAGER.equals(user.getRole())) {
             final Project project = getController().getProjectService().getById(projectId);
             if (!user.getId().equals(project.getAuthorId())) {

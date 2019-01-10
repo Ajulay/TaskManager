@@ -28,7 +28,7 @@ public class TaskFindAllByAssignerCommand extends AbstractCommand {
     public void execute() throws NoSuchAssignerException, NoSuchTaskException, NoSuchProjectException {
         final List<Task> tasks = new ArrayList<>();
         final List<Assignee> assignees = getController().getAssigneeService().findAllAssignee();
-        final User currentUser = getController().getCurrentUser();
+        final User currentUser = getController().getUserService().getCurrentUser();
         System.out.println("Enter user id");
         final String userId = getController().nextLine();
         final User user = getController().getUserService().findById(userId);

@@ -12,34 +12,34 @@ import java.util.List;
  */
 public class UserDAO implements IUserDAO {
 
-    private final List<User> assigners = new ArrayList<>();
+    private final List<User> users = new ArrayList<>();
 
     @Override
     public User create(final String surname) {
-        final User assigner = new User();
-        assigner.setSurname(surname);
-        assigners.add(assigner);
-        return assigner;
+        final User user = new User();
+        user.setSurname(surname);
+        users.add(user);
+        return user;
     }
 
     @Override
     public User delete(final String surname) throws NoSuchAssignerException {
-        for (User assigner : assigners) {
-            if (surname.equals(assigner.getSurname())) {
-                assigners.remove(assigner);
-                return assigner;
+        for (User user : users) {
+            if (surname.equals(user.getSurname())) {
+                users.remove(user);
+                return user;
             }
         }
         throw new NoSuchAssignerException();
     }
 
     @Override
-    public User update(final User assigner) throws NoSuchAssignerException {
-        for (final User asser : assigners) {
-            if (asser.getId().equals(assigner.getId())) {
-                assigners.remove(asser);
-                assigners.add(assigner);
-                return asser;
+    public User update(final User user) throws NoSuchAssignerException {
+        for (final User tmpUser : users) {
+            if (tmpUser.getId().equals(user.getId())) {
+                users.remove(tmpUser);
+                users.add(user);
+                return user;
             }
         }
         throw new NoSuchAssignerException();
@@ -47,9 +47,9 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public User findById(final String id) throws NoSuchAssignerException {
-        for (final User assigner : assigners) {
-            if (id.equals(assigner.getId())) {
-                return assigner;
+        for (final User user : users) {
+            if (id.equals(user.getId())) {
+                return user;
             }
         }
         throw new NoSuchAssignerException();
@@ -57,21 +57,21 @@ public class UserDAO implements IUserDAO {
 
     @Override
     public List<User> findAll() {
-        return assigners;
+        return users;
     }
 
     @Override
-    public boolean merge(List<User> assigners) {
-        this.assigners.clear();
-        this.assigners.addAll(assigners);
+    public boolean merge(List<User> users) {
+        this.users.clear();
+        this.users.addAll(users);
         return true;
     }
 
     @Override
     public User findByLogin(String login) throws NoSuchAssignerException {
-        for (final User assigner : assigners) {
-            if (login.equals(assigner.getLogin())) {
-                return assigner;
+        for (final User usner : users) {
+            if (login.equals(usner.getLogin())) {
+                return usner;
             }
         }
         throw new NoSuchAssignerException();

@@ -8,6 +8,7 @@ public class ServiceConstant {
     public static final String END_ENTER_ASSIGNER = "/end";
     public static final String START_LOGIN = "admin";
     public static final String START_PASSWORD_HASH = "admin".hashCode() + "";
+    public static final String DATA_FILE = "data/AppData.txt";
 
 
 }

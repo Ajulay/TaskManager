@@ -20,7 +20,7 @@ public class DataSaveXmlCommand extends AbstractCommand {
 
     @Override
     public String getDescription() {
-        return "save current data to file";
+        return "save current data to xml";
     }
 
     @Override

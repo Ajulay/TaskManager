@@ -29,4 +29,10 @@ public interface IUserService {
 
     Boolean isLoginExists(String in);
 
+    Boolean changePassword(String password);
+
+    User getCurrentUser();
+
+    void setCurrentUser(User currentUser);
+
 }

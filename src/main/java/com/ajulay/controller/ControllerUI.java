@@ -6,6 +6,7 @@ import com.ajulay.api.service.IProjectService;
 import com.ajulay.api.service.ITaskService;
 import com.ajulay.api.service.IUserService;
 import com.ajulay.command.*;
+import com.ajulay.constants.ServiceConstant;
 import com.ajulay.entity.*;
 import com.ajulay.enumirated.Role;
 import com.ajulay.exception.checked.NoSuchAssignerException;
@@ -16,6 +17,9 @@ import com.ajulay.service.ProjectService;
 import com.ajulay.service.TaskService;
 import com.ajulay.service.UserService;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +29,23 @@ import java.util.Scanner;
  * ControllerUI - class-controller for interacting
  */
 public class ControllerUI implements IControllerUI {
+
+    private static final Class[] classes = {
+            AppExitCommand.class, AppHelpCommand.class, UserFindAllCommand.class,
+            ProjectFindAllCommand.class, TaskChangeStatusCommand.class, TaskCreateCommand.class,
+            TaskDeleteCommand.class, TaskFindAllByProjectCommand.class, TaskFindAllCommand.class,
+            UserFindAllByTaskCommand.class, TaskFindAllByAssignerCommand.class, DataSaveCommand.class,
+            DataLoadCommand.class, DataBinaryClearCommand.class, RegistrationCommand.class,
+            LoginCommand.class, ProjectCreateCommand.class, DataSaveJsonCommand.class,
+            DataLoadJsonCommand.class, DataSaveXmlCommand.class, DataLoadXmlCommand.class,
+            ChangePasswordCommand.class
+    };
+
+    private static final Class[] workerClasses = {AppExitCommand.class, AppHelpCommand.class, TaskChangeStatusCommand.class,
+            TaskFindAllCommand.class, DataSaveCommand.class, DataLoadCommand.class,
+            DataSaveJsonCommand.class, DataLoadJsonCommand.class, DataSaveXmlCommand.class,
+            DataLoadXmlCommand.class, ChangePasswordCommand.class, LogOutCommand.class
+    };
 
     private final IUserService userService = new UserService();
 
@@ -37,8 +58,6 @@ public class ControllerUI implements IControllerUI {
     private final Map<String, AbstractCommand> commands = new HashMap<>();
 
     private final Scanner scanner = new Scanner(System.in);
-
-    private User currentUser;
 
     public void register(Class... clazzes) throws InstantiationException, IllegalAccessException {
         for (Class clazz : clazzes) {
@@ -53,57 +72,31 @@ public class ControllerUI implements IControllerUI {
         commands.put(command.getCommandKeyWord(), command);
     }
 
+    public void registerCommandAll() throws IllegalAccessException, InstantiationException {
+        register(classes);
+    }
+
+    public void registerWorkerCommandAll() throws IllegalAccessException, InstantiationException {
+        register(workerClasses);
+    }
+
     public String nextLine() {
         return scanner.nextLine();
     }
 
     public void run() throws Exception {
-        final AbstractCommand loadCommand = commands.get(new DataLoadCommand().getCommandKeyWord());
-        System.out.println(loadCommand.getDescription());
-        loadCommand.execute();
-        Thread.sleep(1000);
+        loadData();
         System.out.println("TASK MANAGER");
-        Thread.sleep(1000);
-        for (int i = 0; i < 3; i++) {
-            System.out.println("type /login (If You have no login type: /reg)");
-            final String login = nextLine();
-            try {
-                if (login.equals(RegistrationCommand.COMMAND) || login.equals(LoginCommand.COMMAND)) {
-                    final AbstractCommand command = commands.get(login);
-                    command.execute();
-                    if (login.equals(RegistrationCommand.COMMAND)) {
-                        AbstractCommand saveCommand = commands.get(new DataSaveCommand().getCommandKeyWord());
-                        saveCommand.execute();
-                    }
-                    System.out.println("[Ok]");
-                    break;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println(e.getMessage());
-            }
-            System.out.println("You entered incorrect data... Try again.");
-        }
-        commands.remove(RegistrationCommand.COMMAND);
-        commands.remove(LoginCommand.COMMAND);
-        if (currentUser == null) {
-            System.out.println("You entered incorrect data more than 3 times.");
-            return;
-        }
-        if (Role.WORKER.equals(currentUser.getRole())) {
-            commands.remove(new UserFindAllByTaskCommand().getCommandKeyWord());
-            commands.remove(new UserFindAllCommand().getCommandKeyWord());
-            commands.remove(new DataBinaryClearCommand().getCommandKeyWord());
-            commands.remove(new ProjectCreateCommand().getCommandKeyWord());
-            commands.remove(new ProjectFindAllCommand().getCommandKeyWord());
-            commands.remove(new TaskCreateCommand().getCommandKeyWord());
-            commands.remove(new TaskDeleteCommand().getCommandKeyWord());
-            commands.remove(new TaskFindAllByAssignerCommand().getCommandKeyWord());
-            commands.remove(new TaskFindAllByProjectCommand().getCommandKeyWord());
-        }
         while (true) {
-            System.out.println("User: " + currentUser.getSurname() + ", role: " + currentUser.getRole());
-            String in = nextLine();
+            if (getUserService().getCurrentUser() == null) {
+                commands.clear();
+                register(LoginCommand.class, RegistrationCommand.class, AppExitCommand.class, AppHelpCommand.class);
+            } else {
+                final String currentUserName = getUserService().getCurrentUser().getSurname();
+                final String currentUserRole = getUserService().getCurrentUser().getRole().toString();
+                System.out.printf("User: %s, role: %s\n", currentUserName, currentUserRole);
+            }
+            final String in = nextLine();
             if (in == null) continue;
             final AbstractCommand command = commands.get(in);
             if (command != null) {
@@ -122,6 +115,22 @@ public class ControllerUI implements IControllerUI {
         }
     }
 
+    private void loadData() throws Exception {
+        System.out.println("Load data");
+        final Path path = Paths.get(ServiceConstant.DATA_FILE);
+        if (!Files.exists(path)) {
+            final User user = getUserService().createUser("admin");
+            user.setRole(Role.ADMIN);
+            user.setLogin(ServiceConstant.START_LOGIN);
+            user.setPassword(ServiceConstant.START_PASSWORD_HASH);
+        } else {
+            final AbstractCommand tmpCommand = new DataLoadCommand();
+            tmpCommand.setController(this);
+            tmpCommand.execute();
+        }
+        Thread.sleep(500);
+    }
+
     public Domain createDomain() {
         final Domain domain = new Domain();
         final List<Project> projects = getProjectService().getProjects();
@@ -129,7 +138,7 @@ public class ControllerUI implements IControllerUI {
         final List<Assignee> assignees = getAssigneeService().findAllAssignee();
         final List<Task> tasks = getTaskService().findTaskAll();
         domain.setProjects(projects);
-        domain.setAssigners(assigners);
+        domain.setUsers(assigners);
         domain.setAssignees(assignees);
         domain.setTasks(tasks);
         return domain;
@@ -138,7 +147,7 @@ public class ControllerUI implements IControllerUI {
     public Boolean loadDomain(final Domain domain) {
         final List<Project> projects = domain.getProjects();
         final List<Assignee> assignees = domain.getAssignees();
-        final List<User> assigners = domain.getAssigners();
+        final List<User> assigners = domain.getUsers();
         final List<Task> tasks = domain.getTasks();
         getProjectService().merge(projects);
         getAssigneeService().merge(assignees);
@@ -169,14 +178,6 @@ public class ControllerUI implements IControllerUI {
 
     public Scanner getScanner() {
         return scanner;
-    }
-
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
     }
 
 }

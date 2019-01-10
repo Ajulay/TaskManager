@@ -22,7 +22,7 @@ public class UserFindAllCommand extends AbstractCommand {
     public void execute() {
         int index = 1;
         List<User> assigners = getController().getUserService().getUsers();
-        if (Role.MANAGER.equals(getController().getCurrentUser().getRole())) {
+        if (Role.MANAGER.equals(getController().getUserService().getCurrentUser().getRole())) {
             assigners = assigners.stream().filter(u -> !u.getRole().equals(Role.ADMIN)).collect(Collectors.toList());
         }
         for (final User assigner : assigners) {

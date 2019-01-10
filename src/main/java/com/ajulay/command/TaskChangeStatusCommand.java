@@ -27,7 +27,7 @@ public class TaskChangeStatusCommand extends AbstractCommand {
     public void execute() throws NoSuchTaskException, NoSuchProjectException {
         System.out.println("Enter task id:");
         final String taskId = getController().nextLine();
-        final User user = getController().getCurrentUser();
+        final User user = getController().getUserService().getCurrentUser();
         final Task task = getController().getTaskService().findTaskById(taskId);
         if (Role.MANAGER.equals(user.getRole())) {
             final Project project = getController().getProjectService().getById(task.getProjectId());

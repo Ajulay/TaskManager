@@ -23,9 +23,12 @@ public class RegistrationCommand extends AbstractCommand {
         for (int i = 0; i < 3; i++) {
             System.out.println("Enter login (required):");
             final String login = getController().nextLine();
-            if (!getController().getUserService().isLoginExists(login)) {
+            if (getController().getUserService().isLoginExists(login)) {
+                System.out.println("This login already exists.");
+                continue;
+            }
                 user.setLogin(login);
-                while (true) {
+            for (int j = 0; j < 3; j++) {
                     System.out.println("Enter password (required):");
                     final String password = getController().nextLine().hashCode() + "";
                     System.out.println("Confirm password (required):");
@@ -37,19 +40,21 @@ public class RegistrationCommand extends AbstractCommand {
                     user.setPassword(confirmedPassword);
                     break;
                 }
+            if (user.getPassword() == null) {
+                System.out.println("Keep attention when enter passwords");
+                continue;
+            }
                 System.out.println("Enter surname (required):");
                 final String surname = getController().nextLine();
-                user.setSurname(surname);
+            if (surname != null) user.setSurname(surname);
                 System.out.println("Enter role (required): manager or worker");
                 final String role = getController().nextLine();
-                user.setRole(Role.valueOf(role.toUpperCase()));
+            if (role != null) user.setRole(Role.valueOf(role.toUpperCase()));
                 getController().getUserService().getUsers().add(user);
-                getController().setCurrentUser(user);
                 return;
-            }
-            System.out.println("This login already exists.");
         }
         System.out.println("You try to enter incorrect data during registration.");
+        System.exit(0);
     }
 
 }

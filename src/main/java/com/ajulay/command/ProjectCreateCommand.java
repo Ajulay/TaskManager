@@ -18,7 +18,7 @@ public class ProjectCreateCommand extends AbstractCommand {
         System.out.println("Enter project name");
         final String projectName = getController().nextLine();
         final Project project = new Project();
-        project.setAuthorId(getController().getCurrentUser().getId());
+        project.setAuthorId(getController().getUserService().getCurrentUser().getId());
         project.setName(projectName);
         getController().getProjectService().saveProject(project);
     }

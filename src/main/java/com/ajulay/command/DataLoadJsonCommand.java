@@ -15,7 +15,7 @@ public class DataLoadJsonCommand extends AbstractCommand {
 
     @Override
     public String getDescription() {
-        return "load datajson";
+        return "load json data";
     }
 
     @Override

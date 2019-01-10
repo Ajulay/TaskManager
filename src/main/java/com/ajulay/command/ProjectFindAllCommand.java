@@ -23,7 +23,7 @@ public class ProjectFindAllCommand extends AbstractCommand {
     public void execute() {
         int index = 1;
         List<Project> userProjects = new ArrayList<>();
-        final User currentUser = getController().getCurrentUser();
+        final User currentUser = getController().getUserService().getCurrentUser();
         if (Role.ADMIN.equals(currentUser.getRole())) {
             userProjects = getController().getProjectService().getProjects();
         } else {

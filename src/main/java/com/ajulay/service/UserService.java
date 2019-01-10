@@ -15,20 +15,22 @@ import java.util.List;
  */
 public class UserService implements IUserService {
 
-    private final IUserDAO assignerDao = new UserDAO();
+    private User currentUser;
+
+    private final IUserDAO userDao = new UserDAO();
 
     public User createUser(final String surname) {
         if (surname == null || surname.isEmpty()) {
             throw new NullDataForAssignerException();
         }
-        return assignerDao.create(surname);
+        return userDao.create(surname);
     }
 
     public User deleteUser(final String surname) throws NoSuchAssignerException {
         if (surname == null || surname.isEmpty()) {
             throw new NullDataForAssignerException();
         }
-        return assignerDao.delete(surname);
+        return userDao.delete(surname);
     }
 
     public User updateUser(final User assigner) throws NoSuchAssignerException {
@@ -37,7 +39,7 @@ public class UserService implements IUserService {
         oldAssigner.setName(assigner.getName());
         oldAssigner.setLastName(assigner.getLastName());
         oldAssigner.setSurname(assigner.getSurname());
-        return assignerDao.update(oldAssigner);
+        return userDao.update(oldAssigner);
     }
 
     public User getBySurname(final String surname) throws NoSuchAssignerException {
@@ -56,32 +58,46 @@ public class UserService implements IUserService {
         if (id == null || id.isEmpty()) {
             throw new NullIdException();
         }
-        return assignerDao.findById(id);
+        return userDao.findById(id);
     }
 
     public List<User> getUsers() {
-        return assignerDao.findAll();
+        return userDao.findAll();
     }
 
     @Override
     public boolean merge(final List<User> users) {
         if (users == null) return true;
-        return assignerDao.merge(users);
+        return userDao.merge(users);
     }
 
     @Override
     public User findByLogin(final String login) throws NoSuchAssignerException {
-        return assignerDao.findByLogin(login);
+        return userDao.findByLogin(login);
     }
 
     @Override
     public Boolean isLoginExists(final String in) {
         try {
-            assignerDao.findByLogin(in);
+            userDao.findByLogin(in);
         } catch (NoSuchAssignerException e) {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public Boolean changePassword(String password) {
+
+        return null;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
     }
 
 }

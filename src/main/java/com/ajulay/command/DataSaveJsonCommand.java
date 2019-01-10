@@ -20,7 +20,7 @@ public class DataSaveJsonCommand extends AbstractCommand {
 
     @Override
     public String getDescription() {
-        return "save current data to file";
+        return "save current data to json";
     }
 
     @Override

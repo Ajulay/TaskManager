@@ -56,7 +56,7 @@ public class ProjectDAO implements IProjectDAO {
     }
 
     @Override
-    public boolean merge(List<Project> projects) {
+    public boolean merge(final List<Project> projects) {
         this.projects.clear();
         this.projects.addAll(projects);
         return true;
