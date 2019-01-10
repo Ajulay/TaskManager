@@ -30,18 +30,16 @@ import java.util.Scanner;
  */
 public class ControllerUI implements IControllerUI {
 
-    private static final Class[] classes = {
-            AppExitCommand.class, AppHelpCommand.class, UserFindAllCommand.class,
-            ProjectFindAllCommand.class, TaskChangeStatusCommand.class, TaskCreateCommand.class,
-            TaskDeleteCommand.class, TaskFindAllByProjectCommand.class, TaskFindAllCommand.class,
-            UserFindAllByTaskCommand.class, TaskFindAllByAssignerCommand.class, DataSaveCommand.class,
-            DataLoadCommand.class, DataBinaryClearCommand.class, RegistrationCommand.class,
-            LoginCommand.class, ProjectCreateCommand.class, DataSaveJsonCommand.class,
-            DataLoadJsonCommand.class, DataSaveXmlCommand.class, DataLoadXmlCommand.class,
-            ChangePasswordCommand.class
+    private static final Class[] additionalCommand = {
+            UserFindAllCommand.class, ProjectFindAllCommand.class,
+            TaskCreateCommand.class, TaskFindAllByProjectCommand.class,
+            TaskDeleteCommand.class, TaskFindAllByAssignerCommand.class,
+            ProjectCreateCommand.class, UserFindAllByTaskCommand.class,
+            DataBinaryClearCommand.class,
     };
 
-    private static final Class[] workerClasses = {AppExitCommand.class, AppHelpCommand.class, TaskChangeStatusCommand.class,
+    private static final Class[] baseCommand = {
+            AppExitCommand.class, TaskChangeStatusCommand.class, AppHelpCommand.class,
             TaskFindAllCommand.class, DataSaveCommand.class, DataLoadCommand.class,
             DataSaveJsonCommand.class, DataLoadJsonCommand.class, DataSaveXmlCommand.class,
             DataLoadXmlCommand.class, ChangePasswordCommand.class, LogOutCommand.class
@@ -73,11 +71,12 @@ public class ControllerUI implements IControllerUI {
     }
 
     public void registerCommandAll() throws IllegalAccessException, InstantiationException {
-        register(classes);
+        register(additionalCommand);
+        register(baseCommand);
     }
 
-    public void registerWorkerCommandAll() throws IllegalAccessException, InstantiationException {
-        register(workerClasses);
+    public void registerBaseCommandAll() throws IllegalAccessException, InstantiationException {
+        register(baseCommand);
     }
 
     public String nextLine() {

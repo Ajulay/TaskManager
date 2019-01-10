@@ -42,7 +42,7 @@ public class LoginCommand extends AbstractCommand {
         }
         getController().getCommands().clear();
         if (Role.WORKER.equals(getController().getUserService().getCurrentUser().getRole())) {
-            getController().registerWorkerCommandAll();
+            getController().registerBaseCommandAll();
         } else {
             getController().registerCommandAll();
         }
