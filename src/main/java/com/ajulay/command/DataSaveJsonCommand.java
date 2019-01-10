@@ -25,19 +25,18 @@ public class DataSaveJsonCommand extends AbstractCommand {
 
     @Override
     public void execute() throws Exception {
-        final Path dir = Paths.get("dataJson");
+        final Path dir = Paths.get("datajson");
         final Path path = Paths.get(dir.toString(), "AppDataJson.txt");
         if (path.toFile().exists()) Files.delete(path);
         if (dir.toFile().exists()) Files.delete(dir);
         Files.createDirectories(dir);
         Files.createFile(path);
         final ObjectMapper mapper = new ObjectMapper();
-        final FileWriter fw = new FileWriter("dataJson/AppDataJson.txt");
+        final FileWriter fw = new FileWriter(path.toFile());
         final Domain domain = getController().createDomain();
         JsonGenerator jsonGenerator = mapper.getJsonFactory().createJsonGenerator(fw);
         jsonGenerator.writeObject(domain);
         jsonGenerator.close();
-        // fw.write(lastBuilder.build().toString());
         fw.close();
     }
 

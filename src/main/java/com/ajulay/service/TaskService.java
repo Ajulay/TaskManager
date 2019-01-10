@@ -23,14 +23,14 @@ public class TaskService implements ITaskService {
     }
 
     public Task deleteTask(final String id) throws NoSuchTaskException {
-        if (id.isEmpty()) {
+        if (id == null || id.isEmpty()) {
             throw new NullIdException();
         }
         return dao.delete(id);
     }
 
     public void changeStatus(final String taskId, final String status) throws NoSuchTaskException {
-        if (taskId.isEmpty() || status.isEmpty()) {
+        if (taskId == null || taskId.isEmpty() || status == null || status.isEmpty()) {
             throw new NullIdException();
         }
         for (Task task : dao.findAll()) {
@@ -48,7 +48,7 @@ public class TaskService implements ITaskService {
 
     @Override
     public List<Task> findTaskAllByProject(final String projectId) {
-        if (projectId.isEmpty()) {
+        if (projectId == null || projectId.isEmpty()) {
             throw new NullIdException();
         }
         return dao.findByProjectId(projectId);
@@ -56,7 +56,7 @@ public class TaskService implements ITaskService {
 
     @Override
     public Task findTaskById(final String taskId) throws NoSuchTaskException {
-        if (taskId.isEmpty()) {
+        if (taskId == null || taskId.isEmpty()) {
             throw new NullDataForTaskException();
         }
         return dao.findById(taskId);

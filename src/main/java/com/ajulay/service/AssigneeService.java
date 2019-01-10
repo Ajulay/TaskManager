@@ -18,7 +18,7 @@ public class AssigneeService implements IAssigneeService {
 
     @Override
     public Assignee createAssignee(final String taskId, final String assignerId) {
-        if (taskId.isEmpty() || assignerId.isEmpty()) {
+        if (taskId == null || taskId.isEmpty() || assignerId == null || assignerId.isEmpty()) {
             throw new NullIdException();
         }
         final Assignee assignee = new Assignee();
@@ -29,7 +29,7 @@ public class AssigneeService implements IAssigneeService {
 
     @Override
     public Assignee deleteAssignee(final String id) throws NoSuchAssigneeException {
-        if (id.isEmpty()) {
+        if (id == null || id.isEmpty()) {
             throw new NullIdException();
         }
         return assigneeDAO.delete(id);
@@ -43,7 +43,7 @@ public class AssigneeService implements IAssigneeService {
 
     @Override
     public Assignee getById(final String id) throws NoSuchAssigneeException {
-        if (id.isEmpty()) {
+        if (id == null || id.isEmpty()) {
             throw new NullIdException();
         }
         return assigneeDAO.findById(id);

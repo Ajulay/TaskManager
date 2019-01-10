@@ -18,14 +18,14 @@ public class UserService implements IUserService {
     private final IUserDAO assignerDao = new UserDAO();
 
     public User createUser(final String surname) {
-        if (surname.isEmpty()) {
+        if (surname == null || surname.isEmpty()) {
             throw new NullDataForAssignerException();
         }
         return assignerDao.create(surname);
     }
 
     public User deleteUser(final String surname) throws NoSuchAssignerException {
-        if (surname.isEmpty()) {
+        if (surname == null || surname.isEmpty()) {
             throw new NullDataForAssignerException();
         }
         return assignerDao.delete(surname);
@@ -41,7 +41,7 @@ public class UserService implements IUserService {
     }
 
     public User getBySurname(final String surname) throws NoSuchAssignerException {
-        if (surname.isEmpty()) {
+        if (surname == null || surname.isEmpty()) {
             throw new NullDataForAssignerException();
         }
         for (User assigner : getUsers()) {
@@ -53,7 +53,7 @@ public class UserService implements IUserService {
     }
 
     public User findById(String id) throws NoSuchAssignerException {
-        if (id.isEmpty()) {
+        if (id == null || id.isEmpty()) {
             throw new NullIdException();
         }
         return assignerDao.findById(id);

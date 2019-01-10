@@ -19,7 +19,7 @@ public class RegistrationCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        User user = new User();
+        final User user = new User();
         for (int i = 0; i < 3; i++) {
             System.out.println("Enter login (required):");
             final String login = getController().nextLine();
@@ -27,9 +27,9 @@ public class RegistrationCommand extends AbstractCommand {
                 user.setLogin(login);
                 while (true) {
                     System.out.println("Enter password (required):");
-                    final String password = getController().nextLine();
+                    final String password = getController().nextLine().hashCode() + "";
                     System.out.println("Confirm password (required):");
-                    final String confirmedPassword = getController().nextLine();
+                    final String confirmedPassword = getController().nextLine().hashCode() + "";
                     if (!password.equals(confirmedPassword)) {
                         System.out.println("passwords are not equals");
                         continue;

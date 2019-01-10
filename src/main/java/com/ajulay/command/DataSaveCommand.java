@@ -25,7 +25,6 @@ public class DataSaveCommand extends AbstractCommand {
 
     @Override
     public void execute() throws Exception {
-
         final Path dir = Paths.get("data");
         final Path path = Paths.get(dir.toString(), "AppData.txt");
         if (path.toFile().exists()) Files.delete(path);

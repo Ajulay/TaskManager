@@ -30,7 +30,7 @@ public class ProjectService implements IProjectService {
 
     @Override
     public Project getById(final String projectId) throws NoSuchProjectException {
-        if (projectId.isEmpty()) {
+        if (projectId == null || projectId.isEmpty()) {
             throw new NullPointerException();
         }
         return projectDAO.findById(projectId);

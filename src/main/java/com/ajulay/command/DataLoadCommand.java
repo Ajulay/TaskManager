@@ -1,5 +1,6 @@
 package com.ajulay.command;
 
+import com.ajulay.constants.ServiceConstant;
 import com.ajulay.entity.*;
 import com.ajulay.enumirated.Role;
 
@@ -26,10 +27,10 @@ public class DataLoadCommand extends AbstractCommand {
     public void execute() throws Exception {
         Path path = Paths.get("data/AppData.txt");
         if (!Files.exists(path)) {
-            User user = getController().getUserService().createUser("admin");
+            final User user = getController().getUserService().createUser("admin");
             user.setRole(Role.ADMIN);
-            user.setLogin("admin");
-            user.setPassword("admin");
+            user.setLogin(ServiceConstant.START_LOGIN);
+            user.setPassword(ServiceConstant.START_PASSWORD_HASH);
             return;
         }
         final FileInputStream fis = new FileInputStream("data/AppData.txt");
