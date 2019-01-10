@@ -64,7 +64,7 @@ public class ControllerUI implements IControllerUI {
         Thread.sleep(1000);
         System.out.println("TASK MANAGER");
         Thread.sleep(1000);
-        while (true) {
+        for (int i = 0; i < 3; i++) {
             System.out.println("type /login (If You have no login type: /reg)");
             final String login = nextLine();
             try {
@@ -86,6 +86,10 @@ public class ControllerUI implements IControllerUI {
         }
         commands.remove(RegistrationCommand.COMMAND);
         commands.remove(LoginCommand.COMMAND);
+        if (currentUser == null) {
+            System.out.println("You entered incorrect data more than 3 times.");
+            return;
+        }
         if (Role.WORKER.equals(currentUser.getRole())) {
             commands.remove(new UserFindAllByTaskCommand().getCommandKeyWord());
             commands.remove(new UserFindAllCommand().getCommandKeyWord());
@@ -96,8 +100,6 @@ public class ControllerUI implements IControllerUI {
             commands.remove(new TaskDeleteCommand().getCommandKeyWord());
             commands.remove(new TaskFindAllByAssignerCommand().getCommandKeyWord());
             commands.remove(new TaskFindAllByProjectCommand().getCommandKeyWord());
-            commands.remove(new DataLoadJsonCommand().getCommandKeyWord());
-            commands.remove(new DataSaveXmlCommand().getCommandKeyWord());
         }
         while (true) {
             System.out.println("User: " + currentUser.getSurname() + ", role: " + currentUser.getRole());

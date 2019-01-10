@@ -18,9 +18,9 @@ public class RegistrationCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws Exception {
+    public void execute() {
         User user = new User();
-        while (true) {
+        for (int i = 0; i < 3; i++) {
             System.out.println("Enter login (required):");
             final String login = getController().nextLine();
             if (!getController().getUserService().isLoginExists(login)) {
@@ -49,6 +49,7 @@ public class RegistrationCommand extends AbstractCommand {
             }
             System.out.println("This login already exists.");
         }
+        System.out.println("You try to enter incorrect data during registration.");
     }
 
 }
