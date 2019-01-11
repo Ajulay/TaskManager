@@ -1,6 +1,6 @@
 package com.ajulay.command;
 
-import com.ajulay.entity.Domain;
+import com.ajulay.dto.Domain;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 
@@ -33,7 +33,7 @@ public class DataSaveXmlCommand extends AbstractCommand {
         Files.createFile(path);
         final XmlMapper mapper = new XmlMapper();
         final FileWriter fw = new FileWriter(path.toFile());
-        final Domain domain = getController().createDomain();
+        final Domain domain = Domain.createDomain(getController());
         final ToXmlGenerator generator = mapper.getFactory().createGenerator(fw);
         generator.writeObject(domain);
         generator.close();

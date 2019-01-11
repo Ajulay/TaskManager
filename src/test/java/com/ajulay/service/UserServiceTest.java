@@ -11,7 +11,7 @@ import java.util.List;
 public class UserServiceTest {
 
     @Test
-    public void createUser() throws Exception {
+    public void createUser() {
         final IUserService service = new UserService();
         final String surname = "Ivlevich";
         final User user = service.createUser(surname);

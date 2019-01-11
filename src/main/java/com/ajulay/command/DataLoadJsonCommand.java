@@ -1,6 +1,6 @@
 package com.ajulay.command;
 
-import com.ajulay.entity.Domain;
+import com.ajulay.dto.Domain;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.nio.file.Path;
@@ -23,7 +23,7 @@ public class DataLoadJsonCommand extends AbstractCommand {
         final Path path = Paths.get("datajson/AppDataJson.txt");
         final ObjectMapper mapper = new ObjectMapper();
         final Domain domain = mapper.getJsonFactory().createJsonParser(path.toFile()).readValueAs(Domain.class);
-        getController().loadDomain(domain);
+        Domain.loadDomain(domain, getController());
     }
 
 }

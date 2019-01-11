@@ -24,4 +24,6 @@ public interface IUserDAO {
 
     User findByLogin(String login) throws NoSuchAssignerException;
 
+    User save(User user);
+
 }

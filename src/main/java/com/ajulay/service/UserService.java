@@ -33,12 +33,17 @@ public class UserService implements IUserService {
         return userDao.delete(surname);
     }
 
-    public User updateUser(final User assigner) throws NoSuchAssignerException {
-        if (assigner == null) throw new NullPointerException();
-        final User oldAssigner = findById(assigner.getId());
-        oldAssigner.setName(assigner.getName());
-        oldAssigner.setLastName(assigner.getLastName());
-        oldAssigner.setSurname(assigner.getSurname());
+    public User updateUser(final User user) throws NoSuchAssignerException {
+        if (user == null) throw new NullPointerException();
+        User oldAssigner;
+        try {
+            oldAssigner = findById(user.getId());
+        } catch (NoSuchAssignerException e) {
+            return userDao.save(user);
+        }
+        oldAssigner.setName(user.getName());
+        oldAssigner.setLastName(user.getLastName());
+        oldAssigner.setSurname(user.getSurname());
         return userDao.update(oldAssigner);
     }
 

@@ -1,6 +1,6 @@
 package com.ajulay.command;
 
-import com.ajulay.entity.Domain;
+import com.ajulay.dto.Domain;
 
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
@@ -32,7 +32,7 @@ public class DataSaveCommand extends AbstractCommand {
         Files.createDirectories(dir);
         Files.createFile(path);
         final OutputStream out = new FileOutputStream(path.toFile());
-        final Domain domain = getController().createDomain();
+        final Domain domain = Domain.createDomain(getController());
         final ObjectOutputStream oos = new ObjectOutputStream(out);
         oos.writeObject(domain);
         oos.close();

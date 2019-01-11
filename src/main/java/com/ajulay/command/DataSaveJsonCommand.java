@@ -1,6 +1,6 @@
 package com.ajulay.command;
 
-import com.ajulay.entity.Domain;
+import com.ajulay.dto.Domain;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -33,7 +33,7 @@ public class DataSaveJsonCommand extends AbstractCommand {
         Files.createFile(path);
         final ObjectMapper mapper = new ObjectMapper();
         final FileWriter fw = new FileWriter(path.toFile());
-        final Domain domain = getController().createDomain();
+        final Domain domain = Domain.createDomain(getController());
         JsonGenerator jsonGenerator = mapper.getJsonFactory().createJsonGenerator(fw);
         jsonGenerator.writeObject(domain);
         jsonGenerator.close();

@@ -1,6 +1,6 @@
 package com.ajulay.command;
 
-import com.ajulay.entity.Domain;
+import com.ajulay.dto.Domain;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import java.io.FileReader;
@@ -25,7 +25,7 @@ public class DataLoadXmlCommand extends AbstractCommand {
         final XmlMapper mapper = new XmlMapper();
         FileReader fr = new FileReader(path.toFile());
         final Domain domain = mapper.readValue(fr, Domain.class);
-        getController().loadDomain(domain);
+        Domain.loadDomain(domain, getController());
     }
 
 }

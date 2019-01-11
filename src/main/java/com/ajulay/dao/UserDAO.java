@@ -77,4 +77,10 @@ public class UserDAO implements IUserDAO {
         throw new NoSuchAssignerException();
     }
 
+    @Override
+    public User save(User user) {
+        users.add(user);
+        return user;
+    }
+
 }
