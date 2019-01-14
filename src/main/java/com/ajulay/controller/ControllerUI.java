@@ -1,21 +1,12 @@
 package com.ajulay.controller;
 
 import com.ajulay.api.controller.IControllerUI;
-import com.ajulay.api.service.IAssigneeService;
-import com.ajulay.api.service.IProjectService;
-import com.ajulay.api.service.ITaskService;
-import com.ajulay.api.service.IUserService;
+import com.ajulay.api.service.*;
 import com.ajulay.command.*;
 import com.ajulay.constants.ServiceConstant;
 import com.ajulay.entity.User;
 import com.ajulay.enumirated.Role;
-import com.ajulay.exception.checked.NoSuchAssignerException;
-import com.ajulay.exception.checked.NoSuchProjectException;
-import com.ajulay.exception.checked.NoSuchTaskException;
-import com.ajulay.service.AssigneeService;
-import com.ajulay.service.ProjectService;
-import com.ajulay.service.TaskService;
-import com.ajulay.service.UserService;
+import com.ajulay.service.*;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -51,6 +42,8 @@ public class ControllerUI implements IControllerUI {
     private final ITaskService taskService = new TaskService();
 
     private final IAssigneeService assigneeService = new AssigneeService();
+
+    private final IOveralService overalService = new OveralService(assigneeService, userService, projectService, taskService);
 
     private final Map<String, AbstractCommand> commands = new HashMap<>();
 
@@ -102,9 +95,7 @@ public class ControllerUI implements IControllerUI {
                 try {
                     command.execute();
                     System.out.println("[Ok]");
-                } catch (NoSuchTaskException |
-                        NoSuchAssignerException |
-                        NoSuchProjectException e) {
+                } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
                 continue;
@@ -118,6 +109,7 @@ public class ControllerUI implements IControllerUI {
         final Path path = Paths.get(ServiceConstant.DATA_FILE);
         if (!Files.exists(path)) {
             final User user = getUserService().createUser("admin");
+            user.setSurname("Admin");
             user.setRole(Role.ADMIN);
             user.setLogin(ServiceConstant.START_LOGIN);
             user.setPassword(ServiceConstant.START_PASSWORD_HASH);
@@ -126,7 +118,7 @@ public class ControllerUI implements IControllerUI {
             tmpCommand.setController(this);
             tmpCommand.execute();
         }
-        Thread.sleep(500);
+        Thread.sleep(ServiceConstant.LOAD_TIME);
     }
 
     public IUserService getUserService() {
@@ -153,4 +145,7 @@ public class ControllerUI implements IControllerUI {
         return scanner;
     }
 
+    public IOveralService getOveralService() {
+        return overalService;
+    }
 }

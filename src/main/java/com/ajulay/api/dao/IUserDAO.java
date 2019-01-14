@@ -10,13 +10,13 @@ import java.util.List;
  */
 public interface IUserDAO {
 
-    User create(String surname);
+    User create(String login);
 
     User delete(String surname) throws NoSuchAssignerException;
 
     User update(User assigner) throws NoSuchAssignerException;
 
-    User findById(String surname) throws NoSuchAssignerException;
+    User findById(String surname);
 
     List<User> findAll();
 

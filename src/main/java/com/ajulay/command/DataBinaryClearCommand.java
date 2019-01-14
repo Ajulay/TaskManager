@@ -18,8 +18,8 @@ public class DataBinaryClearCommand extends AbstractCommand {
 
     @Override
     public void execute() throws Exception {
-        final Path path = Paths.get("data/AppData.txt");
         final Path dir = Paths.get("data");
+        final Path path = Paths.get(dir.toString(), "AppData.txt");
         if (path.toFile().exists()) {
             Files.delete(path);
             Files.delete(dir);

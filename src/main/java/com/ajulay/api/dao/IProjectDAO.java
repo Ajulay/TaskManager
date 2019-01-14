@@ -16,7 +16,7 @@ public interface IProjectDAO {
 
     Project update(Project project) throws NoSuchProjectException;
 
-    Project findById(String id) throws NoSuchProjectException;
+    Project findById(String id);
 
     List<Project> findAll();
 

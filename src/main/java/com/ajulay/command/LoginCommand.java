@@ -1,7 +1,6 @@
 package com.ajulay.command;
 
 import com.ajulay.entity.User;
-import com.ajulay.enumirated.Role;
 
 public class LoginCommand extends AbstractCommand {
 
@@ -41,11 +40,13 @@ public class LoginCommand extends AbstractCommand {
             return;
         }
         getController().getCommands().clear();
-        if (Role.WORKER.equals(getController().getUserService().getCurrentUser().getRole())) {
-            getController().registerBaseCommandAll();
-        } else {
-            getController().registerCommandAll();
-        }
+        //TODO move to service
+//        if (Role.WORKER.equals(getController().getUserService().getCurrentUser().getRole())) {
+//            getController().registerBaseCommandAll();
+//        } else {
+//            getController().registerCommandAll();
+//        }
+        getController().registerCommandAll();
     }
 
 }

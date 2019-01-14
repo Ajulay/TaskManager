@@ -17,10 +17,10 @@ public class ProjectCreateCommand extends AbstractCommand {
     public void execute() {
         System.out.println("Enter project name");
         final String projectName = getController().nextLine();
-        final Project project = new Project();
-        project.setAuthorId(getController().getUserService().getCurrentUser().getId());
-        project.setName(projectName);
-        getController().getProjectService().saveProject(project);
+        final Project project = getController().getOveralService().createProjectByName(projectName);
+        if (project == null) {
+            System.out.println("Project not created...");
+        }
     }
 
 }

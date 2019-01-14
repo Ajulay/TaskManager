@@ -12,7 +12,7 @@ public interface ITaskDAO {
 
     Task save(Task task);
 
-    Task delete(String id) throws NoSuchTaskException;
+    Task delete(String id);
 
     Task update(Task task) throws NoSuchTaskException;
 

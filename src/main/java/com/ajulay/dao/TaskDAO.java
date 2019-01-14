@@ -21,14 +21,14 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public Task delete(final String id) throws NoSuchTaskException {
+    public Task delete(final String id) {
         for (Task task : tasks) {
             if (task.getId().equals(id)) {
                 tasks.remove(task);
                 return task;
             }
         }
-        throw new NoSuchTaskException();
+        return null;
     }
 
     @Override
@@ -43,13 +43,13 @@ public class TaskDAO implements ITaskDAO {
     }
 
     @Override
-    public Task findById(final String id) throws NoSuchTaskException {
+    public Task findById(final String id) {
         for (final Task task : tasks) {
             if (id.equals(task.getId())) {
                 return task;
             }
         }
-        throw new NoSuchTaskException();
+        return null;
     }
 
     public List<Task> findAll() {

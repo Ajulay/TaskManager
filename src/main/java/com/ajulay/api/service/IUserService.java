@@ -11,15 +11,15 @@ import java.util.List;
  */
 public interface IUserService {
 
-    User createUser(String surname);
+    User createUser(String login);
 
     User deleteUser(String surname) throws NoSuchAssignerException;
 
     User updateUser(User executor) throws NoSuchAssignerException;
 
-    User getBySurname(String surname) throws NoSuchAssignerException;
+    User getBySurname(String surname);
 
-    User findById(String id) throws NoSuchAssignerException;
+    User findById(String id);
 
     List<User> getUsers();
 
@@ -27,9 +27,7 @@ public interface IUserService {
 
     User findByLogin(String login) throws NoSuchAssignerException;
 
-    Boolean isLoginExists(String in);
-
-    Boolean changePassword(String password);
+    User changePassword(User user, String password);
 
     User getCurrentUser();
 

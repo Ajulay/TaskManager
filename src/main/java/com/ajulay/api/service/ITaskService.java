@@ -14,13 +14,13 @@ public interface ITaskService {
 
     Task deleteTask(String id) throws NoSuchTaskException;
 
-    void changeStatus(String taskId, String status) throws NoSuchTaskException;
+    Task changeStatus(String taskId, String status);
 
     List<Task> findTaskAll();
 
     List<Task> findTaskAllByProject(String project_id);
 
-    Task findTaskById(String taskId) throws NoSuchTaskException;
+    Task findTaskById(String taskId);
 
     boolean merge(List<Task> tasks);
 

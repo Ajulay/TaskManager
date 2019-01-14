@@ -41,13 +41,13 @@ public class ProjectDAO implements IProjectDAO {
     }
 
     @Override
-    public Project findById(final String id) throws NoSuchProjectException {
+    public Project findById(final String id) {
         for (final Project project : findAll()) {
             if (id.equals(project.getId())) {
                 return project;
             }
         }
-        throw new NoSuchProjectException();
+        return null;
     }
 
     @Override

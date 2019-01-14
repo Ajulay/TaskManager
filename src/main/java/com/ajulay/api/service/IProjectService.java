@@ -12,7 +12,7 @@ public interface IProjectService {
 
     Project getByName(String projectName) throws NoSuchProjectException;
 
-    Project getById(String projectId) throws NoSuchProjectException;
+    Project getById(String projectId);
 
     List<Project> getProjects();
 

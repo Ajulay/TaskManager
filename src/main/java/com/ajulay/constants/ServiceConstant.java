@@ -9,6 +9,8 @@ public class ServiceConstant {
     public static final String START_LOGIN = "admin";
     public static final String START_PASSWORD_HASH = "admin".hashCode() + "";
     public static final String DATA_FILE = "data/AppData.txt";
-
+    public static final int LOAD_TIME = 500;
+    public static final int MAX_ATTEMPT = 3;
+    public static final int SUBSTRING_INSTANT = 10;
 
 }

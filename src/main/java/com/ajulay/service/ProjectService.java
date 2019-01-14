@@ -29,9 +29,9 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public Project getById(final String projectId) throws NoSuchProjectException {
+    public Project getById(final String projectId) {
         if (projectId == null || projectId.isEmpty()) {
-            throw new NullPointerException();
+            return null;
         }
         return projectDAO.findById(projectId);
     }

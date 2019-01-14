@@ -5,6 +5,7 @@ import com.ajulay.api.service.IUserService;
 import com.ajulay.dao.UserDAO;
 import com.ajulay.entity.User;
 import com.ajulay.exception.checked.NoSuchAssignerException;
+import com.ajulay.exception.unchecked.LoginExistsException;
 import com.ajulay.exception.unchecked.NullDataForAssignerException;
 import com.ajulay.exception.unchecked.NullIdException;
 
@@ -19,11 +20,16 @@ public class UserService implements IUserService {
 
     private final IUserDAO userDao = new UserDAO();
 
-    public User createUser(final String surname) {
-        if (surname == null || surname.isEmpty()) {
+    public User createUser(final String login) {
+        if (login == null || login.isEmpty()) {
             throw new NullDataForAssignerException();
         }
-        return userDao.create(surname);
+        if (isLoginExists(login)) {
+            throw new LoginExistsException();
+        }
+        final User user = new User();
+        user.setLogin(login);
+        return userDao.save(user);
     }
 
     public User deleteUser(final String surname) throws NoSuchAssignerException {
@@ -35,19 +41,15 @@ public class UserService implements IUserService {
 
     public User updateUser(final User user) throws NoSuchAssignerException {
         if (user == null) throw new NullPointerException();
-        User oldAssigner;
-        try {
-            oldAssigner = findById(user.getId());
-        } catch (NoSuchAssignerException e) {
-            return userDao.save(user);
-        }
+        final User oldAssigner = findById(user.getId());
+        if (oldAssigner == null) return userDao.save(user);
         oldAssigner.setName(user.getName());
         oldAssigner.setLastName(user.getLastName());
         oldAssigner.setSurname(user.getSurname());
         return userDao.update(oldAssigner);
     }
 
-    public User getBySurname(final String surname) throws NoSuchAssignerException {
+    public User getBySurname(final String surname) {
         if (surname == null || surname.isEmpty()) {
             throw new NullDataForAssignerException();
         }
@@ -56,10 +58,10 @@ public class UserService implements IUserService {
                 return assigner;
             }
         }
-        throw new NoSuchAssignerException();
+        return null;
     }
 
-    public User findById(String id) throws NoSuchAssignerException {
+    public User findById(String id) {
         if (id == null || id.isEmpty()) {
             throw new NullIdException();
         }
@@ -81,8 +83,7 @@ public class UserService implements IUserService {
         return userDao.findByLogin(login);
     }
 
-    @Override
-    public Boolean isLoginExists(final String in) {
+    private Boolean isLoginExists(final String in) {
         try {
             userDao.findByLogin(in);
         } catch (NoSuchAssignerException e) {
@@ -92,9 +93,9 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Boolean changePassword(String password) {
-
-        return null;
+    public User changePassword(User user, String password) {
+        user.setPassword(password);
+        return user;
     }
 
     public User getCurrentUser() {

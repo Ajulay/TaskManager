@@ -13,7 +13,7 @@
 * Project: Class-entity contains project data;
 * Task: Class-entity contains task data;  
 * ServiceConstant: Class contains base constants;
-* Status: enum - START, IN_PROGRESS, FINISHED, FAILED;
+* Status: Enum - START, IN_PROGRESS, FINISHED, FAILED;
 * UserService: Class presents assigner (executor) data; 
 * AssigneeService: Class presents assignee data;
 * ProjectService: Class presents project data;
@@ -22,9 +22,11 @@
 * AssigneeDao: Class provides assignee data; 
 * ProjectDao: Class provides project data;
 * TaskDao: Class provides task data;
-* Exception: package com.ajulay.exception contains custom exceptions;
+* Domain: Class for data transporting;
+* Exception: Package com.ajulay.exception contains custom exceptions;
 * AbstractCommand: Class-interface for executing command;
-* Api: package com.ajulay.api contains base interfaces for data access.
+* Command: Package com.ajulay.command contains Command classes including custom ones;
+* Api: Package com.ajulay.api contains base interfaces for data access.
 
 #### *Base functions:*    
 * to see base function type: /help;

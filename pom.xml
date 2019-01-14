@@ -49,6 +49,7 @@
                             <mainClass>com.ajulay.App</mainClass>
                         </manifest>
                     </archive>
+                    <finalName>task-manager</finalName>
                 </configuration>
             </plugin>
             <plugin>

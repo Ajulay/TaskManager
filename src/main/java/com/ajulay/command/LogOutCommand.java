@@ -15,4 +15,5 @@ public class LogOutCommand extends AbstractCommand {
     public void execute() {
         getController().getUserService().setCurrentUser(null);
     }
+
 }

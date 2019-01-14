@@ -3,7 +3,7 @@ package com.ajulay.service;
 import com.ajulay.api.service.ITaskService;
 import com.ajulay.dao.TaskDAO;
 import com.ajulay.entity.Task;
-import com.ajulay.enumirated.Status;
+import com.ajulay.enumirated.Role;
 import com.ajulay.exception.checked.NoSuchTaskException;
 import com.ajulay.exception.unchecked.NullDataForTaskException;
 import com.ajulay.exception.unchecked.NullIdException;
@@ -29,17 +29,13 @@ public class TaskService implements ITaskService {
         return dao.delete(id);
     }
 
-    public void changeStatus(final String taskId, final String status) throws NoSuchTaskException {
+    public Task changeStatus(final String taskId, final String status) {
         if (taskId == null || taskId.isEmpty() || status == null || status.isEmpty()) {
-            throw new NullIdException();
+            return null;
         }
-        for (Task task : dao.findAll()) {
-            if (taskId.equals(task.getId())) {
-                task.setStatus(Status.valueOf(status.toUpperCase()));
-                return;
-            }
-        }
-        throw new NoSuchTaskException();
+        final Task task = findTaskById(taskId);
+        task.setStatus(Role.valueOf(status.toUpperCase()));
+        return task;
     }
 
     public List<Task> findTaskAll() {
@@ -55,9 +51,9 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Task findTaskById(final String taskId) throws NoSuchTaskException {
+    public Task findTaskById(final String taskId) {
         if (taskId == null || taskId.isEmpty()) {
-            throw new NullDataForTaskException();
+            return null;
         }
         return dao.findById(taskId);
     }
