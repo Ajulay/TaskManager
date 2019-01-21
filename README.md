@@ -7,7 +7,7 @@
 * Maven 4.0.0
 
 #### *Project base structure:*
-* App: Class with psvm;
+* com.ajulay.App: Class with psvm;
 * User: Class-entity contains executor data;
 * Assignee: Class-entity contains relation between Assigner and Task;
 * Project: Class-entity contains project data;
@@ -23,10 +23,10 @@
 * ProjectDao: Class provides project data;
 * TaskDao: Class provides task data;
 * Domain: Class for data transporting;
-* Exception: Package com.ajulay.exception contains custom exceptions;
+* Exception: Package com.com.com.ajulay.exception contains custom exceptions;
 * AbstractCommand: Class-interface for executing command;
-* Command: Package com.ajulay.command contains Command classes including custom ones;
-* Api: Package com.ajulay.api contains base interfaces for data access.
+* Command: Package com.com.com.ajulay.command contains Command classes including custom ones;
+* Api: Package com.com.com.ajulay.api contains base interfaces for data access.
 
 #### *Base functions:*    
 * to see base function type: /help;
