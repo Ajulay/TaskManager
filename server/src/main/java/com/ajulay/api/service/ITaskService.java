@@ -1,6 +1,7 @@
 package com.ajulay.api.service;
 
 
+import com.ajulay.api.dao.ITaskDAO;
 import com.ajulay.entity.Task;
 
 import java.util.List;
@@ -23,5 +24,7 @@ public interface ITaskService {
     Task findTaskById(String taskId);
 
     List<Task> merge(List<Task> tasks);
+
+    ITaskDAO getDao();
 
 }

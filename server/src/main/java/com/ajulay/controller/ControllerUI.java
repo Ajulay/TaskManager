@@ -5,6 +5,7 @@ import com.ajulay.api.service.*;
 import com.ajulay.api.soap.*;
 import com.ajulay.command.*;
 import com.ajulay.constants.ServiceConstant;
+import com.ajulay.dao.util.DataBaseConnection;
 import com.ajulay.endpoint.*;
 import com.ajulay.entity.Session;
 import com.ajulay.entity.User;
@@ -12,9 +13,6 @@ import com.ajulay.enumirated.Role;
 import com.ajulay.service.*;
 
 import javax.xml.ws.Endpoint;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -23,15 +21,14 @@ import java.util.*;
 public class ControllerUI implements IControllerUI {
 
     private static final Class[] CLASSES = {
-            UserFindAllCommand.class, ProjectFindAllCommand.class,
-            TaskCreateCommand.class, TaskFindAllByProjectCommand.class,
-            TaskDeleteCommand.class, TaskFindAllByUserCommand.class,
-            ProjectCreateCommand.class, UserFindAllByTaskCommand.class,
-            DataBinaryClearCommand.class, AppExitCommand.class, TaskChangeStatusCommand.class, AppHelpCommand.class,
+            UserFindAllCommand.class, ProjectFindAllCommand.class, TaskCreateCommand.class,
+            TaskFindAllByProjectCommand.class, TaskDeleteCommand.class, TaskFindAllByUserCommand.class,
+            ProjectCreateCommand.class, UserFindAllByTaskCommand.class, DataBinaryClearCommand.class,
+            AppExitCommand.class, TaskChangeStatusCommand.class, AppHelpCommand.class,
             TaskFindAllCommand.class, DataSaveCommand.class, DataLoadCommand.class,
             DataSaveJsonCommand.class, DataLoadJsonCommand.class, DataSaveXmlCommand.class,
-            DataLoadXmlCommand.class, UserChangePasswordCommand.class,// LogOutCommand.class,
-            SessionAllShowCommand.class, SessionFindByIdCommand.class
+            DataLoadXmlCommand.class, UserChangePasswordCommand.class, LogOutCommand.class,
+            SessionAllShowCommand.class, SessionFindByIdCommand.class, UserDeleteById.class
     };
 
     private final IUserService userService = new UserService();
@@ -51,6 +48,8 @@ public class ControllerUI implements IControllerUI {
 
     private final Scanner scanner = new Scanner(System.in);
 
+    private DataBaseConnection conn = new DataBaseConnection();
+
     public void register(Class... clazzes) throws InstantiationException, IllegalAccessException {
         for (Class clazz : clazzes) {
             register(clazz);
@@ -69,20 +68,19 @@ public class ControllerUI implements IControllerUI {
     }
 
     public void run() throws Exception {
+        setConnection();
         runServices();
         loadData();
         System.out.println("TASK MANAGER");
         while (true) {
-            if (getUserService().getCurrentUser() == null) {
+            if (getSessionService().getCurrentSession() == null) {
                 commands.clear();
                 register(LoginCommand.class, RegistrationCommand.class,
-                        // AppExitCommand.class,
+                        AppExitCommand.class,
                         AppHelpCommand.class);
             } else {
-                final String currentUserName = getUserService().getCurrentUser().getSurname();
-                final String currentUserRole = getUserService().getCurrentUser().getRole().toString();
-                System.out.printf("User: %s, role: %s\n", currentUserName, currentUserRole);
-
+                final User currentUser = getUserService().getCurrentUser();
+                System.out.printf("User: %s, role: %s\n", currentUser.getSurname(), currentUser.getRole());
             }
             final String in = nextLine();
             if (in == null) continue;
@@ -93,7 +91,7 @@ public class ControllerUI implements IControllerUI {
                     command.execute();
                     System.out.println("[Ok]");
                 } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                    System.out.println("Error!!!" + e.getMessage());
                 }
                 continue;
             }
@@ -114,19 +112,24 @@ public class ControllerUI implements IControllerUI {
         Endpoint.publish("http://localhost:8080/assignee", assigneeSoapService);
     }
 
+    private void setConnection() throws Exception {
+        conn.connect();
+        getUserService().getUserDao().setConn(conn.getConn());
+        getProjectService().getProjectDAO().setConn(conn.getConn());
+        getSessionService().getSessionDao().setConn(conn.getConn());
+        getTaskService().getDao().setConn(conn.getConn());
+        getAssigneeService().getAssigneeDAO().setConn(conn.getConn());
+    }
     private void loadData() throws Exception {
         System.out.println("Load data");
-        final Path path = Paths.get(ServiceConstant.DATA_FILE);
-        if (!Files.exists(path)) {
-            final User user = getUserService().createUser("admin");
-            user.setSurname("Admin");
-            user.setRole(Role.ADMIN);
-            user.setLogin(ServiceConstant.START_LOGIN);
-            user.setPassword(ServiceConstant.START_PASSWORD_HASH);
-        } else {
-            final AbstractCommand tmpCommand = new DataLoadCommand();
-            tmpCommand.setController(this);
-            tmpCommand.execute();
+        final User admin = getUserService().findByLogin("admin");
+        if (admin == null) {
+            final User newAdmin = getUserService().createUser("admin");
+            newAdmin.setSurname("Admin");
+            newAdmin.setRole(Role.ADMIN);
+            newAdmin.setLogin(ServiceConstant.START_LOGIN);
+            newAdmin.setPassword(ServiceConstant.START_PASSWORD_HASH);
+            getUserService().updateUser(newAdmin);
         }
         Thread.sleep(ServiceConstant.LOAD_TIME);
     }
@@ -143,7 +146,7 @@ public class ControllerUI implements IControllerUI {
                     }
                     final List<Session> sessionAllForRemove = new ArrayList<>();
                     for (final Session session : sessionService.findSessionAll()) {
-                        final long ldate = new Date().getTime() - session.getTimestamp().getTime();
+                        final long ldate = new Date().getTime() - session.getCreatedDate().getTime();
                         if (ldate > ServiceConstant.CONTROL_TIME) {
                             sessionAllForRemove.add(session);
                         }

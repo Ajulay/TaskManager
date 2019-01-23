@@ -1,5 +1,6 @@
 package com.ajulay.service;
 
+import com.ajulay.api.dao.ITaskDAO;
 import com.ajulay.api.service.ITaskService;
 import com.ajulay.dao.TaskDAO;
 import com.ajulay.entity.Task;
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public class TaskService implements ITaskService {
 
-    private final TaskDAO dao = new TaskDAO();
+    private final ITaskDAO dao = new TaskDAO();
 
     public Task saveTask(final Task task) {
         if (task == null) throw new NullDataForTaskException();
@@ -62,6 +63,10 @@ public class TaskService implements ITaskService {
     public List<Task> merge(final List<Task> tasks) {
         if (tasks == null) return Collections.emptyList();
         return dao.merge(tasks);
+    }
+
+    public ITaskDAO getDao() {
+        return dao;
     }
 
 }

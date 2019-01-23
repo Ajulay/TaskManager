@@ -1,6 +1,7 @@
 package com.ajulay.api.service;
 
 
+import com.ajulay.api.dao.IUserDAO;
 import com.ajulay.entity.User;
 
 import java.util.List;
@@ -10,11 +11,11 @@ import java.util.List;
  */
 public interface IUserService {
 
-    User createUser(String login);
+    User createUser(String login) throws Exception;
 
-    User deleteUser(String surname);
+    User deleteUser(String id);
 
-    User updateUser(User user);
+    User updateUser(User user) throws Exception;
 
     User getBySurname(String surname);
 
@@ -31,5 +32,7 @@ public interface IUserService {
     User getCurrentUser();
 
     void setCurrentUser(User currentUser);
+
+    IUserDAO getUserDao();
 
 }

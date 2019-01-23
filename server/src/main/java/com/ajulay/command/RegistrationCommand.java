@@ -19,8 +19,8 @@ public class RegistrationCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() {
-        final User user = new User();
+    public void execute() throws Exception {
+        User user = null;
         for (int i = 1; i <= ServiceConstant.MAX_ATTEMPT; i++) {
             if (i == ServiceConstant.MAX_ATTEMPT) {
                 System.out.println("Your attempts are ended.");
@@ -28,7 +28,7 @@ public class RegistrationCommand extends AbstractCommand {
             }
             System.out.println("Enter login (required):");
             final String login = getController().nextLine();
-            user.setLogin(login);
+            user = getController().getUserService().createUser(login);
             for (int j = 1; j <= ServiceConstant.MAX_ATTEMPT; j++) {
                 if (j == ServiceConstant.MAX_ATTEMPT) {
                     System.out.println("Your attempts are ended.");
@@ -57,7 +57,7 @@ public class RegistrationCommand extends AbstractCommand {
                 System.out.println(e.getMessage());
                 continue;
             }
-            getController().getUserService().getUsers().add(user);
+            getController().getUserService().updateUser(user);
             break;
         }
     }

@@ -3,9 +3,12 @@ package com.ajulay.dao;
 import com.ajulay.api.dao.IAssigneeDAO;
 import com.ajulay.entity.Assignee;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * {@inheritDoc}
@@ -14,18 +17,71 @@ public class AssigneeDAO implements IAssigneeDAO {
 
     private final List<Assignee> assignees = new ArrayList<>();
 
+    private Connection conn;
+
+    private Assignee fetch(final ResultSet resultSet) throws SQLException {
+        if (!resultSet.next()) return null;
+        final Assignee assignee = new Assignee();
+        assignee.setId(resultSet.getString("id"));
+        assignee.setUserId(resultSet.getString("user_id"));
+        assignee.setTaskId(resultSet.getString("task_id"));
+        return assignee;
+    }
+
+    private List<Assignee> fetchAll(final ResultSet resultSet) throws SQLException {
+        final List<Assignee> assignees = new ArrayList<>();
+        while (resultSet.next()) {
+            final Assignee assignee = new Assignee();
+            assignee.setId(resultSet.getString("id"));
+            assignee.setUserId(resultSet.getString("user_id"));
+            assignee.setTaskId(resultSet.getString("task_id"));
+            assignees.add(assignee);
+        }
+        return assignees;
+    }
+
     @Override
     public Assignee create(final Assignee assignee) {
-        assignees.add(assignee);
-        return assignee;
+        PreparedStatement statement = null;
+        try {
+            statement = conn.prepareStatement(
+                    "INSERT INTO assignee(id, user_id, task_id) " +
+                            "VALUES (?, ?, ?)");
+            statement.setString(1, assignee.getId());
+            statement.setString(2, assignee.getUserId());
+            statement.setString(3, assignee.getTaskId());
+            statement.execute();
+            statement.close();
+            return assignee;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     @Override
     public Assignee delete(final String id) {
-        for (final Assignee assignee : assignees) {
-            if (id.equals(assignee.getId())) {
-                assignees.remove(assignee);
-                return assignee;
+        final Assignee assignee = findById(id);
+        PreparedStatement statement = null;
+        try {
+            statement = conn.prepareStatement(
+                    "DELETE FROM assignee WHERE id = '" + id + "'");
+            statement.execute();
+            statement.close();
+            return assignee;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
         return null;
@@ -33,11 +89,23 @@ public class AssigneeDAO implements IAssigneeDAO {
 
     @Override
     public Assignee update(final Assignee assignee) {
-        for (final Assignee asee : assignees) {
-            if (asee.getId().equals(assignee.getId())) {
-                assignees.remove(asee);
-                assignees.add(assignee);
-                return assignee;
+        PreparedStatement statement = null;
+        try {
+            statement = conn.prepareStatement(
+                    "UPDATE assignee SET user_id = ?, task_id = ? WHERE id = ?");
+            statement.setString(1, assignee.getUserId());
+            statement.setString(2, assignee.getTaskId());
+            statement.setString(3, assignee.getId());
+            statement.execute();
+            statement.close();
+            return assignee;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
         return null;
@@ -45,9 +113,19 @@ public class AssigneeDAO implements IAssigneeDAO {
 
     @Override
     public Assignee findById(final String id) {
-        for (final Assignee assignee : assignees) {
-            if (id.equals(assignee.getId())) {
-                return assignee;
+        PreparedStatement statement = null;
+        try {
+            statement = conn.prepareStatement(
+                    "SELECT * FROM assignee WHERE id = '" + id + "'");
+            final ResultSet result = statement.executeQuery();
+            return fetch(result);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
         return null;
@@ -55,20 +133,59 @@ public class AssigneeDAO implements IAssigneeDAO {
 
     @Override
     public List<Assignee> findAll() {
-        return assignees;
+        PreparedStatement statement = null;
+        try {
+            statement = conn.prepareStatement(
+                    "SELECT * FROM assignee");
+            final ResultSet result = statement.executeQuery();
+            return fetchAll(result);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     @Override
-    public List<Assignee> merge(List<Assignee> assignees) {
-        this.assignees.clear();
-        this.assignees.addAll(assignees);
+    public List<Assignee> merge(final List<Assignee> assignees) {
+        for (final Assignee assignee : assignees) {
+            if (findById(assignee.getId()) == null) {
+                create(assignee);
+                continue;
+            }
+            update(assignee);
+        }
         return assignees;
     }
 
     @Override
     public List<Assignee> findByUserId(final String userId) {
-        return assignees.stream().filter(assignee -> assignee.getAssignerId().equals(userId))
-                .collect(Collectors.toList());
+        PreparedStatement statement = null;
+        try {
+            statement = conn.prepareStatement(
+                    "SELECT * FROM assignee WHERE user_id = '" + userId + "'");
+            final ResultSet result = statement.executeQuery();
+            return fetchAll(result);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void setConn(final Connection conn) {
+        this.conn = conn;
     }
 
 }

@@ -26,19 +26,17 @@ public class UserService implements IUserService {
         if (isLoginExists(login)) {
             throw new LoginExistsException();
         }
-        final User user = new User();
-        user.setLogin(login);
-        return userDao.save(user);
+        return userDao.create(login);
     }
 
-    public User deleteUser(final String surname) {
-        if (surname == null || surname.isEmpty()) {
+    public User deleteUser(final String id) {
+        if (id == null || id.isEmpty()) {
             throw new NullDataForAssignerException();
         }
-        return userDao.delete(surname);
+        return userDao.delete(id);
     }
 
-    public User updateUser(final User user) {
+    public User updateUser(final User user) throws Exception {
         if (user == null) throw new NullPointerException();
         final User oldAssigner = findById(user.getId());
         if (oldAssigner == null) return userDao.save(user);
@@ -46,6 +44,7 @@ public class UserService implements IUserService {
         oldAssigner.setLastName(user.getLastName());
         oldAssigner.setSurname(user.getSurname());
         oldAssigner.setPassword(user.getPassword());
+        oldAssigner.setRole(user.getRole());
         return userDao.update(oldAssigner);
     }
 
@@ -53,9 +52,9 @@ public class UserService implements IUserService {
         if (surname == null || surname.isEmpty()) {
             throw new NullDataForAssignerException();
         }
-        for (User assigner : getUsers()) {
-            if (surname.equals(assigner.getSurname())) {
-                return assigner;
+        for (final User user : getUsers()) {
+            if (surname.equals(user.getSurname())) {
+                return user;
             }
         }
         return null;
@@ -92,6 +91,7 @@ public class UserService implements IUserService {
     @Override
     public User changePassword(User user, String password) {
         user.setPassword(password);
+        userDao.update(user);
         return user;
     }
 
@@ -101,6 +101,10 @@ public class UserService implements IUserService {
 
     public void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
+    }
+
+    public IUserDAO getUserDao() {
+        return userDao;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.ajulay.api.service;
 
+import com.ajulay.api.dao.IProjectDAO;
 import com.ajulay.entity.Project;
 
 import java.util.List;
@@ -24,4 +25,7 @@ public interface IProjectService {
     Project updateProject(Project project);
 
     List<Project> findProjectByUserId(String userId);
+
+    IProjectDAO getProjectDAO();
+
 }

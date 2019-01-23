@@ -12,7 +12,7 @@ public class Session {
 
     private String signature;
 
-    private Date timestamp = new Date();
+    private Date createdDate = new Date();
 
     public String getId() {
         return id;
@@ -26,12 +26,12 @@ public class Session {
         this.signature = signature;
     }
 
-    public Date getTimestamp() {
-        return timestamp;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public String getUserId() {
@@ -58,7 +58,7 @@ public class Session {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getSignature(), getTimestamp());
+        return Objects.hash(getId(), getSignature(), getCreatedDate());
     }
 
 }

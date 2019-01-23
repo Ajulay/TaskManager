@@ -20,11 +20,16 @@ public class ProjectCreateCommand extends AbstractCommand {
     public void execute() {
         System.out.println("Enter project name");
         final String projectName = getController().nextLine();
-        final Project project = getController().getOveralService().createProjectByName(projectName);
+        final Session session = getController().getSessionService().getCurrentSession();
+        if (session == null) return;
+        final IProjectService projectService = getController().getProjectService();
+        final Project project = projectService.createProjectByName(projectName);
         if (project == null) {
             System.out.println("Project not created...");
             return;
         }
+        project.setAuthorId(session.getUserId());
+        projectService.updateProject(project);
     }
 
 }

@@ -34,6 +34,13 @@
             <artifactId>jackson-dataformat-xml</artifactId>
             <version>2.9.8</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.5</version>
+        </dependency>
+
     </dependencies>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -91,7 +98,7 @@
             <!--<configuration>-->
             <!--<artifactItems>-->
             <!--<artifactItem>-->
-            <!--<groupId>com.com.com.ajulay</groupId>-->
+            <!--<groupId>com.ajulay</groupId>-->
             <!--<artifactId>taskmanager</artifactId>-->
             <!--<version>0.0.1</version>-->
             <!--<type>jar</type>-->

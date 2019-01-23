@@ -1,8 +1,8 @@
 package com.ajulay.api.dao;
 
 import com.ajulay.entity.Task;
-import com.ajulay.exception.checked.NoSuchTaskException;
 
+import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -14,14 +14,16 @@ public interface ITaskDAO {
 
     Task delete(String id);
 
-    Task update(Task task) throws NoSuchTaskException;
+    Task update(Task task);
 
-    Task findById(String id) throws NoSuchTaskException;
+    Task findById(String id);
 
     List<Task> findAll();
 
     List<Task> findByProjectId(String projectId);
 
     List<Task> merge(List<Task> tasks);
+
+    void setConn(Connection conn);
 
 }

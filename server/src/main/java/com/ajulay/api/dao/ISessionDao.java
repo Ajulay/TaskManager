@@ -2,6 +2,7 @@ package com.ajulay.api.dao;
 
 import com.ajulay.entity.Session;
 
+import java.sql.Connection;
 import java.util.List;
 
 public interface ISessionDao {
@@ -21,5 +22,9 @@ public interface ISessionDao {
     List<Session> removeAll(List<Session> sessions);
 
     List<Session> findSessionByUserId(String userId);
+
+    List<Session> deleteAll();
+
+    void setConn(Connection conn);
 
 }

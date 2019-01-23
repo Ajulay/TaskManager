@@ -1,19 +1,20 @@
 package com.ajulay.command;
 
-public class LogOutCommand extends AbstractCommand {
+public class DataBDLoadCommand extends AbstractCommand {
+
     @Override
     public String getCommandKeyWord() {
-        return "/out";
+        return "/dbload";
     }
 
     @Override
     public String getDescription() {
-        return "log out from application";
+        return "load data from database";
     }
 
     @Override
     public void execute() {
-        getController().getUserService().setCurrentUser(null);
+
     }
 
 }

@@ -2,6 +2,7 @@ package com.ajulay.api.dao;
 
 import com.ajulay.entity.User;
 
+import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -11,11 +12,11 @@ public interface IUserDAO {
 
     User create(String login);
 
-    User delete(String surname);
+    User delete(String id);
 
     User update(User assigner);
 
-    User findById(String surname);
+    User findById(String id);
 
     List<User> findAll();
 
@@ -24,5 +25,7 @@ public interface IUserDAO {
     User findByLogin(String login);
 
     User save(User user);
+
+    void setConn(Connection conn);
 
 }

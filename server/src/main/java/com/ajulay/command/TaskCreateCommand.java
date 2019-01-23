@@ -61,18 +61,18 @@ public class TaskCreateCommand extends AbstractCommand {
         if (in != null) {
             task.setContent(in);
         }
-        System.out.println("Enter surname executor(s) (to finish write: /end)");
         addWorker(task);
         System.out.println("Task added");
         getController().getTaskService().saveTask(task);
     }
 
     private void addWorker(final Task task) {
+        System.out.println("Enter id executor(s) (to finish write: /end)");
         final String in = getController().nextLine();
         if (ServiceConstant.END_ENTER_ASSIGNER.equals(in)) {
             return;
         }
-        final User worker = getController().getUserService().getBySurname(in);
+        final User worker = getController().getUserService().findById(in);
         if (worker == null) {
             System.out.println("No such executor.");
         }

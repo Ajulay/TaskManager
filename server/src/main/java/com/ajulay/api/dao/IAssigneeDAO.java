@@ -2,6 +2,7 @@ package com.ajulay.api.dao;
 
 import com.ajulay.entity.Assignee;
 
+import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -22,5 +23,7 @@ public interface IAssigneeDAO {
     List<Assignee> merge(List<Assignee> assignees);
 
     List<Assignee> findByUserId(String userId);
+
+    void setConn(Connection conn);
 
 }

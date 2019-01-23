@@ -3,6 +3,7 @@ package com.ajulay.api.dao;
 import com.ajulay.entity.Project;
 import com.ajulay.exception.checked.NoSuchProjectException;
 
+import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -21,5 +22,7 @@ public interface IProjectDAO {
     List<Project> findAll();
 
     List<Project> merge(List<Project> projects);
+
+    void setConn(Connection conn);
 
 }

@@ -73,7 +73,7 @@ public class OveralService implements IOveralService {
         if (currentUser == null) return null;
         final List<Task> tasks = new ArrayList<>();
         for (final Assignee assignee : assignees) {
-            if (currentUser.getId().equals(assignee.getAssignerId())) {
+            if (currentUser.getId().equals(assignee.getUserId())) {
                 final Task task = taskService.findTaskById(assignee.getTaskId());
                 tasks.add(task);
             }
@@ -88,7 +88,7 @@ public class OveralService implements IOveralService {
         final List<User> users = new ArrayList<>();
         for (final Assignee assignee : assignees) {
             if (task.getId().equals(assignee.getTaskId())) {
-                final User user = userService.findById(assignee.getAssignerId());
+                final User user = userService.findById(assignee.getUserId());
                 users.add(user);
             }
         }

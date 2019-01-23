@@ -9,7 +9,7 @@ public class Assignee implements Serializable {
 
     private String taskId;
 
-    private String assignerId;
+    private String userId;
 
     public String getId() {
         return id;
@@ -27,12 +27,12 @@ public class Assignee implements Serializable {
         this.taskId = taskId;
     }
 
-    public String getAssignerId() {
-        return assignerId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setAssignerId(String assignerId) {
-        this.assignerId = assignerId;
+    public void setUserId(String assignerId) {
+        this.userId = assignerId;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class Assignee implements Serializable {
         return "Assignee{" +
                 "id='" + id + '\'' +
                 ", taskId='" + taskId + '\'' +
-                ", assignerId='" + assignerId + '\'' +
+                ", assignerId='" + userId + '\'' +
                 '}';
     }
 

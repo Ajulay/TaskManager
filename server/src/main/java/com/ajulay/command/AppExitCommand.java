@@ -14,7 +14,7 @@ public class AppExitCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        System.out.println(getDescription());
+        getController().getSessionService().deleteSessionAll();
         System.exit(0);
     }
 

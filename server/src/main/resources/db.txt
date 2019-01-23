@@ -1,0 +1,52 @@
+CREATE TABLE public.project
+(
+    id character PRIMARY KEY NOT NULL,
+    name char,
+    author_id char
+);
+CREATE UNIQUE INDEX project_id_uindex ON public.project (id);
+
+create table assignee
+(
+  id      char not null
+    constraint assignee_pkey
+    primary key,
+  task_id char,
+  user_id char
+);
+
+create table session
+(
+  id        char not null
+    constraint session_pkey
+    primary key,
+  user_id   char,
+  signature char,
+  timestamp timestamp
+);
+
+CREATE TABLE public.task
+(
+    id char PRIMARY KEY,
+    project_id char,
+    term timestamp,
+    priority int,
+    task_content char,
+    status char
+);
+
+CREATE TABLE public."user"
+(
+    id char PRIMARY KEY,
+    login char,
+    password_hash char,
+    name char,
+    surname char,
+    lastname char,
+    role char
+);
+
+CREATE UNIQUE INDEX user_login_uindex ON public."user" (login);
+ALTER TABLE public.task
+ADD CONSTRAINT task_project_id_fk
+FOREIGN KEY (project_id) REFERENCES project (id) ON DELETE CASCADE ON UPDATE CASCADE;

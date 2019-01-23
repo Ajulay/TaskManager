@@ -61,6 +61,11 @@ public class SessionService implements ISessionService {
         return sessionDao.removeAll(sessions);
     }
 
+    @Override
+    public List<Session> deleteSessionAll() {
+        return sessionDao.deleteAll();
+    }
+
     public List<Session> findSessionByUserId(final String userId) {
         return sessionDao.findSessionByUserId(userId);
     }
@@ -73,5 +78,8 @@ public class SessionService implements ISessionService {
         this.currentSession = currentSession;
     }
 
+    public ISessionDao getSessionDao() {
+        return sessionDao;
+    }
 
 }

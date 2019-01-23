@@ -16,6 +16,7 @@ public class AssigneeService implements IAssigneeService {
 
     private final IAssigneeDAO assigneeDAO = new AssigneeDAO();
 
+
     @Override
     public Assignee createAssignee(final String taskId, final String assignerId) {
         if (taskId == null || taskId.isEmpty() || assignerId == null || assignerId.isEmpty()) {
@@ -23,7 +24,7 @@ public class AssigneeService implements IAssigneeService {
         }
         final Assignee assignee = new Assignee();
         assignee.setTaskId(taskId);
-        assignee.setAssignerId(assignerId);
+        assignee.setUserId(assignerId);
         return assigneeDAO.create(assignee);
     }
 
@@ -64,6 +65,10 @@ public class AssigneeService implements IAssigneeService {
     public List<Assignee> findAssigneeAllByUserId(final String userId) {
         if (userId == null) return Collections.emptyList();
         return assigneeDAO.findByUserId(userId);
+    }
+
+    public IAssigneeDAO getAssigneeDAO() {
+        return assigneeDAO;
     }
 
 }

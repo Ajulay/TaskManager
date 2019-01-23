@@ -75,4 +75,8 @@ public class ProjectService implements IProjectService {
         return userProjects;
     }
 
+    public IProjectDAO getProjectDAO() {
+        return projectDAO;
+    }
+
 }

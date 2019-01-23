@@ -1,5 +1,6 @@
 package com.ajulay.api.service;
 
+import com.ajulay.api.dao.ISessionDao;
 import com.ajulay.entity.Session;
 
 import java.util.List;
@@ -22,10 +23,14 @@ public interface ISessionService {
 
     List<Session> deleteSessionAll(List<Session> sessionAllForRemove);
 
+    List<Session> deleteSessionAll();
+
     Session getCurrentSession();
 
     void setCurrentSession(Session currentSession);
 
-    List<Session> findSessionByUserId(final String userId);
+    List<Session> findSessionByUserId(String userId);
+
+    ISessionDao getSessionDao();
 
 }

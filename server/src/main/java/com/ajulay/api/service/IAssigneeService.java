@@ -1,5 +1,6 @@
 package com.ajulay.api.service;
 
+import com.ajulay.api.dao.IAssigneeDAO;
 import com.ajulay.entity.Assignee;
 
 import java.util.List;
@@ -22,5 +23,7 @@ public interface IAssigneeService {
     List<Assignee> merge(List<Assignee> assignees);
 
     List<Assignee> findAssigneeAllByUserId(String currentUser);
+
+    IAssigneeDAO getAssigneeDAO();
 
 }

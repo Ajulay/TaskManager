@@ -3,6 +3,8 @@ package com.ajulay.command;
 import com.ajulay.entity.Session;
 import com.ajulay.entity.User;
 
+import java.util.Date;
+
 public class LoginCommand extends AbstractCommand {
 
     public final static String COMMAND = "/login";
@@ -19,10 +21,11 @@ public class LoginCommand extends AbstractCommand {
 
     @Override
     public void execute() throws Exception {
+        User user = null;
         for (int i = 0; i < 3; i++) {
             System.out.println("type /login");
             final String login = getController().nextLine();
-            final User user = getController().getUserService().findByLogin(login);
+            user = getController().getUserService().findByLogin(login);
             if (user == null) {
                 System.out.println("No such user");
                 continue;
@@ -42,10 +45,13 @@ public class LoginCommand extends AbstractCommand {
         }
         getController().getCommands().clear();
         getController().registerCommandAll();
+        //getController().getUserService().setCurrentUser(user);
         final Session session = new Session();
-        session.setSignature("555");
-        session.setUserId(getController().getUserService().getCurrentUser().getId());
+        session.setUserId(user.getId());
+        session.setSignature(user.getPassword());
+        session.setCreatedDate(new Date());
         getController().getSessionService().saveSession(session);
+        getController().getSessionService().setCurrentSession(session);
     }
 
 }
