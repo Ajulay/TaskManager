@@ -32,7 +32,7 @@ public class SessionSoapEndPoint implements ISessionSoapService {
         if (!user.getPassword().equals(passwordHash)) return null;
         final Session session = new Session();
         session.setUserId(user.getId());
-        session.setTimestamp(new Date());
+        session.setCreatedDate(new Date());
         session.setSignature(user.getPassword());
         overalService.getSessionService().saveSession(session);
         return session;
