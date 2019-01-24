@@ -43,7 +43,7 @@ public class UserSoapEndPoint implements IUserSoapService {
         if (!currentSession.getSignature().equals(session.getSignature())) {
             return null;
         }
-        final User updatedUser = overalService.getUserService().updateUser(user);
+        final User updatedUser = overalService.getUserService().mergeUser(user);
         if (updatedUser == null) return null;
         return new Success();
     }

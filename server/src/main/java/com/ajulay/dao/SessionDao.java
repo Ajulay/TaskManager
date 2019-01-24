@@ -74,7 +74,7 @@ public class SessionDao implements ISessionDao {
         PreparedStatement statement = null;
         try {
             statement = conn.prepareStatement(
-                    "DELETE FROM task WHERE id = '" + session.getId() + "'");
+                    "DELETE FROM session WHERE id = '" + session.getId() + "'");
             statement.execute();
             statement.close();
             return session;

@@ -10,9 +10,20 @@ import com.ajulay.endpoint.*;
 import com.ajulay.entity.Session;
 import com.ajulay.entity.User;
 import com.ajulay.enumirated.Role;
+import com.ajulay.mybatis.mapper.MyBatisUserDao;
 import com.ajulay.service.*;
+import org.apache.ibatis.datasource.pooled.PooledDataSource;
+import org.apache.ibatis.mapping.Environment;
+import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.ibatis.transaction.TransactionFactory;
+import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 
+import javax.sql.DataSource;
 import javax.xml.ws.Endpoint;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -50,6 +61,8 @@ public class ControllerUI implements IControllerUI {
 
     private DataBaseConnection conn = new DataBaseConnection();
 
+    private SqlSessionFactory sqlSessionFactory;
+
     public void register(Class... clazzes) throws InstantiationException, IllegalAccessException {
         for (Class clazz : clazzes) {
             register(clazz);
@@ -70,7 +83,10 @@ public class ControllerUI implements IControllerUI {
     public void run() throws Exception {
         setConnection();
         runServices();
+        getMyBatis();
         loadData();
+        controlSession();
+
         System.out.println("TASK MANAGER");
         while (true) {
             if (getSessionService().getCurrentSession() == null) {
@@ -92,6 +108,7 @@ public class ControllerUI implements IControllerUI {
                     System.out.println("[Ok]");
                 } catch (Exception e) {
                     System.out.println("Error!!!" + e.getMessage());
+                    e.printStackTrace();
                 }
                 continue;
             }
@@ -114,7 +131,7 @@ public class ControllerUI implements IControllerUI {
 
     private void setConnection() throws Exception {
         conn.connect();
-        getUserService().getUserDao().setConn(conn.getConn());
+        //getUserService().getUserDao().setConn(conn.getConn());
         getProjectService().getProjectDAO().setConn(conn.getConn());
         getSessionService().getSessionDao().setConn(conn.getConn());
         getTaskService().getDao().setConn(conn.getConn());
@@ -129,7 +146,7 @@ public class ControllerUI implements IControllerUI {
             newAdmin.setRole(Role.ADMIN);
             newAdmin.setLogin(ServiceConstant.START_LOGIN);
             newAdmin.setPassword(ServiceConstant.START_PASSWORD_HASH);
-            getUserService().updateUser(newAdmin);
+            getUserService().mergeUser(newAdmin);
         }
         Thread.sleep(ServiceConstant.LOAD_TIME);
     }
@@ -157,6 +174,26 @@ public class ControllerUI implements IControllerUI {
         };
         controlThread.setDaemon(true);
         controlThread.start();
+    }
+
+    private void getMyBatis() throws IOException {
+        final FileInputStream fis = new FileInputStream(ServiceConstant.DATABASE_PROPERTY_ADDRESS);
+        final Properties property = new Properties();
+        property.load(fis);
+        final DataSource dataSource = new PooledDataSource(
+                property.getProperty(ServiceConstant.DATABASE_DRIVER),
+                property.getProperty(ServiceConstant.DATABASE_ADDRESS),
+                property.getProperty(ServiceConstant.DATABASE_USER),
+                property.getProperty(ServiceConstant.DATABASE_PASSWORD));
+        final TransactionFactory transactionFactory = new JdbcTransactionFactory();
+        final Environment environment = new Environment("development",
+                transactionFactory, dataSource);
+        final Configuration configuration = new Configuration(environment);
+        configuration.addMapper(MyBatisUserDao.class);
+        sqlSessionFactory = new SqlSessionFactoryBuilder()
+                .build(configuration);
+        getUserService().getUserDao().setSqlSessionFactory(sqlSessionFactory);
+
     }
 
     public IUserService getUserService() {

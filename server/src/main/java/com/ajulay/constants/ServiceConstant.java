@@ -9,6 +9,9 @@ public class ServiceConstant {
     public static final String LOG_OUT = "/out";
     public static final String START_LOGIN = "admin";
     public static final String START_PASSWORD_HASH = "admin".hashCode() + "";
+    public static final String DATABASE_DRIVER = "driver";
+    public static final String DATABASE_ADDRESS = "address";
+
     public static final String DATA_FILE = "data/AppData.txt";
     public static final String ADMIN = "admin";
     public static final int LOAD_TIME = 500;
@@ -18,4 +21,7 @@ public class ServiceConstant {
     public static final boolean SUCCESS = true;
     public static final long CONTROL_TIME = 1000 * 60 * 30;
 
+    public static final String DATABASE_USER = "user";
+    public static final String DATABASE_PASSWORD = "password";
+    public static final String DATABASE_PROPERTY_ADDRESS = "server/src/main/database.properties";
 }

@@ -19,6 +19,7 @@ public class UserService implements IUserService {
 
     private final IUserDAO userDao = new UserDAO();
 
+
     public User createUser(final String login) {
         if (login == null || login.isEmpty()) {
             throw new NullDataForAssignerException();
@@ -26,7 +27,9 @@ public class UserService implements IUserService {
         if (isLoginExists(login)) {
             throw new LoginExistsException();
         }
-        return userDao.create(login);
+        final User user = new User();
+        user.setLogin(login);
+        return userDao.save(user);
     }
 
     public User deleteUser(final String id) {
@@ -36,16 +39,11 @@ public class UserService implements IUserService {
         return userDao.delete(id);
     }
 
-    public User updateUser(final User user) throws Exception {
+    public User mergeUser(final User user) {
         if (user == null) throw new NullPointerException();
         final User oldAssigner = findById(user.getId());
         if (oldAssigner == null) return userDao.save(user);
-        oldAssigner.setName(user.getName());
-        oldAssigner.setLastName(user.getLastName());
-        oldAssigner.setSurname(user.getSurname());
-        oldAssigner.setPassword(user.getPassword());
-        oldAssigner.setRole(user.getRole());
-        return userDao.update(oldAssigner);
+        return userDao.update(user);
     }
 
     public User getBySurname(final String surname) {
@@ -60,10 +58,11 @@ public class UserService implements IUserService {
         return null;
     }
 
-    public User findById(String id) {
+    public User findById(final String id) {
         if (id == null || id.isEmpty()) {
             throw new NullIdException();
         }
+
         return userDao.findById(id);
     }
 
@@ -74,7 +73,15 @@ public class UserService implements IUserService {
     @Override
     public List<User> merge(final List<User> users) {
         if (users == null) return null;
-        return userDao.merge(users);
+        for (final User user : users) {
+            if (findById(user.getId()) == null) {
+                userDao.save(user);
+                continue;
+            }
+            userDao.update(user);
+        }
+
+        return users;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.ajulay.command;
 
+import com.ajulay.entity.Session;
+
 public class LogOutCommand extends AbstractCommand {
 
     public final static String COMMAND = "/out";
@@ -16,7 +18,10 @@ public class LogOutCommand extends AbstractCommand {
 
     @Override
     public void execute() {
+        final Session session = getController().getSessionService().getCurrentSession();
         getController().getSessionService().setCurrentSession(null);
         getController().getUserService().setCurrentUser(null);
+        getController().getSessionService().deleteSessionById(session.getId());
     }
+
 }

@@ -5,13 +5,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.ajulay</groupId>
-    <artifactId>taskmanager</artifactId>
+    <artifactId>task-manager</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1</version>
     <modules>
         <module>client</module>
         <module>server</module>
     </modules>
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <mybatis.version>3.4.6</mybatis.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -40,14 +47,25 @@
             <artifactId>postgresql</artifactId>
             <version>42.2.5</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>5.4.0.Final</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.4.0.Final</version>
+        </dependency>
 
     </dependencies>
-    <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
     <build>
         <plugins>
             <plugin>
@@ -57,7 +75,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.ajulay.com.ajulay.App</mainClass>
+                            <mainClass>com.ajulay.App</mainClass>
                         </manifest>
                     </archive>
                     <finalName>task-manager</finalName>
@@ -74,7 +92,7 @@
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/taskmanager/lib</outputDirectory>
+                            <outputDirectory>${project.build.directory}/task-manager/lib</outputDirectory>
                             <overWriteReleases>false</overWriteReleases>
                             <overWriteSnapshots>false</overWriteSnapshots>
                             <overWriteIfNewer>true</overWriteIfNewer>
@@ -99,12 +117,12 @@
             <!--<artifactItems>-->
             <!--<artifactItem>-->
             <!--<groupId>com.ajulay</groupId>-->
-            <!--<artifactId>taskmanager</artifactId>-->
+            <!--<artifactId>task-manager</artifactId>-->
             <!--<version>0.0.1</version>-->
             <!--<type>jar</type>-->
             <!--<overWrite>true</overWrite>-->
-            <!--<outputDirectory>${project.build.directory}/taskmanager/bin</outputDirectory>-->
-            <!--<destFileName>taskmanager.jar</destFileName>-->
+            <!--<outputDirectory>${project.build.directory}/task-manager/bin</outputDirectory>-->
+            <!--<destFileName>task-manager.jar</destFileName>-->
             <!--</artifactItem>-->
             <!--</artifactItems>-->
             <!--<overWriteReleases>false</overWriteReleases>-->

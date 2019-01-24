@@ -11,11 +11,11 @@ import java.util.List;
  */
 public interface IUserService {
 
-    User createUser(String login) throws Exception;
+    User createUser(String login);
 
     User deleteUser(String id);
 
-    User updateUser(User user) throws Exception;
+    User mergeUser(User user);
 
     User getBySurname(String surname);
 

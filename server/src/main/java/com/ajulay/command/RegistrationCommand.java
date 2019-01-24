@@ -57,7 +57,7 @@ public class RegistrationCommand extends AbstractCommand {
                 System.out.println(e.getMessage());
                 continue;
             }
-            getController().getUserService().updateUser(user);
+            getController().getUserService().mergeUser(user);
             break;
         }
     }

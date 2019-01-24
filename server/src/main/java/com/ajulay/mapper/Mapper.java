@@ -18,4 +18,5 @@ public class Mapper {
 
         return new String(baos.toByteArray());
     }
+
 }

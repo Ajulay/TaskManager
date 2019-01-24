@@ -1,16 +1,14 @@
 package com.ajulay.api.dao;
 
 import com.ajulay.entity.User;
+import org.apache.ibatis.session.SqlSessionFactory;
 
-import java.sql.Connection;
 import java.util.List;
 
 /**
- * IAssignerDAO defines base data access methods for Assigner
+ * IUserDAO defines base data access methods for User
  */
 public interface IUserDAO {
-
-    User create(String login);
 
     User delete(String id);
 
@@ -20,12 +18,10 @@ public interface IUserDAO {
 
     List<User> findAll();
 
-    List<User> merge(List<User> assigners);
-
     User findByLogin(String login);
 
     User save(User user);
 
-    void setConn(Connection conn);
+    void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory);
 
 }
