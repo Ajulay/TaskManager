@@ -28,6 +28,7 @@ public class TaskDeleteCommand extends AbstractCommand {
         final Project project = getController().getProjectService().getById(task.getProjectId());
         if (project == null) {
             getController().getTaskService().deleteTask(taskId);
+            getController().getAssigneeService().deleteAssigneeAllByTaskId(taskId);
             return;
         }
         if (!currentUserId.equals(project.getAuthorId())) {
@@ -35,6 +36,7 @@ public class TaskDeleteCommand extends AbstractCommand {
             return;
         }
         getController().getTaskService().deleteTask(taskId);
+        getController().getAssigneeService().deleteAssigneeAllByTaskId(taskId);
         System.out.println("task deleted...");
     }
 

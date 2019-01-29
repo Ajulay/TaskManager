@@ -188,4 +188,25 @@ public class AssigneeDAO implements IAssigneeDAO {
         this.conn = conn;
     }
 
+    @Override
+    public List<Assignee> findByTaskId(final String taskId) {
+        PreparedStatement statement = null;
+        try {
+            statement = conn.prepareStatement(
+                    "SELECT * FROM assignee WHERE task_id = '" + taskId + "'");
+            final ResultSet result = statement.executeQuery();
+            return fetchAll(result);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
 }

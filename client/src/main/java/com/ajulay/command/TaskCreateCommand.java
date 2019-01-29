@@ -10,6 +10,7 @@ import java.lang.Exception;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.UUID;
 
 public class TaskCreateCommand extends AbstractCommand {
 
@@ -39,6 +40,8 @@ public class TaskCreateCommand extends AbstractCommand {
             return;
         }
         final Task task = new Task();
+        final String taskId = UUID.randomUUID().toString();
+        task.setId(taskId);
         task.setProjectId(in);
         System.out.println("Enter term in format: yyyy-MM-dd");
         in = getController().nextLine();
@@ -70,16 +73,17 @@ public class TaskCreateCommand extends AbstractCommand {
     }
 
     private void addWorker(final Task task, final Session session) {
-        System.out.println("Enter surname executor(s) (to finish write: /end)");
-        final String surname = getController().nextLine();
-        if (ServiceConstant.END_ENTER_ASSIGNER.equals(surname)) {
+        System.out.println("Enter id executor(s) (to finish write: /end)");
+        final String userId = getController().nextLine();
+        if (ServiceConstant.END_ENTER_ASSIGNER.equals(userId)) {
             return;
         }
-        final User worker = getController().getUserService().getUserSoapEndPointPort().getBySurname(session, surname);
+        final User worker = getController().getUserService().getUserSoapEndPointPort().findById(session, userId);
         if (worker == null) {
             System.out.println("No such executor.");
             addWorker(task, session);
         }
+        System.out.println("worker id: " + worker.getId());
         final Success success = getController().getAssigneeService()
                 .getAssigneeSoapEndPointPort().createAssignee(session, task.getId(), worker.getId());
         if (success == null) {

@@ -29,7 +29,7 @@ public interface MyBatisUserDao {
             @Result(property = "password", column = "password_hash"),
     }
     )
-    User findById(String id);
+    User findById(@Param("id") String id);
 
 
     @Select(GET_USER_ALL)
@@ -48,29 +48,6 @@ public interface MyBatisUserDao {
             @Result(property = "password", column = "password_hash"),
     }
     )
-    User findByLogin(@Param("login") String login);
+    User findByLogin(String login);
 
-    //    User create(String login);
-//
-//
-//    List<User> merge(List<User> assigners);
-//
-//
-//    User findByLogin(String login);
-
-
-//    void setConn(Connection conn);
-
-    //    @Select(GET_PERSON_BY_ID)
-//    public User doSelectPerson(String userId);
-//
-//    @Update(UPDATE_PERSON)
-//    public User doUpdatePerson(PersonVO vo) throws Exception;
-//
-//
-//    @Insert(INSERT_PERSON)@Options(useGeneratedKeys = true, keyProperty = "id", flushCache = true)
-//    public int doCreatePerson(PersonVO person) throws Exception;
-//
-//    @Delete(DELETE_PERSON)@Options(flushCache = true)
-//    public int doDeletePerson(long personId) throws Exception;
 }

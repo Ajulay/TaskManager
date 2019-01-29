@@ -2,13 +2,15 @@ package com.ajulay.dao;
 
 import com.ajulay.api.dao.ITaskDAO;
 import com.ajulay.entity.Task;
-import com.ajulay.enumirated.Status;
+import com.ajulay.hibernate.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
-import java.sql.*;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 /**
@@ -16,194 +18,149 @@ import java.util.List;
  */
 public class TaskDAO implements ITaskDAO {
 
-    //private final List<Task> tasks = new ArrayList<>();
-
-    private Connection conn;
-
-    private Task fetch(final ResultSet resultSet) throws SQLException {
-        if (!resultSet.next()) return null;
-        final Task task = new Task();
-        task.setId(resultSet.getString("id"));
-        task.setProjectId(resultSet.getString("project_id"));
-        final Instant iterm = resultSet.getTimestamp("term").toInstant();
-        final Date term = Date.from(iterm);
-        task.setTerm(term);
-        task.setPriority(resultSet.getInt("priority"));
-        task.setContent(resultSet.getString("task_content"));
-        task.setStatus(Status.valueOf(resultSet.getString("status")));
-        return task;
-    }
-
-    private List<Task> fetchAll(final ResultSet resultSet) throws SQLException {
-        final List<Task> tasks = new ArrayList<>();
-        while (resultSet.next()) {
-            final Task task = new Task();
-            task.setId(resultSet.getString("id"));
-            task.setProjectId(resultSet.getString("project_id"));
-            final Instant iTerm = resultSet.getTimestamp("term").toInstant();
-            final Date term = Date.from(iTerm);
-            task.setTerm(term);
-            task.setPriority(resultSet.getInt("priority"));
-            task.setContent(resultSet.getString("task_content"));
-            task.setStatus(Status.valueOf(resultSet.getString("status")));
-            tasks.add(task);
-        }
-        return tasks;
-    }
-
+    private SessionFactory sessionFactory;
 
     @Override
     public Task save(final Task task) {
-        PreparedStatement statement = null;
+        Session session = null;
         try {
-            statement = conn.prepareStatement(
-                    "INSERT INTO task(id, project_id, priority, task_content, term, status) " +
-                            "VALUES (?, ?, ?, ?, ?, ?)");
-            statement.setString(1, task.getId());
-            statement.setString(2, task.getProjectId());
-            statement.setInt(3, task.getPriority());
-            statement.setString(4, task.getContent());
-            Timestamp iTerm = Timestamp.from(task.getTerm().toInstant());
-            statement.setTimestamp(5, iTerm);
-            statement.setString(6, task.getStatus().name());
-            statement.execute();
-            statement.close();
+            session = sessionFactory.openSession();
+            final Transaction transaction = session.beginTransaction();
+            session.persist(task);
+            transaction.commit();
             return task;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            session.close();
         }
         return null;
     }
 
     @Override
     public Task delete(final String id) {
-        final Task task = findById(id);
-        PreparedStatement statement = null;
+        Session session = null;
+        Transaction transaction = null;
         try {
-            statement = conn.prepareStatement(
-                    "DELETE FROM task WHERE id = '" + id + "'");
-            statement.execute();
-            statement.close();
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            final Task task = findById(id);
+            session.delete(task);
+            transaction.commit();
             return task;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            session.close();
         }
         return null;
     }
-
     @Override
-    public Task update(final Task task) {
-        PreparedStatement statement = null;
+    public Task update(Task task) {
+        Session session = null;
         try {
-            statement = conn.prepareStatement(
-                    "UPDATE task SET project_id = ?, priority = ?, task_content = ?, term = ?, status = ? WHERE id = ?");
-            statement.setString(1, task.getProjectId());
-            statement.setInt(2, task.getPriority());
-            statement.setString(3, task.getContent());
-            final Timestamp iTerm = Timestamp.from(task.getTerm().toInstant());
-            statement.setTimestamp(4, iTerm);
-            statement.setString(5, task.getStatus().name());
-            statement.setString(6, task.getId());
-            statement.execute();
-            statement.close();
-            return task;
-        } catch (SQLException e) {
+            session = sessionFactory.openSession();
+            final Transaction transaction = session.beginTransaction();
+            task = (Task) session.merge(task);
+            transaction.commit();
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            session.close();
         }
-        return null;
+        return task;
     }
 
     @Override
     public Task findById(final String id) {
-        PreparedStatement statement = null;
+        Session session = null;
+        Task task = null;
         try {
-            statement = conn.prepareStatement(
-                    "SELECT * FROM task WHERE id = '" + id + "'");
-            final ResultSet result = statement.executeQuery();
-            return fetch(result);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    public List<Task> findAll() {
-        PreparedStatement statement = null;
-        try {
-            statement = conn.prepareStatement(
-                    "SELECT * FROM task");
-            final ResultSet result = statement.executeQuery();
-            return fetchAll(result);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return Collections.emptyList();
-    }
-
-    @Override
-    public List<Task> findByProjectId(final String projectId) {
-        PreparedStatement statement = null;
-        try {
-            statement = conn.prepareStatement(
-                    "SELECT * FROM task WHERE project_id = '" + projectId + "'");
-            final ResultSet result = statement.executeQuery();
-            return fetchAll(result);
+            session = sessionFactory.openSession();
+            final Transaction transaction = session.beginTransaction();
+            final CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Task> criteriaQuery = criteriaBuilder.createQuery(Task.class);
+            final Root<Task> root = criteriaQuery.from(Task.class);
+            criteriaQuery = criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("id"), id));
+            final TypedQuery<Task> query = session.createQuery(criteriaQuery);
+            task = query.getSingleResult();
+            transaction.commit();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                statement.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (session != null) {
+                session.close();
             }
         }
-        return null;
+        return task;
     }
 
-    @Override
-    public List<Task> merge(List<Task> tasks) {
-        for (final Task task : tasks) {
-            if (findById(task.getId()) == null) {
-                save(task);
-                continue;
+    public List<Task> findAll() {
+        Session session = null;
+        List<Task> tasks = null;
+        try {
+            session = sessionFactory.openSession();
+            final Transaction transaction = session.beginTransaction();
+            final CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Task> criteriaQuery = criteriaBuilder.createQuery(Task.class);
+            final Root<Task> root = criteriaQuery.from(Task.class);
+            criteriaQuery = criteriaQuery.select(root);
+            final TypedQuery<Task> query = session.createQuery(criteriaQuery);
+            tasks = query.getResultList();
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
             }
-            update(task);
         }
         return tasks;
     }
 
-    public void setConn(final Connection conn) {
-        this.conn = conn;
+    @Override
+    public List<Task> findByProjectId(final String projectId) {
+        Session session = null;
+        List<Task> tasks = null;
+        try {
+            session = sessionFactory.openSession();
+            final Transaction transaction = session.beginTransaction();
+            final CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Task> criteriaQuery = criteriaBuilder.createQuery(Task.class);
+            final Root<Task> root = criteriaQuery.from(Task.class);
+            criteriaQuery = criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("projectId"), projectId));
+            final TypedQuery<Task> query = session.createQuery(criteriaQuery);
+            tasks = query.getResultList();
+            transaction.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+        return tasks;
+    }
+
+    @Override
+    public List<Task> merge(final List<Task> tasks) {
+        Session session = null;
+        try {
+            session = HibernateUtil.factory().openSession();
+            for (final Task task : tasks) {
+                session.merge(task);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return tasks;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
 }

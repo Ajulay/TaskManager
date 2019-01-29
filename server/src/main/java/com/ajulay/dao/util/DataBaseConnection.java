@@ -12,11 +12,11 @@ public class DataBaseConnection {
 
     public void connect() throws Exception {
 
-        final FileInputStream fis = new FileInputStream(ServiceConstant.DATABASE_PROPERTY_ADDRESS);
+        final FileInputStream fis = new FileInputStream(ServiceConstant.HIBERNATE_PROPERTY_ADDRESS);
         final Properties property = new Properties();
         property.load(fis);
-        Class.forName(property.getProperty(ServiceConstant.DATABASE_DRIVER));
-        conn = DriverManager.getConnection(ServiceConstant.DATABASE_ADDRESS);
+        Class.forName(property.getProperty(ServiceConstant.HIBERNATE_DRIVER));
+        conn = DriverManager.getConnection(property.getProperty(ServiceConstant.HIBERNATE_CONNECT));
     }
 
     public Connection getConn() {

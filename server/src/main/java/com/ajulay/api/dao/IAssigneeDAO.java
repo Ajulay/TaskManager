@@ -26,4 +26,6 @@ public interface IAssigneeDAO {
 
     void setConn(Connection conn);
 
+    List<Assignee> findByTaskId(String taskId);
+
 }

@@ -2,25 +2,34 @@ package com.ajulay.entity;
 
 import com.ajulay.enumirated.Status;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.UUID;
 
+@Entity
+@Table(name = "task")
 public class Task implements Serializable {
 
+    @Id
     private String id = UUID.randomUUID().toString();
 
+    @Column(name = "project_id")
     private String projectId;
 
+    @Temporal(TemporalType.TIMESTAMP)
     private Date term;
 
     private int priority;
 
+    @Column(name = "task_content")
     private String content;
 
+    @Enumerated(EnumType.ORDINAL)
     private Status status = Status.START;
+
 
     public Date getTerm() {
         return term;

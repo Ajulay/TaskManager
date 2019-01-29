@@ -26,4 +26,6 @@ public interface IAssigneeService {
 
     IAssigneeDAO getAssigneeDAO();
 
+    List<Assignee> deleteAssigneeAllByTaskId(String taskId);
+
 }

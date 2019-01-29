@@ -20,8 +20,17 @@ public class ServiceConstant {
     public static final boolean FAILED = false;
     public static final boolean SUCCESS = true;
     public static final long CONTROL_TIME = 1000 * 60 * 30;
-
-    public static final String DATABASE_USER = "user";
-    public static final String DATABASE_PASSWORD = "password";
+    public static final String EMPTY = "";
+    public static final String USER = "user";
+    public static final String PASSWORD = "password";
     public static final String DATABASE_PROPERTY_ADDRESS = "server/src/main/database.properties";
+    public static final String HIBERNATE_PROPERTY_ADDRESS = "server/src/main/hibernate.properties";
+    public static final String HIBERNATE_CONNECT = "hibernate.connection.url";
+    public static final String HIBERNATE_DRIVER = "hibernate.connection.driver_class";
+    public static final String HIBERNATE_USER = "hibernate.connection.user";
+    public static final String HIBERNATE_PASSWORD = "hibernate.connection.password";
+    public static final String HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto";
+    public static final String HIBERNATE_SHOW_SQL = "hibernate.sql";
+    public static final String HIBERNATE_DIALECT = "hibernate.dialect";
+
 }

@@ -69,7 +69,8 @@ public class TaskSoapEndPoint implements ITaskSoapService {
         if (!currentSession.getSignature().equals(session.getSignature())) {
             return null;
         }
-        return overalService.getTaskService().findTaskAllByProject(project_id);
+        List<Task> tasks = overalService.getTaskService().findTaskAllByProject(project_id);
+        return tasks;
     }
 
     @Override

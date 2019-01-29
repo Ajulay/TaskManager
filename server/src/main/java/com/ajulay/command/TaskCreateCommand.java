@@ -7,7 +7,6 @@ import com.ajulay.entity.Project;
 import com.ajulay.entity.Task;
 import com.ajulay.entity.User;
 
-import javax.xml.datatype.DatatypeConfigurationException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,7 +24,7 @@ public class TaskCreateCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws DatatypeConfigurationException, ParseException {
+    public void execute() throws ParseException {
         System.out.println("Enter: project_id (required)");
         String in = getController().nextLine();
         final String currentUserId = getController().getSessionService().getCurrentSession().getUserId();
@@ -72,10 +71,12 @@ public class TaskCreateCommand extends AbstractCommand {
         if (ServiceConstant.END_ENTER_ASSIGNER.equals(in)) {
             return;
         }
-        final User worker = getController().getUserService().findById(in);
+        User worker = getController().getUserService().findById(in);
         if (worker == null) {
             System.out.println("No such executor.");
+            addWorker(task);
         }
+
         final Assignee assignee = getController().getAssigneeService().createAssignee(task.getId(), worker.getId());
         if (assignee == null) {
             System.out.println("Problem to save information about executor.");

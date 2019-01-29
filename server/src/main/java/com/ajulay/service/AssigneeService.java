@@ -71,4 +71,18 @@ public class AssigneeService implements IAssigneeService {
         return assigneeDAO;
     }
 
+    @Override
+    public List<Assignee> deleteAssigneeAllByTaskId(final String taskId) {
+        final List<Assignee> assignees = findAssigneeAllByTaskId(taskId);
+        for (final Assignee assignee : assignees) {
+            deleteAssignee(assignee.getId());
+        }
+        return assignees;
+    }
+
+    private List<Assignee> findAssigneeAllByTaskId(final String taskId) {
+        if (taskId == null) return Collections.emptyList();
+        return assigneeDAO.findByTaskId(taskId);
+    }
+
 }

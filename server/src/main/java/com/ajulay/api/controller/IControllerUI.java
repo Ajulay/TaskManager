@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public interface IControllerUI {
 
-    void register(Class... clazzes) throws InstantiationException, IllegalAccessException;
+    void register(Class... clazzes) throws InstantiationException, IllegalAccessException, Exception;
 
     void register(final Class clazz) throws IllegalAccessException, InstantiationException;
 

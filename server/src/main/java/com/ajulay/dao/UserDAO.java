@@ -2,14 +2,10 @@ package com.ajulay.dao;
 
 import com.ajulay.api.dao.IUserDAO;
 import com.ajulay.entity.User;
-import com.ajulay.enumirated.Role;
 import com.ajulay.mybatis.mapper.MyBatisUserDao;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,36 +14,6 @@ import java.util.List;
 public class UserDAO implements IUserDAO {
 
     private SqlSessionFactory sqlSessionFactory;
-
-    private User fetch(final ResultSet resultSet) throws SQLException {
-        if (!resultSet.next()) return null;
-        final User user = new User();
-        user.setId(resultSet.getString("id"));
-        user.setLogin(resultSet.getString("login"));
-        user.setPassword(resultSet.getString("password_hash"));
-        user.setSurname(resultSet.getString("surname"));
-        user.setName(resultSet.getString("name"));
-        user.setLastName(resultSet.getString("lastname"));
-        final String role = resultSet.getString("role");
-        if (role != null) user.setRole(Role.valueOf(role));
-        return user;
-    }
-
-    private List<User> fetchAll(final ResultSet resultSet) throws SQLException {
-        final List<User> users = new ArrayList<>();
-        while (resultSet.next()) {
-            final User user = new User();
-            user.setId(resultSet.getString("id"));
-            user.setLogin(resultSet.getString("login"));
-            user.setPassword(resultSet.getString("password_hash"));
-            user.setSurname(resultSet.getString("surname"));
-            user.setName(resultSet.getString("name"));
-            user.setLastName(resultSet.getString("lastname"));
-            user.setRole(Role.valueOf(resultSet.getString("role")));
-            users.add(user);
-        }
-        return users;
-    }
 
     @Override
     public User delete(final String id) {

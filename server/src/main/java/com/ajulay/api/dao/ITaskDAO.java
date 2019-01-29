@@ -1,8 +1,8 @@
 package com.ajulay.api.dao;
 
 import com.ajulay.entity.Task;
+import org.hibernate.SessionFactory;
 
-import java.sql.Connection;
 import java.util.List;
 
 /**
@@ -24,6 +24,6 @@ public interface ITaskDAO {
 
     List<Task> merge(List<Task> tasks);
 
-    void setConn(Connection conn);
+    void setSessionFactory(SessionFactory sessionFactory);
 
 }

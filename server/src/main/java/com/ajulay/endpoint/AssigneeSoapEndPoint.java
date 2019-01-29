@@ -27,15 +27,15 @@ public class AssigneeSoapEndPoint implements IAssigneeSoapService {
     }
 
     @Override
-    public Success createAssignee(final Session session, final String taskId, final String assignerId) {
+    public Success createAssignee(final Session session, final String taskId, final String userId) {
         final Session currentSession = overalService.getSessionService().findSessionById(session.getId());
         if (!currentSession.getSignature().equals(session.getSignature())) {
             return null;
         }
-        if (taskId == null || taskId.isEmpty() || assignerId == null || assignerId.isEmpty()) {
+        if (taskId == null || taskId.isEmpty() || userId == null || userId.isEmpty()) {
             throw new NullIdException();
         }
-        final Assignee newAssignee = overalService.getAssigneeService().createAssignee(taskId, assignerId);
+        final Assignee newAssignee = overalService.getAssigneeService().createAssignee(taskId, userId);
         if (newAssignee == null) return null;
         return new Success();
     }

@@ -10,6 +10,7 @@ import com.ajulay.endpoint.*;
 import com.ajulay.entity.Session;
 import com.ajulay.entity.User;
 import com.ajulay.enumirated.Role;
+import com.ajulay.hibernate.HibernateUtil;
 import com.ajulay.mybatis.mapper.MyBatisUserDao;
 import com.ajulay.service.*;
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
@@ -19,6 +20,8 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
+import org.hibernate.SessionFactory;
+import org.jetbrains.annotations.NotNull;
 
 import javax.sql.DataSource;
 import javax.xml.ws.Endpoint;
@@ -59,17 +62,19 @@ public class ControllerUI implements IControllerUI {
 
     private final Scanner scanner = new Scanner(System.in);
 
-    private DataBaseConnection conn = new DataBaseConnection();
+    private final DataBaseConnection conn = new DataBaseConnection();
 
     private SqlSessionFactory sqlSessionFactory;
 
-    public void register(Class... clazzes) throws InstantiationException, IllegalAccessException {
-        for (Class clazz : clazzes) {
+    private SessionFactory sessionFactory;
+
+    public void register(final Class... clazzes) throws Exception {
+        for (final Class clazz : clazzes) {
             register(clazz);
         }
     }
 
-    public void register(final Class clazz) throws IllegalAccessException, InstantiationException {
+    public void register(@NotNull final Class clazz) throws IllegalAccessException, InstantiationException {
         if (!AbstractCommand.class.isAssignableFrom(clazz)) return;
         final AbstractCommand command = (AbstractCommand) clazz.newInstance();
         command.setController(this);
@@ -83,10 +88,10 @@ public class ControllerUI implements IControllerUI {
     public void run() throws Exception {
         setConnection();
         runServices();
-        getMyBatis();
+        startMyBatis();
         loadData();
         controlSession();
-
+        startHibernate();
         System.out.println("TASK MANAGER");
         while (true) {
             if (getSessionService().getCurrentSession() == null) {
@@ -131,11 +136,10 @@ public class ControllerUI implements IControllerUI {
 
     private void setConnection() throws Exception {
         conn.connect();
-        //getUserService().getUserDao().setConn(conn.getConn());
         getProjectService().getProjectDAO().setConn(conn.getConn());
         getSessionService().getSessionDao().setConn(conn.getConn());
-        getTaskService().getDao().setConn(conn.getConn());
         getAssigneeService().getAssigneeDAO().setConn(conn.getConn());
+        getTaskService().getDao().setSessionFactory(sessionFactory);
     }
     private void loadData() throws Exception {
         System.out.println("Load data");
@@ -176,24 +180,35 @@ public class ControllerUI implements IControllerUI {
         controlThread.start();
     }
 
-    private void getMyBatis() throws IOException {
+    private void startMyBatis() throws IOException {
         final FileInputStream fis = new FileInputStream(ServiceConstant.DATABASE_PROPERTY_ADDRESS);
         final Properties property = new Properties();
         property.load(fis);
+        String username = property.getProperty(ServiceConstant.USER);
+        String password = property.getProperty(ServiceConstant.PASSWORD);
+        username = ServiceConstant.EMPTY.equals(username) ? null : username;
+        password = ServiceConstant.EMPTY.equals(password) ? null : password;
         final DataSource dataSource = new PooledDataSource(
                 property.getProperty(ServiceConstant.DATABASE_DRIVER),
                 property.getProperty(ServiceConstant.DATABASE_ADDRESS),
-                property.getProperty(ServiceConstant.DATABASE_USER),
-                property.getProperty(ServiceConstant.DATABASE_PASSWORD));
+                username, password);
         final TransactionFactory transactionFactory = new JdbcTransactionFactory();
+
         final Environment environment = new Environment("development",
                 transactionFactory, dataSource);
         final Configuration configuration = new Configuration(environment);
+
         configuration.addMapper(MyBatisUserDao.class);
-        sqlSessionFactory = new SqlSessionFactoryBuilder()
-                .build(configuration);
+
+        sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
+
         getUserService().getUserDao().setSqlSessionFactory(sqlSessionFactory);
 
+    }
+
+    private void startHibernate() throws IOException {
+        sessionFactory = HibernateUtil.factory();
+        getTaskService().getDao().setSessionFactory(sessionFactory);
     }
 
     public IUserService getUserService() {
@@ -224,7 +239,7 @@ public class ControllerUI implements IControllerUI {
         return overalService;
     }
 
-    public void registerCommandAll() throws IllegalAccessException, InstantiationException {
+    public void registerCommandAll() throws Exception {
         register(CLASSES);
     }
 
