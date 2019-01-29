@@ -1,18 +1,19 @@
 package com.ajulay;
 
-import com.ajulay.controller.ControllerUI;
+import com.ajulay.api.controller.IControllerUI;
+
+import javax.enterprise.inject.se.SeContainer;
+import javax.enterprise.inject.se.SeContainerInitializer;
 
 public class App {
 
     public static void main(String[] args) throws Exception {
-        final ControllerUI controllerUI = new ControllerUI();
+        final SeContainerInitializer initializer = SeContainerInitializer.newInstance();
+        final SeContainer seContainer = initializer.initialize();
+        final IControllerUI controllerUI = seContainer.select(IControllerUI.class).get();
         controllerUI.run();
-//        SeContainerInitializer initializer = SeContainerInitializer.newInstance();
-//        initializer.addBeanClasses(IControllerUI.class);
-//        SeContainer seContainer = initializer.initialize();
-//        IControllerUI controllerUI1 = seContainer.select(IControllerUI.class).get();
-//        System.out.println(controllerUI1.getCommands().size());
-        // 39178,08.
+
+        //TODO 39178,08. 331
     }
 
 }

@@ -2,9 +2,13 @@ package com.ajulay.entity;
 
 import com.ajulay.enumirated.Role;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.UUID;
 
+@ApplicationScoped
+@Table(name = "\"user\"")
 public class User implements Serializable {
 
     private String id = UUID.randomUUID().toString();

@@ -6,11 +6,13 @@ import com.ajulay.mybatis.mapper.MyBatisUserDao;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.util.List;
 
 /**
  * {@inheritDoc}
  */
+@ApplicationScoped
 public class UserDAO implements IUserDAO {
 
     private SqlSessionFactory sqlSessionFactory;

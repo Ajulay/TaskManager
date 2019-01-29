@@ -6,9 +6,11 @@ import com.ajulay.entity.Project;
 import com.ajulay.entity.Task;
 import com.ajulay.entity.User;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.io.Serializable;
 import java.util.List;
 
+@ApplicationScoped
 public class Domain implements Serializable {
 
     private List<Project> projects;

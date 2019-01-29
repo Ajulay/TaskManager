@@ -6,7 +6,9 @@ import com.ajulay.hibernate.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.jetbrains.annotations.Nullable;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -16,11 +18,14 @@ import java.util.List;
 /**
  * {@inheritDoc}
  */
+
+@ApplicationScoped
 public class TaskDAO implements ITaskDAO {
 
     private SessionFactory sessionFactory;
 
     @Override
+    @Nullable
     public Task save(final Task task) {
         Session session = null;
         try {

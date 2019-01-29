@@ -12,7 +12,8 @@ import com.ajulay.entity.User;
 import com.ajulay.enumirated.Role;
 import com.ajulay.hibernate.HibernateUtil;
 import com.ajulay.mybatis.mapper.MyBatisUserDao;
-import com.ajulay.service.*;
+import com.ajulay.service.OveralService;
+import com.ajulay.service.SessionService;
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
@@ -23,6 +24,8 @@ import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.hibernate.SessionFactory;
 import org.jetbrains.annotations.NotNull;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.sql.DataSource;
 import javax.xml.ws.Endpoint;
 import java.io.FileInputStream;
@@ -32,6 +35,7 @@ import java.util.*;
 /**
  * ControllerUI - class-controller for interacting
  */
+@ApplicationScoped
 public class ControllerUI implements IControllerUI {
 
     private static final Class[] CLASSES = {
@@ -44,19 +48,24 @@ public class ControllerUI implements IControllerUI {
             DataLoadXmlCommand.class, UserChangePasswordCommand.class, LogOutCommand.class,
             SessionAllShowCommand.class, SessionFindByIdCommand.class, UserDeleteById.class
     };
+    @Inject
+    private IUserService userService; //= new UserService();
 
-    private final IUserService userService = new UserService();
+    @Inject
+    private IProjectService projectService; //= new ProjectService();
 
-    private final IProjectService projectService = new ProjectService();
+    @Inject
+    private ITaskService taskService; //= new TaskService();
 
-    private final ITaskService taskService = new TaskService();
+    @Inject
+    private IAssigneeService assigneeService;// = new AssigneeService();
 
-    private final IAssigneeService assigneeService = new AssigneeService();
+    @Inject
+    private SessionService sessionService; // = new SessionService();
 
-    private final ISessionService sessionService = new SessionService();
-
-    private final IOveralService overalService = new OveralService(assigneeService, userService, projectService,
-            taskService, sessionService);
+    @Inject
+    private OveralService overalService; //= new OveralService(assigneeService, userService, projectService,
+    //taskService, sessionService);
 
     private final Map<String, AbstractCommand> commands = new HashMap<>();
 
@@ -181,27 +190,24 @@ public class ControllerUI implements IControllerUI {
     }
 
     private void startMyBatis() throws IOException {
-        final FileInputStream fis = new FileInputStream(ServiceConstant.DATABASE_PROPERTY_ADDRESS);
+        final FileInputStream fis = new FileInputStream(ServiceConstant.HIBERNATE_PROPERTY_ADDRESS);
         final Properties property = new Properties();
         property.load(fis);
-        String username = property.getProperty(ServiceConstant.USER);
-        String password = property.getProperty(ServiceConstant.PASSWORD);
+        String username = property.getProperty(ServiceConstant.HIBERNATE_USER);
+        String password = property.getProperty(ServiceConstant.HIBERNATE_PASSWORD);
         username = ServiceConstant.EMPTY.equals(username) ? null : username;
         password = ServiceConstant.EMPTY.equals(password) ? null : password;
         final DataSource dataSource = new PooledDataSource(
-                property.getProperty(ServiceConstant.DATABASE_DRIVER),
-                property.getProperty(ServiceConstant.DATABASE_ADDRESS),
+                property.getProperty(ServiceConstant.HIBERNATE_DRIVER),
+                property.getProperty(ServiceConstant.HIBERNATE_CONNECT),
                 username, password);
         final TransactionFactory transactionFactory = new JdbcTransactionFactory();
 
         final Environment environment = new Environment("development",
                 transactionFactory, dataSource);
         final Configuration configuration = new Configuration(environment);
-
         configuration.addMapper(MyBatisUserDao.class);
-
         sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
-
         getUserService().getUserDao().setSqlSessionFactory(sqlSessionFactory);
 
     }

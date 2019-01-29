@@ -2,6 +2,7 @@ package com.ajulay.entity;
 
 import com.ajulay.enumirated.Status;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZoneId;
@@ -10,6 +11,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
+@ApplicationScoped
 @Table(name = "task")
 public class Task implements Serializable {
 

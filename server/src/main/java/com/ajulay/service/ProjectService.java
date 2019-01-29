@@ -6,6 +6,7 @@ import com.ajulay.dao.ProjectDAO;
 import com.ajulay.entity.Project;
 import com.ajulay.exception.unchecked.NullDataForProjectException;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 /**
  * {@inheritDoc}
  */
+@ApplicationScoped
 public class ProjectService implements IProjectService {
 
     private final IProjectDAO projectDAO = new ProjectDAO();

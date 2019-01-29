@@ -8,12 +8,14 @@ import com.ajulay.enumirated.Status;
 import com.ajulay.exception.unchecked.NullDataForTaskException;
 import com.ajulay.exception.unchecked.NullIdException;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.util.Collections;
 import java.util.List;
 
 /**
  * {@inheritDoc}
  */
+@ApplicationScoped
 public class TaskService implements ITaskService {
 
     private final ITaskDAO dao = new TaskDAO();

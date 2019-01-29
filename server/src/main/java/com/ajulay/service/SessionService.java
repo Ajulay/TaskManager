@@ -5,8 +5,10 @@ import com.ajulay.api.service.ISessionService;
 import com.ajulay.dao.SessionDao;
 import com.ajulay.entity.Session;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.util.List;
 
+@ApplicationScoped
 public class SessionService implements ISessionService {
 
     private final ISessionDao sessionDao = new SessionDao();

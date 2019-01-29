@@ -3,6 +3,7 @@ package com.ajulay.dao;
 import com.ajulay.api.dao.IProjectDAO;
 import com.ajulay.entity.Project;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +14,7 @@ import java.util.List;
 /**
  * {@inheritDoc}
  */
+@ApplicationScoped
 public class ProjectDAO implements IProjectDAO {
 
     // private final List<Project> projects = new ArrayList<>();

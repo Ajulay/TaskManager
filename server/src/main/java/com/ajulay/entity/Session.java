@@ -1,9 +1,11 @@
 package com.ajulay.entity;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
+@ApplicationScoped
 public class Session {
 
     private String id = UUID.randomUUID().toString();

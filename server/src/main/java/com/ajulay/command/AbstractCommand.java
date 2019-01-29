@@ -2,8 +2,11 @@ package com.ajulay.command;
 
 import com.ajulay.controller.ControllerUI;
 
+import javax.inject.Inject;
+
 public abstract class AbstractCommand {
 
+    @Inject
     private ControllerUI controller;
 
     public abstract String getCommandKeyWord();

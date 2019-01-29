@@ -3,6 +3,7 @@ package com.ajulay.dao;
 import com.ajulay.api.dao.ISessionDao;
 import com.ajulay.entity.Session;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.sql.*;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+@ApplicationScoped
 public class SessionDao implements ISessionDao {
 
     //  private final List<Session> sessions = new ArrayList<>();
@@ -42,6 +44,7 @@ public class SessionDao implements ISessionDao {
         }
         return sessions;
     }
+
     @Override
     public Session save(final Session session) {
         PreparedStatement statement = null;

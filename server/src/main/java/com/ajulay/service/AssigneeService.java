@@ -6,12 +6,14 @@ import com.ajulay.dao.AssigneeDAO;
 import com.ajulay.entity.Assignee;
 import com.ajulay.exception.unchecked.NullIdException;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.util.Collections;
 import java.util.List;
 
 /**
  * {@inheritDoc}
  */
+@ApplicationScoped
 public class AssigneeService implements IAssigneeService {
 
     private final IAssigneeDAO assigneeDAO = new AssigneeDAO();

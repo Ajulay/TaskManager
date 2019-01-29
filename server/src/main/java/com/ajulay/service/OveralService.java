@@ -10,30 +10,38 @@ import com.ajulay.enumirated.Role;
 import com.ajulay.exception.unchecked.NoCurrentUserException;
 import com.ajulay.exception.unchecked.NoRightEnoughException;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@ApplicationScoped
 public class OveralService implements IOveralService {
 
-    private final IAssigneeService assigneeService;
+    @Inject
+    private IAssigneeService assigneeService;
 
-    private final IUserService userService;
+    @Inject
+    private IUserService userService;
 
-    private final IProjectService projectService;
+    @Inject
+    private IProjectService projectService;
 
-    private final ITaskService taskService;
+    @Inject
+    private ITaskService taskService;
 
+    @Inject
     private ISessionService sessionService;
 
-    public OveralService(IAssigneeService assigneeService, IUserService userService, IProjectService projectService,
-                         ITaskService taskService, ISessionService sessionService) {
-        this.assigneeService = assigneeService;
-        this.userService = userService;
-        this.projectService = projectService;
-        this.taskService = taskService;
-        this.sessionService = sessionService;
-    }
+//    public OveralService(IAssigneeService assigneeService, IUserService userService, IProjectService projectService,
+//                         ITaskService taskService, ISessionService sessionService) {
+//        this.assigneeService = assigneeService;
+//        this.userService = userService;
+//        this.projectService = projectService;
+//        this.taskService = taskService;
+//        this.sessionService = sessionService;
+//    }
 
     @Override
     public Project createProjectByName(final String projectName, final String userId) {

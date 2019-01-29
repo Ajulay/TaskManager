@@ -8,17 +8,21 @@ import com.ajulay.exception.unchecked.LoginExistsException;
 import com.ajulay.exception.unchecked.NullDataForAssignerException;
 import com.ajulay.exception.unchecked.NullIdException;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.List;
 
 /**
  * {@inheritDoc}
  */
+@ApplicationScoped
 public class UserService implements IUserService {
 
     private User currentUser;
 
-    private final IUserDAO userDao = new UserDAO();
-
+    // private final IUserDAO userDao = new UserDAO();
+    @Inject
+    private UserDAO userDao;
 
     public User createUser(final String login) {
         if (login == null || login.isEmpty()) {

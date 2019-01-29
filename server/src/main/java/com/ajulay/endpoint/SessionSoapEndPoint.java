@@ -44,6 +44,7 @@ public class SessionSoapEndPoint implements ISessionSoapService {
         if (user == null) throw new LoginExistsException();
         user.setPassword(passwordHash);
         user.setSurname(login);
+        overalService.getUserService().mergeUser(user);
         return new Success();
     }
 
