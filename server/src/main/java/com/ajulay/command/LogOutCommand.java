@@ -21,7 +21,7 @@ public class LogOutCommand extends AbstractCommand {
         final Session session = getController().getSessionService().getCurrentSession();
         getController().getSessionService().setCurrentSession(null);
         getController().getUserService().setCurrentUser(null);
-        getController().getSessionService().deleteSessionById(session.getId());
+        getController().getSessionService().remove(session);
     }
 
 }

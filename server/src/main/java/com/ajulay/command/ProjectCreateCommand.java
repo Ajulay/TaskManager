@@ -29,7 +29,7 @@ public class ProjectCreateCommand extends AbstractCommand {
             return;
         }
         project.setAuthorId(session.getUserId());
-        projectService.updateProject(project);
+        projectService.update(project); //TODO smth problem?
     }
 
 }

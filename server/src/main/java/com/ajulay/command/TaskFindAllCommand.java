@@ -20,7 +20,7 @@ public class TaskFindAllCommand extends AbstractCommand {
     @Override
     public void execute() {
         final String currentUserId = getController().getSessionService().getCurrentSession().getUserId();
-        final List<Task> tasks = getController().getOveralService().findTaskAllByUserId(currentUserId);
+        final List<Task> tasks = getController().getTaskService().findTaskAllByUserId(currentUserId);
         int index = 1;
         for (final Task task : tasks) {
             final String term = task.getTerm().toString().substring(0, ServiceConstant.SUBSTRING_INSTANT);

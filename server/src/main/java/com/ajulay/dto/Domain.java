@@ -27,10 +27,10 @@ public class Domain implements Serializable {
 
     public static Domain createDomain(ControllerUI controller) {
         final Domain domain = new Domain();
-        final List<Project> projects = controller.getProjectService().getProjects();
-        final List<User> users = controller.getUserService().getUsers();
-        final List<Task> tasks = controller.getTaskService().findTaskAll();
-        final List<Assignee> assignees = controller.getAssigneeService().findAllAssignee();
+        final List<Project> projects = controller.getProjectService().findAll();
+        final List<User> users = controller.getUserService().findAll();
+        final List<Task> tasks = controller.getTaskService().findAll();
+        final List<Assignee> assignees = controller.getAssigneeService().findAll();
         domain.setAssignees(assignees);
         domain.setProjects(projects);
         domain.setUsers(users);
@@ -43,10 +43,10 @@ public class Domain implements Serializable {
         final List<User> users = domain.getUsers();
         final List<Task> tasks = domain.getTasks();
         final List<Assignee> assignees = domain.getAssignees();
-        controller.getProjectService().merge(projects);
-        controller.getUserService().merge(users);
-        controller.getTaskService().merge(tasks);
-        controller.getAssigneeService().merge(assignees);
+        controller.getProjectService().updateAll(projects);
+        controller.getUserService().updateAll(users);
+        controller.getTaskService().updateAll(tasks);
+        controller.getAssigneeService().updateAll(assignees);
 
         return true;
     }

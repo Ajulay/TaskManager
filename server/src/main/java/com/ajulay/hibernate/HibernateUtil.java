@@ -1,7 +1,7 @@
 package com.ajulay.hibernate;
 
 import com.ajulay.constants.ServiceConstant;
-import com.ajulay.entity.Task;
+import com.ajulay.entity.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -10,16 +10,22 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.AvailableSettings;
 import org.jetbrains.annotations.Nullable;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
+import javax.persistence.EntityManager;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
 
+@ApplicationScoped
 public class HibernateUtil {
 
     @Nullable
     public static SessionFactory factory() throws IOException {
+        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
         final FileInputStream fis = new FileInputStream(ServiceConstant.HIBERNATE_PROPERTY_ADDRESS);
         final Properties property = new Properties();
         property.load(fis);
@@ -37,12 +43,25 @@ public class HibernateUtil {
             final StandardServiceRegistry registry = registryBuilder.build();
             final MetadataSources sources = new MetadataSources(registry);
             sources.addAnnotatedClass(Task.class);
+            sources.addAnnotatedClass(Project.class);
+            sources.addAnnotatedClass(Assignee.class);
+            sources.addAnnotatedClass(Session.class);
+            sources.addAnnotatedClass(User.class);
+            sources.addAnnotatedClass(HibernateUtil.class);
             final Metadata metadata = sources.getMetadataBuilder().build();
             return metadata.getSessionFactoryBuilder().build();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Produces
+    @Nullable
+    public EntityManager getEntityManager() throws IOException {
+        final SessionFactory factory = factory();
+        if (factory == null) return null;
+        return factory().createEntityManager();
     }
 
 }

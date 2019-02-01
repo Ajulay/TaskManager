@@ -1,16 +1,30 @@
 package com.ajulay.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
+
 import javax.enterprise.context.ApplicationScoped;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
+@Entity
+@Table(name = "session")
 @ApplicationScoped
+@Getter
+@Setter
+@NoArgsConstructor
 public class Session {
 
+    @Id
     private String id = UUID.randomUUID().toString();
 
-    private String UserId;
+    private String userId;
 
     private String signature;
 
@@ -37,11 +51,11 @@ public class Session {
     }
 
     public String getUserId() {
-        return UserId;
+        return userId;
     }
 
-    public void setUserId(String userId) {
-        UserId = userId;
+    public void setUserId(@NotNull String userId) {
+        this.userId = userId;
     }
 
     public void setId(String id) {

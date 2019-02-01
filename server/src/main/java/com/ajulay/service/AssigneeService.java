@@ -1,12 +1,15 @@
 package com.ajulay.service;
 
-import com.ajulay.api.dao.IAssigneeDAO;
+import com.ajulay.api.repository.IAssigneeRepository;
 import com.ajulay.api.service.IAssigneeService;
-import com.ajulay.dao.AssigneeDAO;
 import com.ajulay.entity.Assignee;
-import com.ajulay.exception.unchecked.NullIdException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,75 +19,156 @@ import java.util.List;
 @ApplicationScoped
 public class AssigneeService implements IAssigneeService {
 
-    private final IAssigneeDAO assigneeDAO = new AssigneeDAO();
+    @Inject
+    @NotNull
+    private IAssigneeRepository assigneeRepository;
+
+    @Inject
+    @NotNull
+    private EntityManager entityManager;
 
 
     @Override
-    public Assignee createAssignee(final String taskId, final String assignerId) {
-        if (taskId == null || taskId.isEmpty() || assignerId == null || assignerId.isEmpty()) {
-            throw new NullIdException();
+    @Nullable
+    public Assignee createAssignee(@NotNull final String taskId, @NotNull final String assignerId) {
+        if (taskId.isEmpty() || assignerId.isEmpty()) {
+            return null;
         }
+        @NotNull
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
         final Assignee assignee = new Assignee();
         assignee.setTaskId(taskId);
         assignee.setUserId(assignerId);
-        return assigneeDAO.create(assignee);
+        assigneeRepository.save(assignee);
+        transaction.commit();
+        return assignee;
     }
 
     @Override
-    public Assignee deleteAssignee(final String id) {
-        if (id == null || id.isEmpty()) {
-            throw new NullIdException();
+    @Nullable
+    public Assignee removeById(@NotNull final String id) {
+        if (id.isEmpty()) {
+            return null;
         }
-        return assigneeDAO.delete(id);
-    }
-
-    @Override
-    public Assignee updateAssignee(final Assignee assignee) {
-        if (assignee == null) throw new NullPointerException();
-        return assigneeDAO.update(assignee);
-    }
-
-    @Override
-    public Assignee getById(final String id) {
-        if (id == null || id.isEmpty()) {
-            throw new NullIdException();
+        @NotNull
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable final Assignee assignee = assigneeRepository.findById(id);
+        if (assignee != null) {
+            assigneeRepository.remove(assignee);
         }
-        return assigneeDAO.findById(id);
+        transaction.commit();
+        return assignee;
     }
 
     @Override
-    public List<Assignee> findAllAssignee() {
-        return assigneeDAO.findAll();
+    @Nullable
+    public Assignee update(@NotNull final Assignee assignee) {
+        @NotNull
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable final Assignee updatedAssignee = assigneeRepository.update(assignee);
+        transaction.commit();
+        return updatedAssignee;
     }
 
     @Override
-    public List<Assignee> merge(final List<Assignee> assignees) {
-        if (assignees == null) return null;
-        return assigneeDAO.merge(assignees);
-    }
-
-    @Override
-    public List<Assignee> findAssigneeAllByUserId(final String userId) {
-        if (userId == null) return Collections.emptyList();
-        return assigneeDAO.findByUserId(userId);
-    }
-
-    public IAssigneeDAO getAssigneeDAO() {
-        return assigneeDAO;
-    }
-
-    @Override
-    public List<Assignee> deleteAssigneeAllByTaskId(final String taskId) {
-        final List<Assignee> assignees = findAssigneeAllByTaskId(taskId);
-        for (final Assignee assignee : assignees) {
-            deleteAssignee(assignee.getId());
+    @Nullable
+    public Assignee findById(@NotNull final String id) {
+        if (id.isEmpty()) {
+            return null;
         }
+        @NotNull
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable final Assignee assignee = assigneeRepository.findById(id);
+        transaction.commit();
+        return assignee;
+    }
+
+    @Override
+    @Nullable
+    public List<Assignee> findAll() {
+        @NotNull
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable final List<Assignee> assignees = assigneeRepository.findAll();
+        transaction.commit();
         return assignees;
     }
 
-    private List<Assignee> findAssigneeAllByTaskId(final String taskId) {
-        if (taskId == null) return Collections.emptyList();
-        return assigneeDAO.findByTaskId(taskId);
+    @Override
+    @NotNull
+    public List<Assignee> findAllByUserId(@NotNull final String currentUser) {
+        @NotNull
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @NotNull final List<Assignee> assignees = assigneeRepository.findByUserId(currentUser);
+        transaction.commit();
+        return assignees;
+    }
+
+    @Override
+    @NotNull
+    public List<Assignee> findAllByTaskId(@NotNull final String taskId) {
+        @NotNull
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @NotNull final List<Assignee> assignees = assigneeRepository.findByTaskId(taskId);
+        transaction.commit();
+        return assignees;
+    }
+
+    @Override
+    @NotNull
+    public List<Assignee> removeAllByTaskId(@NotNull final String taskId) {
+        if (taskId.isEmpty()) {
+            return Collections.emptyList();
+        }
+        @NotNull
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @NotNull final List<Assignee> assignees = assigneeRepository.findByTaskId(taskId);
+        for (@NotNull final Assignee assignee : assignees) {
+            assigneeRepository.remove(assignee);
+        }
+        transaction.commit();
+        return assignees;
+    }
+
+    @Override
+    @Nullable
+    public Assignee save(@NotNull final Assignee assignee) {
+        @NotNull
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable final Assignee savedAssignee = assigneeRepository.save(assignee);
+        transaction.commit();
+        return savedAssignee;
+    }
+
+    @Override
+    @Nullable
+    public Assignee remove(@NotNull final Assignee assignee) {
+        @NotNull
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable final Assignee removedAssignee = assigneeRepository.remove(assignee);
+        transaction.commit();
+        return removedAssignee;
+    }
+
+    @Override
+    @NotNull
+    public List<Assignee> updateAll(@NotNull final List<Assignee> assignees) {
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        for (@NotNull final Assignee assignee : assignees) {
+            entityManager.merge(assignee);
+        }
+        transaction.commit();
+        return assignees;
     }
 
 }

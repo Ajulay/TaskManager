@@ -1,8 +1,8 @@
 package com.ajulay.api.soap;
 
+import com.ajulay.dto.TaskView;
 import com.ajulay.endpoint.transport.Success;
 import com.ajulay.entity.Session;
-import com.ajulay.entity.Task;
 
 import java.util.List;
 
@@ -11,20 +11,20 @@ import java.util.List;
  */
 public interface ITaskSoapService {
 
-    Success saveTask(Session session, Task task);
+    Success saveTask(Session session, TaskView task);
 
     Success deleteTask(Session session, String id);
 
     Success changeStatus(Session session, String taskId, String status);
 
-    List<Task> findTaskAll(Session session);
+    List<TaskView> findTaskAll(Session session);
 
-    List<Task> findTaskAllByProject(Session session, String project_id);
+    List<TaskView> findTaskAllByProject(Session session, String project_id);
 
-    Task findTaskById(Session session, String taskId);
+    TaskView findTaskById(Session session, String taskId);
 
-    Success merge(Session session, List<Task> tasks);
+    Success merge(Session session, List<TaskView> tasks);
 
-    List<Task> findTaskAllByUserId(Session session, String currentUser);
+    List<TaskView> findTaskAllByUserId(Session session, String currentUser);
 
 }

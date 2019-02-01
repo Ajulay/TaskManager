@@ -1,15 +1,18 @@
 package com.ajulay.service;
 
-import com.ajulay.api.dao.IUserDAO;
+import com.ajulay.api.repository.IUserRepository;
+import com.ajulay.api.service.IAssigneeService;
 import com.ajulay.api.service.IUserService;
-import com.ajulay.dao.UserDAO;
+import com.ajulay.entity.Assignee;
 import com.ajulay.entity.User;
-import com.ajulay.exception.unchecked.LoginExistsException;
-import com.ajulay.exception.unchecked.NullDataForAssignerException;
-import com.ajulay.exception.unchecked.NullIdException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,94 +21,96 @@ import java.util.List;
 @ApplicationScoped
 public class UserService implements IUserService {
 
+    @Nullable
     private User currentUser;
 
-    // private final IUserDAO userDao = new UserDAO();
     @Inject
-    private UserDAO userDao;
+    @NotNull
+    private IUserRepository userRepository;
 
-    public User createUser(final String login) {
-        if (login == null || login.isEmpty()) {
-            throw new NullDataForAssignerException();
+    @Inject
+    private IAssigneeService assigneeService;
+
+    @Inject
+    @NotNull
+    private EntityManager entityManager;
+
+
+    @Override
+    @Nullable
+    public User createByLogin(@NotNull final String login) {
+        if (login.isEmpty()) {
+            return null;
         }
-        if (isLoginExists(login)) {
-            throw new LoginExistsException();
-        }
+
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
         final User user = new User();
         user.setLogin(login);
-        return userDao.save(user);
-    }
-
-    public User deleteUser(final String id) {
-        if (id == null || id.isEmpty()) {
-            throw new NullDataForAssignerException();
-        }
-        return userDao.delete(id);
-    }
-
-    public User mergeUser(final User user) {
-        if (user == null) throw new NullPointerException();
-        final User oldAssigner = findById(user.getId());
-        if (oldAssigner == null) return userDao.save(user);
-        return userDao.update(user);
-    }
-
-    public User getBySurname(final String surname) {
-        if (surname == null || surname.isEmpty()) {
-            throw new NullDataForAssignerException();
-        }
-        for (final User user : getUsers()) {
-            if (surname.equals(user.getSurname())) {
-                return user;
-            }
-        }
-        return null;
-    }
-
-    public User findById(final String id) {
-        if (id == null || id.isEmpty()) {
-            throw new NullIdException();
-        }
-
-        return userDao.findById(id);
-    }
-
-    public List<User> getUsers() {
-        return userDao.findAll();
+        @Nullable final User savedUser = userRepository.save(user);
+        transaction.commit();
+        return savedUser;
     }
 
     @Override
-    public List<User> merge(final List<User> users) {
-        if (users == null) return null;
-        for (final User user : users) {
-            if (findById(user.getId()) == null) {
-                userDao.save(user);
-                continue;
-            }
-            userDao.update(user);
+    @Nullable
+    public User removeById(@NotNull final String id) {
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        final User user = userRepository.findById(id);
+        @Nullable final User removedUser = userRepository.remove(user);
+        transaction.commit();
+        return removedUser;
+    }
+
+    @Override
+    @Nullable
+    public User update(@NotNull final User user) {
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable final User updatedUser = userRepository.update(user);
+        transaction.commit();
+        return updatedUser;
+    }
+
+    @Nullable
+    public User findById(@NotNull final String id) {
+        if (id.isEmpty()) {
+            return null;
         }
-
-        return users;
-    }
-
-    @Override
-    public User findByLogin(final String login) {
-        return userDao.findByLogin(login);
-    }
-
-    private Boolean isLoginExists(final String in) {
-        final User user = userDao.findByLogin(in);
-        if (user == null) return false;
-        return true;
-    }
-
-    @Override
-    public User changePassword(User user, String password) {
-        user.setPassword(password);
-        userDao.update(user);
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        final User user = userRepository.findById(id);
+        transaction.commit();
         return user;
     }
 
+    @Override
+    @Nullable
+    public User findByLogin(@NotNull final String login) {
+        if (login.isEmpty()) {
+            return null;
+        }
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable final User user = userRepository.findByLogin(login);
+        transaction.commit();
+        return user;
+    }
+
+    @Override
+    @Nullable
+    public User changePassword(@NotNull final User user, @NotNull final String passwordHash) {
+        if (passwordHash.isEmpty()) return null;
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable final User updatedUser = userRepository.findById(user.getId());
+        updatedUser.setPasswordHash(passwordHash);
+        transaction.commit();
+        return updatedUser;
+    }
+
+    @Nullable
     public User getCurrentUser() {
         return currentUser;
     }
@@ -114,8 +119,62 @@ public class UserService implements IUserService {
         this.currentUser = currentUser;
     }
 
-    public IUserDAO getUserDao() {
-        return userDao;
+    @Override
+    @Nullable
+    public User save(@NotNull final User user) {
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable final User savedUser = userRepository.save(user);
+        transaction.commit();
+        return savedUser;
+    }
+
+    @Override
+    @Nullable
+    public User remove(@NotNull final User user) {
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable final User removedUser = userRepository.remove(user);
+        transaction.commit();
+        return removedUser;
+    }
+
+    @Override
+    @NotNull
+    public List<User> findAll() {
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @NotNull final List<User> users = userRepository.findAll();
+        transaction.commit();
+        return users;
+    }
+
+    @Override
+    @NotNull
+    public List<User> updateAll(@NotNull final List<User> users) {
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        for (@NotNull final User user : users) {
+            entityManager.merge(user);
+        }
+        transaction.commit();
+        return users;
+    }
+
+    @Override
+    @NotNull
+    public List<User> findUserAllByTaskId(@NotNull final String taskId) {
+        final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @NotNull final List<Assignee> assignees = assigneeService.findAllByTaskId(taskId);
+        @NotNull
+        List<User> users = new ArrayList<>();
+        for (@NotNull final Assignee assignee : assignees) {
+            final User user = userRepository.findById(assignee.getUserId());
+            users.add(user);
+        }
+        transaction.commit();
+        return users;
     }
 
 }

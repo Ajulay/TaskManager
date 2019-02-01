@@ -23,7 +23,7 @@ public class TaskFindAllByProjectCommand extends AbstractCommand {
         final String currentUserId = getController().getSessionService().getCurrentSession().getUserId();
         System.out.println("Enter project id...");
         final String projectId = getController().nextLine();
-        final Project project = getController().getProjectService().getById(projectId);
+        final Project project = getController().getProjectService().findById(projectId);
         if (project == null) {
             System.out.println("No such project");
             return;
@@ -33,7 +33,7 @@ public class TaskFindAllByProjectCommand extends AbstractCommand {
             return;
         }
         System.out.println("Project name: " + project.getName());
-        final List<Task> tasks = getController().getTaskService().findTaskAllByProject(projectId);
+        final List<Task> tasks = getController().getTaskService().findAllByProject(projectId);
         int index = 1;
         for (final Task task : tasks) {
             final String term = task.getTerm().toString().substring(0, ServiceConstant.SUBSTRING_INSTANT);

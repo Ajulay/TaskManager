@@ -1,16 +1,21 @@
 package com.ajulay.service;
 
-import com.ajulay.api.dao.ITaskDAO;
+import com.ajulay.api.repository.ITaskRepository;
+import com.ajulay.api.service.IAssigneeService;
 import com.ajulay.api.service.ITaskService;
-import com.ajulay.dao.TaskDAO;
+import com.ajulay.entity.Assignee;
 import com.ajulay.entity.Task;
 import com.ajulay.enumirated.Status;
-import com.ajulay.exception.unchecked.NullDataForTaskException;
-import com.ajulay.exception.unchecked.NullIdException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.enterprise.context.ApplicationScoped;
-import java.util.Collections;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * {@inheritDoc}
@@ -18,57 +23,156 @@ import java.util.List;
 @ApplicationScoped
 public class TaskService implements ITaskService {
 
-    private final ITaskDAO dao = new TaskDAO();
+    @Inject
+    @NotNull
+    private ITaskRepository taskRepository;
 
-    public Task saveTask(final Task task) {
-        if (task == null) throw new NullDataForTaskException();
-        return dao.save(task);
-    }
+    @Inject
+    @NotNull
+    private IAssigneeService assigneeService;
 
-    public Task deleteTask(final String id) {
-        if (id == null || id.isEmpty()) {
+    @Inject
+    @NotNull
+    private EntityManager entityManager;
+
+    @Nullable
+    public Task changeStatus(@NotNull final String taskId, @NotNull final String status) {
+        if (taskId.isEmpty() || status.isEmpty()) {
             return null;
         }
-        return dao.delete(id);
-    }
-
-    public Task changeStatus(final String taskId, final String status) {
-        if (taskId == null || taskId.isEmpty() || status == null || status.isEmpty()) {
-            return null;
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable final Task task = taskRepository.findById(taskId);
+        if (task != null) {
+            task.setStatus(Status.valueOf(status.toUpperCase()));
         }
-        final Task task = findTaskById(taskId);
-        task.setStatus(Status.valueOf(status.toUpperCase()));
+        transaction.commit();
         return task;
     }
 
-    public List<Task> findTaskAll() {
-        return dao.findAll();
+    @Override
+    @NotNull
+    public List<Task> findAllByProject(@NotNull final String projectId) {
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        //TODO remake later for Criteria
+        @NotNull
+        List<Task> tasks = taskRepository.findAll();
+        tasks = tasks.stream().filter(e -> e.getProject().getId().equals(projectId)).collect(Collectors.toList());
+        transaction.commit();
+        return tasks;
     }
 
     @Override
-    public List<Task> findTaskAllByProject(final String projectId) {
-        if (projectId == null || projectId.isEmpty()) {
-            throw new NullIdException();
-        }
-        return dao.findByProjectId(projectId);
+    @Nullable
+    public Task save(@NotNull final Task task) {
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable final Task savedTask = taskRepository.save(task);
+        transaction.commit();
+        return savedTask;
     }
 
     @Override
-    public Task findTaskById(final String taskId) {
-        if (taskId == null || taskId.isEmpty()) {
+    @Nullable
+    public Task findById(@NotNull final String id) {
+        if (id.isEmpty()) {
             return null;
         }
-        return dao.findById(taskId);
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable final Task task = taskRepository.findById(id);
+        transaction.commit();
+        return task;
     }
 
     @Override
-    public List<Task> merge(final List<Task> tasks) {
-        if (tasks == null) return Collections.emptyList();
-        return dao.merge(tasks);
+    @Nullable
+    public Task remove(@NotNull final Task task) {
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable final Task removedTask = taskRepository.remove(task);
+        transaction.commit();
+        return removedTask;
     }
 
-    public ITaskDAO getDao() {
-        return dao;
+    @Override
+    @Nullable
+    public Task update(@NotNull final Task task) {
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable final Task updatedTask = taskRepository.update(task);
+        transaction.commit();
+        return updatedTask;
+    }
+
+    @Override
+    @NotNull
+    public List<Task> findAll() {
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @NotNull final List<Task> tasks = taskRepository.findAll();
+        transaction.commit();
+        return tasks;
+    }
+
+    @Override
+    @NotNull
+    public List<Task> updateAll(@NotNull final List<Task> tasks) {
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        for (@NotNull final Task task : tasks) {
+            entityManager.merge(task);
+        }
+        transaction.commit();
+        return tasks;
+    }
+
+    @Override
+    @Nullable
+    public Task removeById(@NotNull final String id) {
+        if (id.isEmpty()) {
+            return null;
+        }
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable
+        Task task = taskRepository.findById(id);
+        if (task != null) {
+            task = taskRepository.remove(task);
+        }
+        transaction.commit();
+        return task;
+    }
+
+    @Override
+    @Nullable
+    public List<Task> findAllByUserId(@NotNull final String currentUser) {
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        final List<Assignee> assignees = assigneeService.findAllByUserId(currentUser);
+        final List<Task> tasks = new ArrayList<>();
+        for (final Assignee assignee : assignees) {
+            @Nullable final Task task = taskRepository.findById(assignee.getTaskId());
+            if (task != null)
+                tasks.add(task);
+        }
+        transaction.commit();
+        return tasks;
+    }
+
+    @Override
+    public List<Task> findTaskAllByUserId(String currentUserId) {
+        final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @NotNull final List<Assignee> assignees = assigneeService.findAllByUserId(currentUserId);
+        @NotNull final List<Task> tasks = new ArrayList<>();
+        for (@NotNull final Assignee assignee : assignees) {
+            final Task task = taskRepository.findById(assignee.getTaskId());
+            tasks.add(task);
+        }
+        transaction.commit();
+        return tasks;
     }
 
 }

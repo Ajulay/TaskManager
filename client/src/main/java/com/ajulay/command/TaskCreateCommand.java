@@ -39,10 +39,11 @@ public class TaskCreateCommand extends AbstractCommand {
             System.out.println("You can create task for your projects only.");
             return;
         }
-        final Task task = new Task();
+        final TaskView taskView = new TaskView();
+        taskView.setStatus(Status.START);
         final String taskId = UUID.randomUUID().toString();
-        task.setId(taskId);
-        task.setProjectId(in);
+        taskView.setId(taskId);
+        taskView.setProjectId(in);
         System.out.println("Enter term in format: yyyy-MM-dd");
         in = getController().nextLine();
         final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -50,29 +51,29 @@ public class TaskCreateCommand extends AbstractCommand {
         final GregorianCalendar calendar = new GregorianCalendar();
         calendar.setGregorianChange(term);
         final XMLGregorianCalendar xmlTerm = DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
-        task.setTerm(xmlTerm);
+        taskView.setTerm(xmlTerm);
         System.out.println("Enter priority (1 - 3)");
         in = getController().nextLine();
         if (in == null || in.isEmpty()) {
-            task.setPriority(ServiceConstant.LOW_PRIORITY);
+            taskView.setPriority(ServiceConstant.LOW_PRIORITY);
         }
         if (in != null) {
-            task.setPriority(Integer.parseInt(in));
+            taskView.setPriority(Integer.parseInt(in));
         }
         System.out.println("Enter content");
         in = getController().nextLine();
         if (in == null || in.isEmpty()) {
-            task.setContent("Enter content...");
+            taskView.setContent("Enter content...");
         }
         if (in != null) {
-            task.setContent(in);
+            taskView.setContent(in);
         }
-        addWorker(task, session);
+        addWorker(taskView, session);
         System.out.println("Task added");
-        getController().getTaskService().getTaskSoapEndPointPort().saveTask(session, task);
+        getController().getTaskService().getTaskSoapEndPointPort().saveTask(session, taskView);
     }
 
-    private void addWorker(final Task task, final Session session) {
+    private void addWorker(final TaskView task, final Session session) {
         System.out.println("Enter id executor(s) (to finish write: /end)");
         final String userId = getController().nextLine();
         if (ServiceConstant.END_ENTER_ASSIGNER.equals(userId)) {

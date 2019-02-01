@@ -17,7 +17,7 @@ public class UserChangePasswordCommand extends AbstractCommand {
     public void execute() {
         final String newPassword = getController().nextLine();
         final User currentUser = getController().getUserService().getCurrentUser();
-        currentUser.setPassword(newPassword.hashCode() + "");
+        currentUser.setPasswordHash(newPassword.hashCode() + "");
     }
 
 }

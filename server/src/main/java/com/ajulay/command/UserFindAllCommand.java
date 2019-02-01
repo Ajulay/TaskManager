@@ -19,7 +19,7 @@ public class UserFindAllCommand extends AbstractCommand {
     @Override
     public void execute() {
         int index = 1;
-        final List<User> users = getController().getUserService().getUsers();
+        final List<User> users = getController().getUserService().findAll();
         for (final User user : users) {
             System.out.println(index++ + ". Surname: " + user.getSurname() + ", id: " + user.getId() + ", role: " +
                     user.getRole());

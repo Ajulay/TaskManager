@@ -1,6 +1,5 @@
 package com.ajulay.api.service;
 
-import com.ajulay.api.dao.IProjectDAO;
 import com.ajulay.entity.Project;
 
 import java.util.List;
@@ -10,22 +9,18 @@ import java.util.List;
  */
 public interface IProjectService {
 
-    Project getByName(String projectName);
 
-    Project getById(String projectId);
+    Project findById(String projectId);
 
-    List<Project> getProjects();
+    List<Project> findAll();
 
-    Project saveProject(Project project);
+    Project save(Project project);
 
-    List<Project> merge(List<Project> projects);
+    Project update(Project project);
 
     Project createProjectByName(String projectName);
 
-    Project updateProject(Project project);
+    List<Project> findAllByUserId(String userId);
 
-    List<Project> findProjectByUserId(String userId);
-
-    IProjectDAO getProjectDAO();
-
+    List<Project> updateAll(List<Project> projects);
 }

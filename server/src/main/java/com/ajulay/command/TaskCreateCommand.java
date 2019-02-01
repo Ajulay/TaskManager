@@ -28,7 +28,7 @@ public class TaskCreateCommand extends AbstractCommand {
         System.out.println("Enter: project_id (required)");
         String in = getController().nextLine();
         final String currentUserId = getController().getSessionService().getCurrentSession().getUserId();
-        final Project project = getController().getProjectService().getById(in);
+        final Project project = getController().getProjectService().findById(in);
         if (project == null) {
             System.out.println("No such project.");
             return;
@@ -38,7 +38,7 @@ public class TaskCreateCommand extends AbstractCommand {
             return;
         }
         final Task task = new Task();
-        task.setProjectId(in);
+        task.setProject(project);
         System.out.println("Enter term in format: yyyy-MM-dd");
         in = getController().nextLine();
         final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -62,7 +62,7 @@ public class TaskCreateCommand extends AbstractCommand {
         }
         addWorker(task);
         System.out.println("Task added");
-        getController().getTaskService().saveTask(task);
+        getController().getTaskService().save(task);
     }
 
     private void addWorker(final Task task) {
@@ -71,15 +71,15 @@ public class TaskCreateCommand extends AbstractCommand {
         if (ServiceConstant.END_ENTER_ASSIGNER.equals(in)) {
             return;
         }
-        User worker = getController().getUserService().findById(in);
+        final User worker = getController().getUserService().findById(in);
         if (worker == null) {
             System.out.println("No such executor.");
-            addWorker(task);
         }
-
-        final Assignee assignee = getController().getAssigneeService().createAssignee(task.getId(), worker.getId());
-        if (assignee == null) {
-            System.out.println("Problem to save information about executor.");
+        if (worker != null) {
+            final Assignee assignee = getController().getAssigneeService().createAssignee(task.getId(), worker.getId());
+            if (assignee == null) {
+                System.out.println("Problem to save information about executor.");
+            }
         }
         addWorker(task);
     }

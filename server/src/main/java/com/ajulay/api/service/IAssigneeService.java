@@ -1,7 +1,7 @@
 package com.ajulay.api.service;
 
-import com.ajulay.api.dao.IAssigneeDAO;
 import com.ajulay.entity.Assignee;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -10,22 +10,25 @@ import java.util.List;
  */
 public interface IAssigneeService {
 
-    Assignee createAssignee(String taskId, String assignerId);
+    Assignee createAssignee(@Nullable String taskId, String assignerId);
 
-    Assignee deleteAssignee(String id);
+    Assignee removeById(String id);
 
-    Assignee updateAssignee(Assignee assignee);
+    Assignee update(Assignee assignee);
 
-    Assignee getById(String id);
+    Assignee findById(String id);
 
-    List<Assignee> findAllAssignee();
+    List<Assignee> findAll();
 
-    List<Assignee> merge(List<Assignee> assignees);
+    List<Assignee> findAllByUserId(String currentUser);
 
-    List<Assignee> findAssigneeAllByUserId(String currentUser);
+    List<Assignee> findAllByTaskId(String taskId);
 
-    IAssigneeDAO getAssigneeDAO();
+    List<Assignee> removeAllByTaskId(String taskId);
 
-    List<Assignee> deleteAssigneeAllByTaskId(String taskId);
+    Assignee save(Assignee assignee);
 
+    Assignee remove(Assignee assignee);
+
+    List<Assignee> updateAll(List<Assignee> assignees);
 }

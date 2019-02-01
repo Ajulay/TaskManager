@@ -2,7 +2,7 @@ package com.ajulay.command;
 
 import com.ajulay.endpoint.Project;
 import com.ajulay.endpoint.Session;
-import com.ajulay.endpoint.Task;
+import com.ajulay.endpoint.TaskView;
 import com.ajulay.endpoint.User;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class UserFindAllByTaskCommand extends AbstractCommand {
         final Session session = getController().getCurrentSession();
         System.out.println("Enter task id");
         final String taskId = getController().nextLine();
-        final Task task = getController().getTaskService().getTaskSoapEndPointPort().findTaskById(session, taskId);
+        final TaskView task = getController().getTaskService().getTaskSoapEndPointPort().findTaskById(session, taskId);
         final Project project = getController().getProjectService().getProjectSoapEndPointPort().getById(session, task.getProjectId());
         if (project == null) {
             System.out.println("No project for your task.");

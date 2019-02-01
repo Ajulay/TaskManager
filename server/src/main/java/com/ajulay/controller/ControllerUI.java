@@ -5,30 +5,16 @@ import com.ajulay.api.service.*;
 import com.ajulay.api.soap.*;
 import com.ajulay.command.*;
 import com.ajulay.constants.ServiceConstant;
-import com.ajulay.dao.util.DataBaseConnection;
-import com.ajulay.endpoint.*;
 import com.ajulay.entity.Session;
 import com.ajulay.entity.User;
 import com.ajulay.enumirated.Role;
 import com.ajulay.hibernate.HibernateUtil;
-import com.ajulay.mybatis.mapper.MyBatisUserDao;
-import com.ajulay.service.OveralService;
 import com.ajulay.service.SessionService;
-import org.apache.ibatis.datasource.pooled.PooledDataSource;
-import org.apache.ibatis.mapping.Environment;
-import org.apache.ibatis.session.Configuration;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.apache.ibatis.transaction.TransactionFactory;
-import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
-import org.hibernate.SessionFactory;
 import org.jetbrains.annotations.NotNull;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.sql.DataSource;
 import javax.xml.ws.Endpoint;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 
@@ -48,34 +34,41 @@ public class ControllerUI implements IControllerUI {
             DataLoadXmlCommand.class, UserChangePasswordCommand.class, LogOutCommand.class,
             SessionAllShowCommand.class, SessionFindByIdCommand.class, UserDeleteById.class
     };
-    @Inject
-    private IUserService userService; //= new UserService();
 
     @Inject
-    private IProjectService projectService; //= new ProjectService();
+    private IProjectSoapService projectSoapService;
 
     @Inject
-    private ITaskService taskService; //= new TaskService();
+    private ITaskSoapService taskSoapService;
 
     @Inject
-    private IAssigneeService assigneeService;// = new AssigneeService();
+    private IUserSoapService userSoapService;
 
     @Inject
-    private SessionService sessionService; // = new SessionService();
+    private IAssigneeSoapService assigneeSoapService;
 
     @Inject
-    private OveralService overalService; //= new OveralService(assigneeService, userService, projectService,
-    //taskService, sessionService);
+    private ISessionSoapService sessionSoapService;
+
+    @Inject
+    private IUserService userService;
+
+    @Inject
+    private IProjectService projectService;
+
+    @Inject
+    private ITaskService taskService;
+
+    @Inject
+    private IAssigneeService assigneeService;
+
+    @Inject
+    private SessionService sessionService;
 
     private final Map<String, AbstractCommand> commands = new HashMap<>();
 
     private final Scanner scanner = new Scanner(System.in);
 
-    private final DataBaseConnection conn = new DataBaseConnection();
-
-    private SqlSessionFactory sqlSessionFactory;
-
-    private SessionFactory sessionFactory;
 
     public void register(final Class... clazzes) throws Exception {
         for (final Class clazz : clazzes) {
@@ -95,12 +88,11 @@ public class ControllerUI implements IControllerUI {
     }
 
     public void run() throws Exception {
-        setConnection();
+        startHibernate();
         runServices();
-        startMyBatis();
         loadData();
         controlSession();
-        startHibernate();
+
         System.out.println("TASK MANAGER");
         while (true) {
             if (getSessionService().getCurrentSession() == null) {
@@ -131,37 +123,34 @@ public class ControllerUI implements IControllerUI {
     }
 
     private void runServices() {
-        final ISessionSoapService sessionSoapService = new SessionSoapEndPoint(overalService);
         Endpoint.publish("http://localhost:8080/login", sessionSoapService);
-        final IProjectSoapService projectSoapService = new ProjectSoapEndPoint(overalService);
         Endpoint.publish("http://localhost:8080/project", projectSoapService);
-        final ITaskSoapService taskSoapService = new TaskSoapEndPoint(overalService);
         Endpoint.publish("http://localhost:8080/task", taskSoapService);
-        final IUserSoapService userSoapService = new UserSoapEndPoint(overalService);
         Endpoint.publish("http://localhost:8080/user", userSoapService);
-        final IAssigneeSoapService assigneeSoapService = new AssigneeSoapEndPoint(overalService);
         Endpoint.publish("http://localhost:8080/assignee", assigneeSoapService);
     }
 
-    private void setConnection() throws Exception {
-        conn.connect();
-        getProjectService().getProjectDAO().setConn(conn.getConn());
-        getSessionService().getSessionDao().setConn(conn.getConn());
-        getAssigneeService().getAssigneeDAO().setConn(conn.getConn());
-        getTaskService().getDao().setSessionFactory(sessionFactory);
-    }
-    private void loadData() throws Exception {
+    private void loadData() {
         System.out.println("Load data");
         final User admin = getUserService().findByLogin("admin");
         if (admin == null) {
-            final User newAdmin = getUserService().createUser("admin");
+            final User newAdmin = getUserService().createByLogin("admin");
             newAdmin.setSurname("Admin");
             newAdmin.setRole(Role.ADMIN);
             newAdmin.setLogin(ServiceConstant.START_LOGIN);
-            newAdmin.setPassword(ServiceConstant.START_PASSWORD_HASH);
-            getUserService().mergeUser(newAdmin);
+            newAdmin.setPasswordHash(ServiceConstant.START_PASSWORD_HASH);
+            getUserService().update(newAdmin); //TODO problem?
         }
-        Thread.sleep(ServiceConstant.LOAD_TIME);
+
+        final User user = getUserService().findByLogin("user");
+        if (user == null) {
+            final User newAdmin = getUserService().createByLogin("user");
+            newAdmin.setSurname("User");
+            newAdmin.setRole(Role.WORKER);
+            newAdmin.setLogin("user");
+            newAdmin.setPasswordHash("user".hashCode() + "");
+            getUserService().update(newAdmin);
+        }
     }
 
     private void controlSession() {
@@ -175,13 +164,13 @@ public class ControllerUI implements IControllerUI {
                         e.printStackTrace();
                     }
                     final List<Session> sessionAllForRemove = new ArrayList<>();
-                    for (final Session session : sessionService.findSessionAll()) {
+                    for (final Session session : sessionService.findAll()) {
                         final long ldate = new Date().getTime() - session.getCreatedDate().getTime();
                         if (ldate > ServiceConstant.CONTROL_TIME) {
                             sessionAllForRemove.add(session);
                         }
                     }
-                    sessionService.deleteSessionAll(sessionAllForRemove);
+                    sessionService.removeAll(sessionAllForRemove);
                 }
             }
         };
@@ -189,32 +178,9 @@ public class ControllerUI implements IControllerUI {
         controlThread.start();
     }
 
-    private void startMyBatis() throws IOException {
-        final FileInputStream fis = new FileInputStream(ServiceConstant.HIBERNATE_PROPERTY_ADDRESS);
-        final Properties property = new Properties();
-        property.load(fis);
-        String username = property.getProperty(ServiceConstant.HIBERNATE_USER);
-        String password = property.getProperty(ServiceConstant.HIBERNATE_PASSWORD);
-        username = ServiceConstant.EMPTY.equals(username) ? null : username;
-        password = ServiceConstant.EMPTY.equals(password) ? null : password;
-        final DataSource dataSource = new PooledDataSource(
-                property.getProperty(ServiceConstant.HIBERNATE_DRIVER),
-                property.getProperty(ServiceConstant.HIBERNATE_CONNECT),
-                username, password);
-        final TransactionFactory transactionFactory = new JdbcTransactionFactory();
-
-        final Environment environment = new Environment("development",
-                transactionFactory, dataSource);
-        final Configuration configuration = new Configuration(environment);
-        configuration.addMapper(MyBatisUserDao.class);
-        sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);
-        getUserService().getUserDao().setSqlSessionFactory(sqlSessionFactory);
-
-    }
 
     private void startHibernate() throws IOException {
-        sessionFactory = HibernateUtil.factory();
-        getTaskService().getDao().setSessionFactory(sessionFactory);
+        HibernateUtil.factory();
     }
 
     public IUserService getUserService() {
@@ -239,10 +205,6 @@ public class ControllerUI implements IControllerUI {
 
     public Scanner getScanner() {
         return scanner;
-    }
-
-    public IOveralService getOveralService() {
-        return overalService;
     }
 
     public void registerCommandAll() throws Exception {

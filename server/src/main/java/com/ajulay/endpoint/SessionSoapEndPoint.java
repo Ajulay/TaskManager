@@ -1,13 +1,17 @@
 package com.ajulay.endpoint;
 
-import com.ajulay.api.service.IOveralService;
 import com.ajulay.api.soap.ISessionSoapService;
 import com.ajulay.endpoint.transport.Success;
+import com.ajulay.endpoint.util.SessionSignature;
 import com.ajulay.entity.Session;
 import com.ajulay.entity.User;
 import com.ajulay.exception.checked.NoSuchAssignerException;
 import com.ajulay.exception.unchecked.LoginExistsException;
+import com.ajulay.service.SessionService;
+import com.ajulay.service.UserService;
+import org.jetbrains.annotations.Nullable;
 
+import javax.inject.Inject;
 import javax.jws.WebService;
 import java.util.Date;
 import java.util.List;
@@ -15,61 +19,63 @@ import java.util.List;
 @WebService
 public class SessionSoapEndPoint implements ISessionSoapService {
 
-    private IOveralService overalService;
+    @Inject
+    private SessionService sessionService;
 
-
-    public SessionSoapEndPoint(IOveralService sessionService) {
-        this.overalService = sessionService;
-    }
-
-    public SessionSoapEndPoint() {
-    }
+    @Inject
+    private UserService userService;
 
     @Override
+    @Nullable
     public Session login(final String login, final String passwordHash) throws Exception {
-        final User user = overalService.getUserService().findByLogin(login);
+        final User user = userService.findByLogin(login);
         if (user == null) throw new NoSuchAssignerException();
-        if (!user.getPassword().equals(passwordHash)) return null;
+        if (!user.getPasswordHash().equals(passwordHash)) return null;
         final Session session = new Session();
         session.setUserId(user.getId());
         session.setCreatedDate(new Date());
-        session.setSignature(user.getPassword());
-        overalService.getSessionService().saveSession(session);
+        session.setSignature(SessionSignature.sign(user.getId()));//TODO Property
+        sessionService.save(session);
         return session;
     }
 
     @Override
     public Success register(final String login, final String passwordHash) {
-        final User user = overalService.getUserService().createUser(login);
+        final User user = userService.createByLogin(login);
         if (user == null) throw new LoginExistsException();
-        user.setPassword(passwordHash);
+        user.setPasswordHash(passwordHash);
         user.setSurname(login);
-        overalService.getUserService().mergeUser(user);
+        userService.update(user);
         return new Success();
     }
 
     @Override
+    @Nullable
     public Success logout(final Session session) {
-        final Session currentSession = overalService.getSessionService().findSessionById(session.getId());
+        final Session currentSession = sessionService.findById(session.getId());
+        if (currentSession == null) return null;
         if (!currentSession.getSignature().equals(session.getSignature())) {
             return null;
         }
-        overalService.getSessionService().deleteSessionById(session.getId());
+        sessionService.removeById(session.getId());
         return new Success();
     }
 
     @Override
+    @Nullable
     public List<Session> getSessionAll(final Session session) {
-        final Session currentSession = overalService.getSessionService().findSessionById(session.getId());
+        final Session currentSession = sessionService.findById(session.getId());
+        if (currentSession == null) return null;
         if (!currentSession.getSignature().equals(session.getSignature())) {
             return null;
         }
-        return overalService.getSessionService().findSessionByUserId(session.getUserId());
+        return sessionService.findByUserId(session.getUserId());
     }
 
     @Override
+    @Nullable
     public Success deleteSessionById(final Session session, final String sessionId) {
-        final Session deleteSession = overalService.getSessionService().deleteSessionById(sessionId);
+        final Session deleteSession = sessionService.removeById(sessionId);
         if (deleteSession == null) return null;
         return new Success();
     }

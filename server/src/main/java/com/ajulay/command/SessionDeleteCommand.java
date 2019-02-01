@@ -15,6 +15,7 @@ public class SessionDeleteCommand extends AbstractCommand {
     @Override
     public void execute() {
         final String sessionId = getController().nextLine();
-        getController().getSessionService().deleteSessionById(sessionId);
+        getController().getSessionService().removeById(sessionId);
     }
+
 }

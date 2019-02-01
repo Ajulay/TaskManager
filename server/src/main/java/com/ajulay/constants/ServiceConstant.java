@@ -18,7 +18,7 @@ public class ServiceConstant {
     public static final boolean SUCCESS = true;
     public static final long CONTROL_TIME = 1000 * 60 * 30;
     public static final String EMPTY = "";
-    public static final String HIBERNATE_PROPERTY_ADDRESS = "server/src/main/hibernate.properties";
+    public static final String HIBERNATE_PROPERTY_ADDRESS = "server/src/main/resources/application.properties";
     public static final String HIBERNATE_CONNECT = "hibernate.connection.url";
     public static final String HIBERNATE_DRIVER = "hibernate.connection.driver_class";
     public static final String HIBERNATE_USER = "hibernate.connection.user";

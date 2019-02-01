@@ -16,8 +16,9 @@ public class SessionAllShowCommand extends AbstractCommand {
     @Override
     public void execute() {
         int index = 1;
-        for (Session session : getController().getOveralService().getSessionService().findSessionAll()) {
-            System.out.println(index++ + ". session id: " + session.getId() + ", signature: " + session.getSignature());
+        for (Session session : getController().getSessionService().findAll()) {
+            System.out.println(index++ + ". session id: " + session.getId() + ", signature: " + session.getSignature() +
+                    ", user: " + session.getUserId());
         }
     }
 

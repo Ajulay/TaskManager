@@ -18,7 +18,7 @@ public class SessionFindByIdCommand extends AbstractCommand {
     public void execute() {
         System.out.println("Enter session id:");
         final String sessionId = getController().nextLine();
-        Session session = getController().getOveralService().getSessionService().findSessionById(sessionId);
+        Session session = getController().getSessionService().findById(sessionId);
         System.out.println("Session: " + session.getSignature());
     }
 

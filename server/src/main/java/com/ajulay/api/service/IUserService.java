@@ -1,8 +1,8 @@
 package com.ajulay.api.service;
 
 
-import com.ajulay.api.dao.IUserDAO;
 import com.ajulay.entity.User;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -11,19 +11,13 @@ import java.util.List;
  */
 public interface IUserService {
 
-    User createUser(String login);
+    User createByLogin(String login);
 
-    User deleteUser(String id);
+    User removeById(String id);
 
-    User mergeUser(User user);
-
-    User getBySurname(String surname);
+    User update(User user);
 
     User findById(String id);
-
-    List<User> getUsers();
-
-    List<User> merge(List<User> assigners);
 
     User findByLogin(String login);
 
@@ -31,8 +25,16 @@ public interface IUserService {
 
     User getCurrentUser();
 
-    void setCurrentUser(User currentUser);
+    void setCurrentUser(@Nullable User currentUser);
 
-    IUserDAO getUserDao();
+    User save(User user);
+
+    User remove(User user);
+
+    List<User> findAll();
+
+    List<User> updateAll(List<User> users);
+
+    List<User> findUserAllByTaskId(String taskId);
 
 }

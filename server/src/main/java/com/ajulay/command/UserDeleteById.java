@@ -19,7 +19,7 @@ public class UserDeleteById extends AbstractCommand {
     public void execute() throws Exception {
         System.out.println("Enter user id:");
         final String userId = getController().nextLine();
-        final User user = getController().getUserService().deleteUser(userId);
+        final User user = getController().getUserService().removeById(userId);
         System.out.println("User with id: " + user.getId() + " deleted.");
         if (ServiceConstant.ADMIN.equals(user.getLogin())) {
             getController().getCommands().get(LogOutCommand.COMMAND).execute();

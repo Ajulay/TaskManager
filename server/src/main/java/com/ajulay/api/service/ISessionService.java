@@ -1,36 +1,35 @@
 package com.ajulay.api.service;
 
-import com.ajulay.api.dao.ISessionDao;
 import com.ajulay.entity.Session;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public interface ISessionService {
 
-    Session saveSession(Session session);
+    Session save(Session session);
 
-    Session deleteSessionById(String id);
-
-    List<Session> findSessionAll();
-
-    Session findSessionById(String sessionId);
+    Session removeById(String id);
 
     Session findBySignature(String signiture);
 
-    Session deleteSessionBySignature(String signiture);
+    Session removeBySignature(String signiture);
 
-    List<Session> saveSessionAll(List<Session> sessions);
+    List<Session> removeAll();
 
-    List<Session> deleteSessionAll(List<Session> sessionAllForRemove);
+    List<Session> findByUserId(String userId);
 
-    List<Session> deleteSessionAll();
+    Session findById(String id);
+
+    Session remove(Session entity);
+
+    Session update(Session entity);
+
+    List<Session> findAll();
 
     Session getCurrentSession();
 
-    void setCurrentSession(Session currentSession);
+    void setCurrentSession(@Nullable Session currentSession);
 
-    List<Session> findSessionByUserId(String userId);
-
-    ISessionDao getSessionDao();
-
+    void removeAll(List<Session> sessionAllForRemove);
 }

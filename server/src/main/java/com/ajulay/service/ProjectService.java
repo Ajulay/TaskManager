@@ -1,12 +1,15 @@
 package com.ajulay.service;
 
-import com.ajulay.api.dao.IProjectDAO;
+import com.ajulay.api.repository.IProjectRepository;
 import com.ajulay.api.service.IProjectService;
-import com.ajulay.dao.ProjectDAO;
 import com.ajulay.entity.Project;
-import com.ajulay.exception.unchecked.NullDataForProjectException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,68 +20,92 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class ProjectService implements IProjectService {
 
-    private final IProjectDAO projectDAO = new ProjectDAO();
+    @Inject
+    @NotNull
+    private IProjectRepository projectRepository;
 
-    public Project getByName(final String projectName) {
-        if (projectName.isEmpty()) {
-            throw new NullDataForProjectException();
-        }
-        for (final Project p : getProjects()) {
-            if (projectName.equals(p.getName())) {
-                return p;
-            }
-        }
-        return null;
-    }
+    @Inject
+    @NotNull
+    private EntityManager entityManager;
 
     @Override
-    public Project getById(final String projectId) {
-        if (projectId == null || projectId.isEmpty()) {
+    @Nullable
+    public Project findById(@NotNull final String projectId) {
+        if (projectId.isEmpty()) {
             return null;
         }
-        return projectDAO.findById(projectId);
-    }
-
-    public List<Project> getProjects() {
-        return projectDAO.findAll();
-    }
-
-    @Override
-    public Project saveProject(final Project project) {
-        if (project == null) throw new NullPointerException();
-        return projectDAO.create(project);
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable final Project project = projectRepository.findById(projectId);
+        transaction.commit();
+        return project;
     }
 
     @Override
-    public List<Project> merge(final List<Project> projects) {
-        if (projects == null) return null;
-        return projectDAO.merge(projects);
+    @NotNull
+    public List<Project> findAll() {
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @NotNull final List<Project> projects = projectRepository.findAll();
+        transaction.commit();
+        return projects;
     }
 
     @Override
-    public Project createProjectByName(final String projectName) {
-        if (projectName == null) return null;
+    @Nullable
+    public Project save(@NotNull final Project project) {
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable final Project savedProject = projectRepository.save(project);
+        transaction.commit();
+        return savedProject;
+    }
+
+    @Override
+    @Nullable
+    public Project createProjectByName(@NotNull final String projectName) {
+        if (projectName.isEmpty()) return null;
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
         final Project project = new Project();
         project.setName(projectName);
-        return projectDAO.create(project);
+        @Nullable final Project savedProject = projectRepository.save(project);
+        transaction.commit();
+        return savedProject;
     }
 
     @Override
-    public Project updateProject(final Project project) {
-        if (project == null) return null;
-        return projectDAO.update(project);
+    @Nullable
+    public Project update(@NotNull final Project project) {
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @Nullable final Project updatedProject = projectRepository.update(project);
+        transaction.commit();
+        return updatedProject;
     }
 
-    public List<Project> findProjectByUserId(final String userId) {
-        if (userId == null) return Collections.emptyList();
-        final List<Project> userProjects = projectDAO.findAll().stream()
+    @NotNull
+    public List<Project> findAllByUserId(@NotNull final String userId) {
+        if (userId.isEmpty()) return Collections.emptyList();
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        @NotNull final List<Project> userProjects = projectRepository.findAll().stream()
                 .filter((project) -> project.getAuthorId().equals(userId))
                 .collect(Collectors.toList());
+        transaction.commit();
         return userProjects;
     }
 
-    public IProjectDAO getProjectDAO() {
-        return projectDAO;
+    @Override
+    @NotNull
+    public List<Project> updateAll(@NotNull final List<Project> projects) {
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        for (@NotNull final Project project : projects) {
+            entityManager.merge(project);
+        }
+        transaction.commit();
+        return projects;
     }
 
 }

@@ -1,7 +1,7 @@
 package com.ajulay.api.service;
 
 
-import com.ajulay.api.dao.ITaskDAO;
+
 import com.ajulay.entity.Task;
 
 import java.util.List;
@@ -11,20 +11,25 @@ import java.util.List;
  */
 public interface ITaskService {
 
-    Task saveTask(Task task);
-
-    Task deleteTask(String id);
-
     Task changeStatus(String taskId, String status);
 
-    List<Task> findTaskAll();
+    List<Task> findAllByProject(String projectId);
 
-    List<Task> findTaskAllByProject(String project_id);
+    Task save(Task task);
 
-    Task findTaskById(String taskId);
+    Task findById(String id);
 
-    List<Task> merge(List<Task> tasks);
+    Task remove(Task task);
 
-    ITaskDAO getDao();
+    Task update(Task task);
 
+    List<Task> findAll();
+
+    List<Task> updateAll(List<Task> tasks);
+
+    Task removeById(String taskId);
+
+    List<Task> findAllByUserId(String currentUser);
+
+    List<Task> findTaskAllByUserId(String currentUserId);
 }

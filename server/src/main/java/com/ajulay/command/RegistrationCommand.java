@@ -19,7 +19,7 @@ public class RegistrationCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws Exception {
+    public void execute() {
         User user = null;
         for (int i = 1; i <= ServiceConstant.MAX_ATTEMPT; i++) {
             if (i == ServiceConstant.MAX_ATTEMPT) {
@@ -28,7 +28,7 @@ public class RegistrationCommand extends AbstractCommand {
             }
             System.out.println("Enter login (required):");
             final String login = getController().nextLine();
-            user = getController().getUserService().createUser(login);
+            user = getController().getUserService().createByLogin(login);
             for (int j = 1; j <= ServiceConstant.MAX_ATTEMPT; j++) {
                 if (j == ServiceConstant.MAX_ATTEMPT) {
                     System.out.println("Your attempts are ended.");
@@ -42,7 +42,7 @@ public class RegistrationCommand extends AbstractCommand {
                     System.out.println("passwords are not equals");
                     continue;
                 }
-                user.setPassword(confirmedPassword);
+                user.setPasswordHash(confirmedPassword);
                 break;
             }
             System.out.println("Enter surname (required):");
@@ -57,7 +57,7 @@ public class RegistrationCommand extends AbstractCommand {
                 System.out.println(e.getMessage());
                 continue;
             }
-            getController().getUserService().mergeUser(user);
+            getController().getUserService().update(user); //TODO smth problem?
             break;
         }
     }

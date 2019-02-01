@@ -1,12 +1,15 @@
 package com.ajulay.endpoint;
 
-import com.ajulay.api.service.IOveralService;
+import com.ajulay.api.service.ISessionService;
+import com.ajulay.api.service.IUserService;
 import com.ajulay.api.soap.IUserSoapService;
 import com.ajulay.constants.ServiceConstant;
 import com.ajulay.endpoint.transport.Success;
 import com.ajulay.entity.Session;
 import com.ajulay.entity.User;
+import org.jetbrains.annotations.Nullable;
 
+import javax.inject.Inject;
 import javax.jws.WebService;
 import java.util.List;
 
@@ -17,104 +20,108 @@ import java.util.List;
 @WebService
 public class UserSoapEndPoint implements IUserSoapService {
 
-    private IOveralService overalService;
+    @Inject
+    private ISessionService sessionService;
 
-    public UserSoapEndPoint() {
-    }
-
-    public UserSoapEndPoint(IOveralService overalService) {
-        this.overalService = overalService;
-    }
+    @Inject
+    private IUserService userService;
 
     @Override
-    public Success deleteUser(final Session session, final String surname) {
-        final Session currentSession = overalService.getSessionService().findSessionById(session.getId());
+    @Nullable
+    public Success deleteUser(final Session session, final String id) {
+        final Session currentSession = sessionService.findById(session.getId());
         if (!currentSession.getSignature().equals(session.getSignature())) {
             return null;
         }
-        final User deletedUser = overalService.getUserService().deleteUser(surname);
+        final User deletedUser = userService.removeById(id);
         if (deletedUser == null) return null;
         return new Success();
     }
 
     @Override
+    @Nullable
     public Success updateUser(final Session session, final User user) {
-        final Session currentSession = overalService.getSessionService().findSessionById(session.getId());
+        final Session currentSession = sessionService.findById(session.getId());
         if (!currentSession.getSignature().equals(session.getSignature())) {
             return null;
         }
-        final User updatedUser = overalService.getUserService().mergeUser(user);
+        final User updatedUser = userService.update(user);
         if (updatedUser == null) return null;
         return new Success();
     }
 
     @Override
-    public User getBySurname(final Session session, final String surname) {
-        final Session currentSession = overalService.getSessionService().findSessionById(session.getId());
+    @Nullable
+    public User getBySurname(final Session session, final String id) {
+        final Session currentSession = sessionService.findById(session.getId());
         if (!currentSession.getSignature().equals(session.getSignature())) {
             return null;
         }
-        return overalService.getUserService().getBySurname(surname);
+        return userService.findById(id);
     }
 
     @Override
+    @Nullable
     public User findById(final Session session, final String id) {
-        final Session currentSession = overalService.getSessionService().findSessionById(session.getId());
+        final Session currentSession = sessionService.findById(session.getId());
         if (!currentSession.getSignature().equals(session.getSignature())) {
             return null;
         }
-        return overalService.getUserService().findById(id);
+        return userService.findById(id);
     }
 
     @Override
+    @Nullable
     public List<User> getUsers(final Session session) {
-        final Session currentSession = overalService.getSessionService().findSessionById(session.getId());
+        final Session currentSession = sessionService.findById(session.getId());
         if (!currentSession.getSignature().equals(session.getSignature())) {
             return null;
         }
-        return overalService.getUserService().getUsers();
+        return userService.findAll();
     }
 
     @Override
+    @Nullable
     public Success merge(final Session session, final List<User> users) {
-        final Session currentSession = overalService.getSessionService().findSessionById(session.getId());
+        final Session currentSession = sessionService.findById(session.getId());
         if (!currentSession.getSignature().equals(session.getSignature())) {
             return null;
         }
-        final List<User> mergedUsers = overalService.getUserService().merge(users);
+        final List<User> mergedUsers = userService.updateAll(users);
         if (mergedUsers == null) return null;
         return new Success();
     }
 
     @Override
     public User findByLogin(final Session session, final String login) {
-        final Session currentSession = overalService.getSessionService().findSessionById(session.getId());
+        final Session currentSession = sessionService.findById(session.getId());
         if (!currentSession.getSignature().equals(session.getSignature())) {
             return null;
         }
         if (ServiceConstant.LOG_OUT.equals(login)) {
-            overalService.getSessionService().deleteSessionById(session.getId());
+            sessionService.remove(session);
         }
-        return overalService.getUserService().findByLogin(login);
+        return userService.findByLogin(login);
     }
 
     @Override
+    @Nullable
     public Success changePassword(final Session session, final User user, final String password) {
-        final Session currentSession = overalService.getSessionService().findSessionById(session.getId());
+        final Session currentSession = sessionService.findById(session.getId());
         if (!currentSession.getSignature().equals(session.getSignature())) {
             return null;
         }
-        final User changedUser = overalService.getUserService().changePassword(user, password);
+        final User changedUser = userService.changePassword(user, password);
         if (changedUser == null) return null;
         return new Success();
     }
 
     public List<User> findUserAllByTaskId(final Session session, final String taskId) {
-        final Session currentSession = overalService.getSessionService().findSessionById(session.getId());
+        final Session currentSession = sessionService.findById(session.getId());
         if (!currentSession.getSignature().equals(session.getSignature())) {
             return null;
         }
-        return overalService.findUserAllByTaskId(taskId);
+        return userService.findUserAllByTaskId(taskId);
     }
 
 }

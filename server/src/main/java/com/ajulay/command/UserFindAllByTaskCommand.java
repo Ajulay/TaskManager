@@ -23,8 +23,8 @@ public class UserFindAllByTaskCommand extends AbstractCommand {
         final String currentUserId = getController().getSessionService().getCurrentSession().getUserId();
         System.out.println("Enter task id");
         final String taskId = getController().nextLine();
-        final Task task = getController().getTaskService().findTaskById(taskId);
-        final Project project = getController().getProjectService().getById(task.getProjectId());
+        final Task task = getController().getTaskService().findById(taskId);
+        final Project project = getController().getProjectService().findById(task.getProject().getId());
         if (project == null) {
             System.out.println("No project for your task.");
             return;
@@ -33,7 +33,7 @@ public class UserFindAllByTaskCommand extends AbstractCommand {
             System.out.println("You can see executor(s) of your projects only.");
             return;
         }
-        final List<User> users = getController().getOveralService().findUserAllByTaskId(taskId);
+        final List<User> users = getController().getUserService().findUserAllByTaskId(taskId);
         System.out.println("Task content:\n" + task.getContent());
         int index = 1;
         for (final User user : users) {

@@ -1,5 +1,6 @@
 package com.ajulay.command;
 
+import com.ajulay.endpoint.util.SessionSignature;
 import com.ajulay.entity.Session;
 import com.ajulay.entity.User;
 
@@ -32,7 +33,7 @@ public class LoginCommand extends AbstractCommand {
             }
             System.out.println("Enter password");
             final String passwordHash = getController().nextLine().hashCode() + "";
-            if (!user.getPassword().equals(passwordHash)) {
+            if (!user.getPasswordHash().equals(passwordHash)) {
                 System.out.println("Incorrect password");
                 continue;
             }
@@ -45,12 +46,11 @@ public class LoginCommand extends AbstractCommand {
         }
         getController().getCommands().clear();
         getController().registerCommandAll();
-        //getController().getUserService().setCurrentUser(user);
         final Session session = new Session();
         session.setUserId(user.getId());
-        session.setSignature(user.getPassword());
+        session.setSignature(SessionSignature.sign(user.getId()));
         session.setCreatedDate(new Date());
-        getController().getSessionService().saveSession(session);
+        getController().getSessionService().save(session);
         getController().getSessionService().setCurrentSession(session);
     }
 
