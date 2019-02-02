@@ -2,6 +2,8 @@ package com.ajulay.command;
 
 import com.ajulay.entity.Session;
 
+import java.util.List;
+
 public class SessionFindByIdCommand extends AbstractCommand {
 
     @Override
@@ -11,15 +13,18 @@ public class SessionFindByIdCommand extends AbstractCommand {
 
     @Override
     public String getDescription() {
-        return "find ssesion by id";
+        return "find session by user id";
     }
 
     @Override
     public void execute() {
-        System.out.println("Enter session id:");
-        final String sessionId = getController().nextLine();
-        Session session = getController().getSessionService().findById(sessionId);
-        System.out.println("Session: " + session.getSignature());
+        System.out.println("Enter user id:");
+        final String userId = getController().nextLine();
+        final List<Session> sessions = getController().getSessionService().findByUserId(userId);
+        for (final Session session : sessions) {
+            System.out.println("Session: " + session.getSignature());
+        }
+
     }
 
 }

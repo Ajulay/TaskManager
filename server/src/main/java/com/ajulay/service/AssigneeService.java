@@ -1,8 +1,8 @@
 package com.ajulay.service;
 
-import com.ajulay.api.repository.IAssigneeRepository;
 import com.ajulay.api.service.IAssigneeService;
 import com.ajulay.entity.Assignee;
+import com.ajulay.repository.AssigneeRepository;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +21,7 @@ public class AssigneeService implements IAssigneeService {
 
     @Inject
     @NotNull
-    private IAssigneeRepository assigneeRepository;
+    private AssigneeRepository assigneeRepository;
 
     @Inject
     @NotNull

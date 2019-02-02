@@ -1,8 +1,8 @@
 package com.ajulay.service;
 
-import com.ajulay.api.repository.IProjectRepository;
 import com.ajulay.api.service.IProjectService;
 import com.ajulay.entity.Project;
+import com.ajulay.repository.ProjectRepository;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,7 +12,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * {@inheritDoc}
@@ -22,7 +21,7 @@ public class ProjectService implements IProjectService {
 
     @Inject
     @NotNull
-    private IProjectRepository projectRepository;
+    private ProjectRepository projectRepository;
 
     @Inject
     @NotNull
@@ -89,9 +88,7 @@ public class ProjectService implements IProjectService {
         if (userId.isEmpty()) return Collections.emptyList();
         @NotNull final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        @NotNull final List<Project> userProjects = projectRepository.findAll().stream()
-                .filter((project) -> project.getAuthorId().equals(userId))
-                .collect(Collectors.toList());
+        @NotNull final List<Project> userProjects = projectRepository.findAllByUserId(userId);
         transaction.commit();
         return userProjects;
     }

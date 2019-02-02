@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 
-@ApplicationScoped
+
 public class HibernateUtil {
 
     @Nullable
@@ -56,6 +56,7 @@ public class HibernateUtil {
         return null;
     }
 
+    @ApplicationScoped
     @Produces
     @Nullable
     public EntityManager getEntityManager() throws IOException {

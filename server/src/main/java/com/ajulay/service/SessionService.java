@@ -1,8 +1,8 @@
 package com.ajulay.service;
 
-import com.ajulay.api.repository.ISessionRepository;
 import com.ajulay.api.service.ISessionService;
 import com.ajulay.entity.Session;
+import com.ajulay.repository.SessionRepository;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +18,7 @@ public class SessionService implements ISessionService {
 
     @Inject
     @NotNull
-    private ISessionRepository sessionRepository;
+    private SessionRepository sessionRepository;
 
     @Inject
     @NotNull
@@ -57,7 +57,7 @@ public class SessionService implements ISessionService {
         if (signiture.isEmpty()) return null;
         @NotNull final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        @Nullable final Session session = sessionRepository.findBySigniture(signiture);
+        @Nullable final Session session = sessionRepository.findBySignature(signiture);
         transaction.commit();
         return session;
     }
@@ -67,7 +67,7 @@ public class SessionService implements ISessionService {
     public Session removeBySignature(@NotNull final String signature) {
         @NotNull final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        @Nullable final Session session = sessionRepository.findBySigniture(signature);
+        @Nullable final Session session = sessionRepository.findBySignature(signature);
         if (session != null) {
             sessionRepository.remove(session);
         }
@@ -152,9 +152,12 @@ public class SessionService implements ISessionService {
 
     @Override
     public void removeAll(@NotNull final List<Session> sessions) {
+        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
         for (@NotNull final Session session : sessions) {
-
+            entityManager.remove(session);
         }
+        transaction.commit();
     }
 
 

@@ -1,6 +1,6 @@
 package com.ajulay.command;
 
-import com.ajulay.endpoint.util.SessionSignature;
+import com.ajulay.controller.util.PropertyReader;
 import com.ajulay.entity.Session;
 import com.ajulay.entity.User;
 
@@ -48,7 +48,7 @@ public class LoginCommand extends AbstractCommand {
         getController().registerCommandAll();
         final Session session = new Session();
         session.setUserId(user.getId());
-        session.setSignature(SessionSignature.sign(user.getId()));
+        session.setSignature(PropertyReader.SessionSignature.sign(user.getId()));
         session.setCreatedDate(new Date());
         getController().getSessionService().save(session);
         getController().getSessionService().setCurrentSession(session);

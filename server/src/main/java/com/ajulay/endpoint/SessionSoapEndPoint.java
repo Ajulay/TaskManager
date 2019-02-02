@@ -1,8 +1,8 @@
 package com.ajulay.endpoint;
 
 import com.ajulay.api.soap.ISessionSoapService;
+import com.ajulay.controller.util.PropertyReader;
 import com.ajulay.endpoint.transport.Success;
-import com.ajulay.endpoint.util.SessionSignature;
 import com.ajulay.entity.Session;
 import com.ajulay.entity.User;
 import com.ajulay.exception.checked.NoSuchAssignerException;
@@ -34,7 +34,7 @@ public class SessionSoapEndPoint implements ISessionSoapService {
         final Session session = new Session();
         session.setUserId(user.getId());
         session.setCreatedDate(new Date());
-        session.setSignature(SessionSignature.sign(user.getId()));//TODO Property
+        session.setSignature(PropertyReader.SessionSignature.sign(user.getId()));//TODO Property
         sessionService.save(session);
         return session;
     }

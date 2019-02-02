@@ -1,11 +1,11 @@
 package com.ajulay.service;
 
-import com.ajulay.api.repository.ITaskRepository;
-import com.ajulay.api.service.IAssigneeService;
 import com.ajulay.api.service.ITaskService;
 import com.ajulay.entity.Assignee;
 import com.ajulay.entity.Task;
 import com.ajulay.enumirated.Status;
+import com.ajulay.repository.AssigneeRepository;
+import com.ajulay.repository.TaskRepository;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,6 +13,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,11 +26,11 @@ public class TaskService implements ITaskService {
 
     @Inject
     @NotNull
-    private ITaskRepository taskRepository;
+    private TaskRepository taskRepository;
 
     @Inject
     @NotNull
-    private IAssigneeService assigneeService;
+    private AssigneeRepository assigneeRepository;
 
     @Inject
     @NotNull
@@ -149,8 +150,8 @@ public class TaskService implements ITaskService {
     @Nullable
     public List<Task> findAllByUserId(@NotNull final String currentUser) {
         EntityTransaction transaction = entityManager.getTransaction();
+        final List<Assignee> assignees = assigneeRepository.findByUserId(currentUser);
         transaction.begin();
-        final List<Assignee> assignees = assigneeService.findAllByUserId(currentUser);
         final List<Task> tasks = new ArrayList<>();
         for (final Assignee assignee : assignees) {
             @Nullable final Task task = taskRepository.findById(assignee.getTaskId());
@@ -165,11 +166,17 @@ public class TaskService implements ITaskService {
     public List<Task> findTaskAllByUserId(String currentUserId) {
         final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        @NotNull final List<Assignee> assignees = assigneeService.findAllByUserId(currentUserId);
+        @NotNull final List<Assignee> assignees = assigneeRepository.findByUserId(currentUserId);
         @NotNull final List<Task> tasks = new ArrayList<>();
+
         for (@NotNull final Assignee assignee : assignees) {
-            final Task task = taskRepository.findById(assignee.getTaskId());
-            tasks.add(task);
+            Task task = null;
+            try {
+                task = taskRepository.findById(assignee.getTaskId());
+                tasks.add(task);
+            } catch (NoResultException e) {
+
+            }
         }
         transaction.commit();
         return tasks;

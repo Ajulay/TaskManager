@@ -1,10 +1,10 @@
 package com.ajulay.service;
 
-import com.ajulay.api.repository.IUserRepository;
 import com.ajulay.api.service.IAssigneeService;
 import com.ajulay.api.service.IUserService;
 import com.ajulay.entity.Assignee;
 import com.ajulay.entity.User;
+import com.ajulay.repository.UserRepository;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +26,7 @@ public class UserService implements IUserService {
 
     @Inject
     @NotNull
-    private IUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Inject
     private IAssigneeService assigneeService;
@@ -42,7 +42,6 @@ public class UserService implements IUserService {
         if (login.isEmpty()) {
             return null;
         }
-
         @NotNull final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         final User user = new User();

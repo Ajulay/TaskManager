@@ -1,130 +1,32 @@
 package com.ajulay.repository;
 
-import com.ajulay.api.repository.IAssigneeRepository;
+import com.ajulay.api.repository.IRepository;
 import com.ajulay.entity.Assignee;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.apache.deltaspike.data.api.Query;
+import org.apache.deltaspike.data.api.Repository;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import java.util.Collections;
 import java.util.List;
 
-/**
- * {@inheritDoc}
- */
-@ApplicationScoped
-public class AssigneeRepository implements IAssigneeRepository {
+@Repository(forEntity = Assignee.class)
+public interface AssigneeRepository extends IRepository<Assignee> {
 
-    @Inject
-    @NotNull
-    private EntityManager entityManager;
+    @Query("SELECT a FROM Assignee a WHERE a.userId = ?1")
+    List<Assignee> findByUserId(String userId);
 
-    @Override
-    @NotNull
-    public Assignee save(@NotNull final Assignee assignee) {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        entityManager.persist(assignee);
-        transaction.commit();
-        return assignee;
-    }
+    @Query("SELECT a FROM Assignee a WHERE a.taskId = ?1")
+    List<Assignee> findByTaskId(String taskId);
 
-    @Override
-    @NotNull
-    public Assignee remove(@NotNull final Assignee assignee) {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        entityManager.remove(assignee);
-        transaction.commit();
-        return assignee;
-    }
 
-    @Override
-    @NotNull
-    public Assignee update(@NotNull final Assignee assignee) {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        entityManager.merge(assignee);
-        transaction.commit();
-        return assignee;
-    }
+    Assignee save(Assignee entity);
 
-    @Override
-    @NotNull
-    public Assignee findById(@NotNull final String id) {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @NotNull final CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        @NotNull
-        CriteriaQuery<Assignee> criteriaQuery = criteriaBuilder.createQuery(Assignee.class);
-        @NotNull final Root<Assignee> root = criteriaQuery.from(Assignee.class);
-        criteriaQuery = criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("id"), id));
-        @NotNull final TypedQuery<Assignee> query = entityManager.createQuery(criteriaQuery);
-        final Assignee assignee = query.getSingleResult();
-        transaction.commit();
-        return assignee;
-    }
+    @Query("SELECT a FROM Assignee a WHERE a.id = ?1")
+    Assignee findById(String id);
 
-    @Override
-    @Nullable
-    public List<Assignee> findAll() {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @NotNull final CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        @NotNull
-        CriteriaQuery<Assignee> criteriaQuery = criteriaBuilder.createQuery(Assignee.class);
-        @NotNull final Root<Assignee> root = criteriaQuery.from(Assignee.class);
-        criteriaQuery = criteriaQuery.select(root);
-        @NotNull final TypedQuery<Assignee> query = entityManager.createQuery(criteriaQuery);
-        final List<Assignee> assignees = query.getResultList();
-        transaction.commit();
-        return assignees;
-    }
+    Assignee remove(Assignee entity);
 
-    @Override
-    @NotNull
-    public List<Assignee> findAllByCriteria(@NotNull final Assignee entity) {
-        //TODO later
-        return Collections.emptyList();
-    }
+    Assignee update(Assignee entity);
 
-    @Override
-    @NotNull
-    public List<Assignee> findByUserId(@NotNull final String userId) {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @NotNull final CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        @NotNull
-        CriteriaQuery<Assignee> criteriaQuery = criteriaBuilder.createQuery(Assignee.class);
-        @NotNull final Root<Assignee> root = criteriaQuery.from(Assignee.class);
-        criteriaQuery = criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("userId"), userId));
-        @NotNull final TypedQuery<Assignee> query = entityManager.createQuery(criteriaQuery);
-        final List<Assignee> assignees = query.getResultList();
-        transaction.commit();
-        return assignees;
-    }
+    List<Assignee> findAll();
 
-    @Override
-    @NotNull
-    public List<Assignee> findByTaskId(@NotNull final String taskId) {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @NotNull final CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        @NotNull
-        CriteriaQuery<Assignee> criteriaQuery = criteriaBuilder.createQuery(Assignee.class);
-        @NotNull final Root<Assignee> root = criteriaQuery.from(Assignee.class);
-        criteriaQuery = criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("taskId"), taskId));
-        @NotNull final TypedQuery<Assignee> query = entityManager.createQuery(criteriaQuery);
-        final List<Assignee> assignees = query.getResultList();
-        transaction.commit();
-        return assignees;
-    }
 
 }
