@@ -3,6 +3,8 @@ package com.ajulay.command;
 import com.ajulay.endpoint.Session;
 import com.ajulay.endpoint.Success;
 
+import javax.enterprise.event.Observes;
+
 public class LogOutCommand extends AbstractCommand {
 
     @Override
@@ -15,8 +17,7 @@ public class LogOutCommand extends AbstractCommand {
         return "log out";
     }
 
-    @Override
-    public void execute() {
+    public void execute(@Observes LogOutCommand logOutCommand) {
         final Session session = getController().getCurrentSession();
         final Success success = getController().getSessionService().getSessionSoapEndPointPort().logout(session);
         if (success == null) {

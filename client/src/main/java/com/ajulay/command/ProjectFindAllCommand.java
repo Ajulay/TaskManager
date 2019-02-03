@@ -4,6 +4,7 @@ package com.ajulay.command;
 import com.ajulay.endpoint.Project;
 import com.ajulay.endpoint.Session;
 
+import javax.enterprise.event.Observes;
 import java.util.List;
 
 public class ProjectFindAllCommand extends AbstractCommand {
@@ -18,8 +19,7 @@ public class ProjectFindAllCommand extends AbstractCommand {
         return "show all projects";
     }
 
-    @Override
-    public void execute() {
+    public void execute(@Observes ProjectFindAllCommand projectFindAllCommand) {
         int index = 1;
         final Session session = getController().getCurrentSession();
         final List<Project> userProjects = getController().getProjectService().getProjectSoapEndPointPort().getProjects(session);

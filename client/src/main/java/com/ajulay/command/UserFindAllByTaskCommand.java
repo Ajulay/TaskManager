@@ -5,6 +5,7 @@ import com.ajulay.endpoint.Session;
 import com.ajulay.endpoint.TaskView;
 import com.ajulay.endpoint.User;
 
+import javax.enterprise.event.Observes;
 import java.util.List;
 
 public class UserFindAllByTaskCommand extends AbstractCommand {
@@ -19,8 +20,7 @@ public class UserFindAllByTaskCommand extends AbstractCommand {
         return "list of assigners by task";
     }
 
-    @Override
-    public void execute() {
+    public void execute(@Observes UserFindAllByTaskCommand userFindAllByTaskCommand) {
         final Session session = getController().getCurrentSession();
         System.out.println("Enter task id");
         final String taskId = getController().nextLine();

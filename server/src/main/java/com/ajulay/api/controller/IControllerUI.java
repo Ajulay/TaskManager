@@ -7,7 +7,6 @@ import com.ajulay.api.service.IUserService;
 import com.ajulay.command.AbstractCommand;
 
 import java.util.Map;
-import java.util.Scanner;
 
 public interface IControllerUI {
 
@@ -28,7 +27,5 @@ public interface IControllerUI {
     Map<String, AbstractCommand> getCommands();
 
     IAssigneeService getAssigneeService();
-
-    Scanner getScanner();
 
 }

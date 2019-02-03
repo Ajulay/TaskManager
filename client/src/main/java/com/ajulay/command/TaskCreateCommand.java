@@ -4,6 +4,7 @@ package com.ajulay.command;
 import com.ajulay.constants.ServiceConstant;
 import com.ajulay.endpoint.*;
 
+import javax.enterprise.event.Observes;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.lang.Exception;
@@ -24,8 +25,7 @@ public class TaskCreateCommand extends AbstractCommand {
         return "add new task";
     }
 
-    @Override
-    public void execute() throws Exception {
+    public void execute(@Observes TaskCreateCommand taskCreateCommand) throws Exception {
         final Session session = getController().getCurrentSession();
         final String currentUserId = getController().getCurrentSession().getUserId();
         System.out.println("Enter: project_id (required)");

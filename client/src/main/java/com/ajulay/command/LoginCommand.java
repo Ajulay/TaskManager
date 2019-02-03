@@ -4,6 +4,7 @@ package com.ajulay.command;
 import com.ajulay.constants.ServiceConstant;
 import com.ajulay.endpoint.Session;
 
+import javax.enterprise.event.Observes;
 import java.util.List;
 
 public class LoginCommand extends AbstractCommand {
@@ -20,8 +21,8 @@ public class LoginCommand extends AbstractCommand {
         return "login";
     }
 
-    @Override
-    public void execute() throws Exception {
+
+    public void execute(@Observes LoginCommand loginCommand) throws Exception {
         for (int i = 1; i <= ServiceConstant.MAX_ATTEMPT; i++) {
             System.out.println("Enter login:");
             final String login = getController().nextLine();

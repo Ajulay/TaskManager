@@ -3,6 +3,8 @@ package com.ajulay.command;
 
 import com.ajulay.constants.ServiceConstant;
 
+import javax.enterprise.event.Observes;
+
 public class RegistrationCommand extends AbstractCommand {
 
     public final static String COMMAND = "/reg";
@@ -17,8 +19,7 @@ public class RegistrationCommand extends AbstractCommand {
         return "registration new user";
     }
 
-    @Override
-    public void execute() {
+    public void execute(@Observes RegistrationCommand registrationCommand) {
         System.out.println("Enter login (required):");
         final String login = getController().nextLine();
         for (int j = 1; j <= ServiceConstant.MAX_ATTEMPT; j++) {

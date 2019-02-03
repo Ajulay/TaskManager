@@ -2,6 +2,8 @@ package com.ajulay.command;
 
 import com.ajulay.endpoint.Session;
 
+import javax.enterprise.event.Observes;
+
 public class AppExitCommand extends AbstractCommand {
 
     @Override
@@ -14,8 +16,7 @@ public class AppExitCommand extends AbstractCommand {
         return "Bye!";
     }
 
-    @Override
-    public void execute() {
+    public void execute(@Observes AppExitCommand appExitCommand) {
         final Session session = getController().getCurrentSession();
         if (session != null) {
             getController().getSessionService().getSessionSoapEndPointPort().logout(session);

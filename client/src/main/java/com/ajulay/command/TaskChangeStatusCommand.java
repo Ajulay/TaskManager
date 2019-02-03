@@ -3,6 +3,8 @@ package com.ajulay.command;
 import com.ajulay.endpoint.Session;
 import com.ajulay.endpoint.Success;
 
+import javax.enterprise.event.Observes;
+
 public class TaskChangeStatusCommand extends AbstractCommand {
 
     @Override
@@ -15,8 +17,7 @@ public class TaskChangeStatusCommand extends AbstractCommand {
         return "change status";
     }
 
-    @Override
-    public void execute() {
+    public void execute(@Observes TaskChangeStatusCommand taskChangeStatusCommand) {
         final Session session = getController().getCurrentSession();
         System.out.println("Enter task id:");
         final String taskId = getController().nextLine();

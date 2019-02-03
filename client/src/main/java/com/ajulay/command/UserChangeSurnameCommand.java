@@ -3,6 +3,8 @@ package com.ajulay.command;
 import com.ajulay.endpoint.Session;
 import com.ajulay.endpoint.User;
 
+import javax.enterprise.event.Observes;
+
 public class UserChangeSurnameCommand extends AbstractCommand {
     @Override
     public String getCommandKeyWord() {
@@ -14,8 +16,7 @@ public class UserChangeSurnameCommand extends AbstractCommand {
         return "change surname";
     }
 
-    @Override
-    public void execute() {
+    public void execute(@Observes UserChangeSurnameCommand userChangeSurnameCommand) {
         final Session session = getController().getCurrentSession();
         if (session == null) {
             System.out.println("You are not login.");

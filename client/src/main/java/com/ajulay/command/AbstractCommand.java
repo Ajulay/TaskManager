@@ -2,15 +2,16 @@ package com.ajulay.command;
 
 import com.ajulay.controller.ControllerUI;
 
+import javax.inject.Inject;
+
 public abstract class AbstractCommand {
 
+    @Inject
     private ControllerUI controller;
 
     public abstract String getCommandKeyWord();
 
     public abstract String getDescription();
-
-    public abstract void execute() throws Exception;
 
     public ControllerUI getController() {
         return controller;

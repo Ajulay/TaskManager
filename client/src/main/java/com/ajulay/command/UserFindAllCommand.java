@@ -3,6 +3,7 @@ package com.ajulay.command;
 import com.ajulay.endpoint.Session;
 import com.ajulay.endpoint.User;
 
+import javax.enterprise.event.Observes;
 import java.util.List;
 
 public class UserFindAllCommand extends AbstractCommand {
@@ -17,8 +18,7 @@ public class UserFindAllCommand extends AbstractCommand {
         return "show all executors";
     }
 
-    @Override
-    public void execute() {
+    public void execute(@Observes UserFindAllCommand userFindAllCommand) {
         final Session session = getController().getCurrentSession();
         int index = 1;
         final List<User> users = getController().getUserService().getUserSoapEndPointPort().getUsers(session);

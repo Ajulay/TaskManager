@@ -1,14 +1,19 @@
 package com.ajulay.controller;
 
+import com.ajulay.api.IController;
 import com.ajulay.command.*;
 import com.ajulay.endpoint.*;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
 import java.lang.Exception;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class ControllerUI {
+@ApplicationScoped
+public class ControllerUI implements IController {
     private static final Class[] CLASSES = {
             UserFindAllCommand.class, ProjectFindAllCommand.class, TaskCreateCommand.class,
             TaskFindAllByProjectCommand.class, TaskDeleteCommand.class, TaskFindAllByUserCommand.class,
@@ -17,6 +22,9 @@ public class ControllerUI {
             AppHelpCommand.class, UserChangePasswordCommand.class, SessionAllShowCommand.class,
             TaskFindAllCommand.class, TaskChangeStatusCommand.class
     };
+
+    @Inject
+    private Event<AbstractCommand> abstractCommandEvent;
 
     private final UserSoapEndPointService userService = new UserSoapEndPointService();
 
@@ -29,6 +37,8 @@ public class ControllerUI {
     private final AssigneeSoapEndPointService assigneeService = new AssigneeSoapEndPointService();
 
     private final Map<String, AbstractCommand> commands = new HashMap<>();
+
+    private final Map<String, Event> events = new HashMap<>();
 
     private Session currentSession = null;
 
@@ -43,7 +53,6 @@ public class ControllerUI {
     public void register(final Class clazz) throws IllegalAccessException, InstantiationException {
         if (!AbstractCommand.class.isAssignableFrom(clazz)) return;
         final AbstractCommand command = (AbstractCommand) clazz.newInstance();
-        command.setController(this);
         commands.put(command.getCommandKeyWord(), command);
     }
 
@@ -72,7 +81,7 @@ public class ControllerUI {
             if (command != null) {
                 System.out.println(command.getDescription());
                 try {
-                    command.execute();
+                    abstractCommandEvent.fire(command);
                     System.out.println("[Ok]");
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
@@ -85,10 +94,6 @@ public class ControllerUI {
 
     public Map<String, AbstractCommand> getCommands() {
         return commands;
-    }
-
-    public Scanner getScanner() {
-        return scanner;
     }
 
     public void registerCommandAll() throws IllegalAccessException, InstantiationException {
@@ -122,4 +127,5 @@ public class ControllerUI {
     public void setCurrentSession(Session currentSession) {
         this.currentSession = currentSession;
     }
+
 }

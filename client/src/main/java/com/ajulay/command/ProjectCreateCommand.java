@@ -5,6 +5,8 @@ import com.ajulay.endpoint.ProjectSoapEndPointService;
 import com.ajulay.endpoint.Session;
 import com.ajulay.endpoint.Success;
 
+import javax.enterprise.event.Observes;
+
 public class ProjectCreateCommand extends AbstractCommand {
     @Override
     public String getCommandKeyWord() {
@@ -16,8 +18,7 @@ public class ProjectCreateCommand extends AbstractCommand {
         return "create project";
     }
 
-    @Override
-    public void execute() {
+    public void execute(@Observes ProjectCreateCommand projectCreateCommand) {
         final Session session = getController().getCurrentSession();
         System.out.println("Enter project name");
         final String projectName = getController().nextLine();

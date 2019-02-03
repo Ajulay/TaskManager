@@ -1,12 +1,18 @@
 package com.ajulay;
 
-import com.ajulay.controller.ControllerUI;
+import com.ajulay.api.IController;
+import org.jetbrains.annotations.NotNull;
+
+import javax.enterprise.inject.se.SeContainer;
+import javax.enterprise.inject.se.SeContainerInitializer;
 
 public class ClientApp {
 
     public static void main(String[] args) throws Exception {
-        final ControllerUI controller = new ControllerUI();
-        controller.run();
+        @NotNull final SeContainerInitializer initializer = SeContainerInitializer.newInstance();
+        @NotNull final SeContainer seContainer = initializer.initialize();
+        @NotNull final IController controllerUI = seContainer.select(IController.class).get();
+        controllerUI.run();
     }
 
 }

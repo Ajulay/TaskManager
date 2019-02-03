@@ -5,6 +5,7 @@ import com.ajulay.constants.ServiceConstant;
 import com.ajulay.endpoint.Session;
 import com.ajulay.endpoint.TaskView;
 
+import javax.enterprise.event.Observes;
 import java.util.List;
 
 public class TaskFindAllCommand extends AbstractCommand {
@@ -19,8 +20,7 @@ public class TaskFindAllCommand extends AbstractCommand {
         return "show all tasks";
     }
 
-    @Override
-    public void execute() {
+    public void execute(@Observes TaskFindAllCommand taskFindAllCommand) {
         final Session session = getController().getCurrentSession();
         final List<TaskView> tasks = getController().getTaskService().getTaskSoapEndPointPort().findTaskAllByUserId(session, session.getUserId());
         int index = 1;

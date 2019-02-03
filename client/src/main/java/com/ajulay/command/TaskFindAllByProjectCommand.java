@@ -5,6 +5,7 @@ import com.ajulay.constants.ServiceConstant;
 import com.ajulay.endpoint.Session;
 import com.ajulay.endpoint.TaskView;
 
+import javax.enterprise.event.Observes;
 import java.util.List;
 
 public class TaskFindAllByProjectCommand extends AbstractCommand {
@@ -19,8 +20,7 @@ public class TaskFindAllByProjectCommand extends AbstractCommand {
         return "show tasks in project";
     }
 
-    @Override
-    public void execute() {
+    public void execute(@Observes TaskFindAllByProjectCommand taskFindAllByProjectCommand) {
         final Session session = getController().getCurrentSession();
         System.out.println("Enter project id...");
         final String projectId = getController().nextLine();
