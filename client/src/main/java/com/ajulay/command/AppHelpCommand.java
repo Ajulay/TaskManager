@@ -5,7 +5,6 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import java.util.Collection;
 
-
 public class AppHelpCommand extends AbstractCommand {
 
     @Inject

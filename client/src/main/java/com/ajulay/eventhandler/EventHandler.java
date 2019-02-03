@@ -3,6 +3,7 @@ package com.ajulay.eventhandler;
 import com.ajulay.api.IController;
 import com.ajulay.command.*;
 import com.ajulay.endpoint.Session;
+import com.ajulay.eventhandler.interseptor.Logable;
 
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
@@ -16,6 +17,7 @@ public class EventHandler {
     @Inject
     private Event<AbstractCommand> abstractCommandEvent;
 
+    @Logable
     public void handle(@Observes BeginCommand begin) throws Exception {
         final Session currentSession = controller.getCurrentSession();
         if (currentSession == null) {
