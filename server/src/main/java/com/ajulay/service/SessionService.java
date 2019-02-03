@@ -43,7 +43,7 @@ public class SessionService implements ISessionService {
         if (id.isEmpty()) return null;
         @NotNull final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        @Nullable final Session session = sessionRepository.findById(id);
+        @Nullable final Session session = sessionRepository.findBy(id);
         if (session != null) {
             sessionRepository.remove(session);
         }
@@ -106,7 +106,7 @@ public class SessionService implements ISessionService {
         if (id.isEmpty()) return null;
         @NotNull final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        @Nullable final Session session = sessionRepository.findById(id);
+        @Nullable final Session session = sessionRepository.findBy(id);
         transaction.commit();
         return session;
     }
@@ -116,9 +116,9 @@ public class SessionService implements ISessionService {
     public Session remove(@NotNull final Session session) {
         @NotNull final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        @Nullable final Session removedSession = sessionRepository.remove(session);
+        sessionRepository.remove(session);
         transaction.commit();
-        return removedSession;
+        return session;
     }
 
     @Override
@@ -126,7 +126,7 @@ public class SessionService implements ISessionService {
     public Session update(@NotNull final Session session) {
         @NotNull final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        @Nullable final Session updatedSession = sessionRepository.update(session);
+        @Nullable final Session updatedSession = sessionRepository.save(session);
         transaction.commit();
         return updatedSession;
     }

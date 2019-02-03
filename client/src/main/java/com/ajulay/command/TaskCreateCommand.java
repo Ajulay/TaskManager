@@ -97,8 +97,4 @@ public class TaskCreateCommand extends AbstractCommand {
         addWorker(task, session);
     }
 
-    private void toBegin() {
-        getAbstractCommandEvent().fire(getController().getBeginCommand());
-    }
-
 }

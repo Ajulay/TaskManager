@@ -25,4 +25,8 @@ public abstract class AbstractCommand {
         return abstractCommandEvent;
     }
 
+    protected void toBegin() {
+        getAbstractCommandEvent().fire(getController().getBeginCommand());
+    }
+
 }

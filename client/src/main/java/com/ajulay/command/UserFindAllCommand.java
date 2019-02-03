@@ -30,7 +30,4 @@ public class UserFindAllCommand extends AbstractCommand {
         toBegin();
     }
 
-    private void toBegin() {
-        getAbstractCommandEvent().fire(getController().getBeginCommand());
-    }
 }

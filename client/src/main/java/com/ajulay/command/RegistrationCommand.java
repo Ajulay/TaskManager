@@ -42,7 +42,4 @@ public class RegistrationCommand extends AbstractCommand {
         toBegin();
     }
 
-    private void toBegin() {
-        getAbstractCommandEvent().fire(getController().getBeginCommand());
-    }
 }

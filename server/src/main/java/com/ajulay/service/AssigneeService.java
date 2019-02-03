@@ -68,7 +68,7 @@ public class AssigneeService implements IAssigneeService {
         @NotNull
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        @Nullable final Assignee updatedAssignee = assigneeRepository.update(assignee);
+        @Nullable final Assignee updatedAssignee = assigneeRepository.save(assignee);
         transaction.commit();
         return updatedAssignee;
     }
@@ -154,9 +154,9 @@ public class AssigneeService implements IAssigneeService {
         @NotNull
         EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        @Nullable final Assignee removedAssignee = assigneeRepository.remove(assignee);
+        assigneeRepository.remove(assignee);
         transaction.commit();
-        return removedAssignee;
+        return assignee;
     }
 
     @Override

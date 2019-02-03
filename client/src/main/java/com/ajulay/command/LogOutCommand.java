@@ -31,7 +31,4 @@ public class LogOutCommand extends AbstractCommand {
         toBegin();
     }
 
-    private void toBegin() {
-        getAbstractCommandEvent().fire(getController().getBeginCommand());
-    }
 }

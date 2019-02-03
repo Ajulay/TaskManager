@@ -36,7 +36,4 @@ public class TaskFindAllByProjectCommand extends AbstractCommand {
         toBegin();
     }
 
-    private void toBegin() {
-        getAbstractCommandEvent().fire(getController().getBeginCommand());
-    }
 }

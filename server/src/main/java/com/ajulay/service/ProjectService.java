@@ -35,7 +35,7 @@ public class ProjectService implements IProjectService {
         }
         @NotNull final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        @Nullable final Project project = projectRepository.findById(projectId);
+        @Nullable final Project project = projectRepository.findBy(projectId);
         transaction.commit();
         return project;
     }
@@ -78,7 +78,7 @@ public class ProjectService implements IProjectService {
     public Project update(@NotNull final Project project) {
         @NotNull final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        @Nullable final Project updatedProject = projectRepository.update(project);
+        @Nullable final Project updatedProject = projectRepository.save(project);
         transaction.commit();
         return updatedProject;
     }

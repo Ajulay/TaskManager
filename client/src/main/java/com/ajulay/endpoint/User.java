@@ -1,6 +1,8 @@
 
 package com.ajulay.endpoint;
 
+import org.jetbrains.annotations.Nullable;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSchemaType;
@@ -187,7 +189,7 @@ public class User {
      * @param value allowed object is
      *              {@link String }
      */
-    public void setSurname(String value) {
+    public void setSurname(@Nullable String value) {
         this.surname = value;
     }
 

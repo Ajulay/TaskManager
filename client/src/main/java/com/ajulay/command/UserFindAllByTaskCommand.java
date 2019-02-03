@@ -46,8 +46,4 @@ public class UserFindAllByTaskCommand extends AbstractCommand {
         toBegin();
     }
 
-    private void toBegin() {
-        getAbstractCommandEvent().fire(getController().getBeginCommand());
-    }
-
 }

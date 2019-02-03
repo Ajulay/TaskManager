@@ -20,7 +20,7 @@ public class ControllerUI implements IController {
             ProjectCreateCommand.class, LogOutCommand.class, UserFindAllByTaskCommand.class,
             AppExitCommand.class, UserChangeSurnameCommand.class, SessionDeleteCommand.class,
             AppHelpCommand.class, UserChangePasswordCommand.class, TaskChangeStatusCommand.class,
-            TaskFindAllCommand.class
+            TaskFindAllCommand.class, SessionAllShowCommand.class
     };
 
     @Inject

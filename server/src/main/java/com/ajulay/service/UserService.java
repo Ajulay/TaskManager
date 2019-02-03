@@ -57,9 +57,9 @@ public class UserService implements IUserService {
         @NotNull final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
         final User user = userRepository.findById(id);
-        @Nullable final User removedUser = userRepository.remove(user);
+        userRepository.remove(user);
         transaction.commit();
-        return removedUser;
+        return user;
     }
 
     @Override
@@ -67,9 +67,9 @@ public class UserService implements IUserService {
     public User update(@NotNull final User user) {
         @NotNull final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        @Nullable final User updatedUser = userRepository.update(user);
+        userRepository.refresh(user);
         transaction.commit();
-        return updatedUser;
+        return user;
     }
 
     @Nullable
@@ -133,9 +133,9 @@ public class UserService implements IUserService {
     public User remove(@NotNull final User user) {
         @NotNull final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        @Nullable final User removedUser = userRepository.remove(user);
+        userRepository.remove(user);
         transaction.commit();
-        return removedUser;
+        return user;
     }
 
     @Override
@@ -174,6 +174,16 @@ public class UserService implements IUserService {
         }
         transaction.commit();
         return users;
+    }
+
+    @Nullable
+    public User changeSurname(String id, String surname) {
+        final EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        userRepository.changeSurname(id, surname);
+        final User user = userRepository.findById(id);
+        transaction.commit();
+        return user;
     }
 
 }

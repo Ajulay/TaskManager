@@ -21,6 +21,7 @@ public class AppExitCommand extends AbstractCommand {
         if (session != null) {
             getController().getSessionService().getSessionSoapEndPointPort().logout(session);
         }
+        System.exit(0);
     }
 
 }

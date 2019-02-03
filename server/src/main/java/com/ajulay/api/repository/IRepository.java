@@ -10,10 +10,6 @@ public interface IRepository<E> {
 
     E remove(E entity);
 
-    E update(E entity);
-
     List<E> findAll();
-
-    List<E> findAllByCriteria(E entity);
 
 }

@@ -1,14 +1,13 @@
 package com.ajulay.repository;
 
-import com.ajulay.api.repository.IRepository;
 import com.ajulay.entity.User;
+import org.apache.deltaspike.data.api.EntityRepository;
+import org.apache.deltaspike.data.api.Modifying;
 import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 
-import java.util.List;
-
 @Repository(forEntity = User.class)
-public interface UserRepository extends IRepository<User> {
+public interface UserRepository extends EntityRepository<User, String> {
 
     @Query("select u from User u WHERE u.login = ?1")
     User findByLogin(String login);
@@ -16,12 +15,8 @@ public interface UserRepository extends IRepository<User> {
     @Query("SELECT u FROM User u WHERE u.id = ?1")
     User findById(String id);
 
-    User save(User entity);
-
-    User remove(User entity);
-
-    User update(User entity);
-
-    List<User> findAll();
+    @Modifying
+    @Query("update User as u set u.surname = ?2 where u.id = ?1")
+    void changeSurname(String id, String surname);
 
 }

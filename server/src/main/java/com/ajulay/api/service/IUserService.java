@@ -37,4 +37,6 @@ public interface IUserService {
 
     List<User> findUserAllByTaskId(String taskId);
 
+    User changeSurname(String id, String surname);
+
 }

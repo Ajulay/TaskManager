@@ -43,7 +43,7 @@ public class TaskService implements ITaskService {
         }
         @NotNull final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        @Nullable final Task task = taskRepository.findById(taskId);
+        @Nullable final Task task = taskRepository.findBy(taskId);
         if (task != null) {
             task.setStatus(Status.valueOf(status.toUpperCase()));
         }
@@ -82,7 +82,7 @@ public class TaskService implements ITaskService {
         }
         @NotNull final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        @Nullable final Task task = taskRepository.findById(id);
+        @Nullable final Task task = taskRepository.findBy(id);
         transaction.commit();
         return task;
     }
@@ -92,9 +92,9 @@ public class TaskService implements ITaskService {
     public Task remove(@NotNull final Task task) {
         @NotNull final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        @Nullable final Task removedTask = taskRepository.remove(task);
+        taskRepository.remove(task);
         transaction.commit();
-        return removedTask;
+        return task;
     }
 
     @Override
@@ -102,7 +102,7 @@ public class TaskService implements ITaskService {
     public Task update(@NotNull final Task task) {
         @NotNull final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        @Nullable final Task updatedTask = taskRepository.update(task);
+        @Nullable final Task updatedTask = taskRepository.save(task);
         transaction.commit();
         return updatedTask;
     }
@@ -137,10 +137,9 @@ public class TaskService implements ITaskService {
         }
         @NotNull final EntityTransaction transaction = entityManager.getTransaction();
         transaction.begin();
-        @Nullable
-        Task task = taskRepository.findById(id);
+        @Nullable final Task task = taskRepository.findBy(id);
         if (task != null) {
-            task = taskRepository.remove(task);
+            taskRepository.remove(task);
         }
         transaction.commit();
         return task;
@@ -154,7 +153,7 @@ public class TaskService implements ITaskService {
         transaction.begin();
         final List<Task> tasks = new ArrayList<>();
         for (final Assignee assignee : assignees) {
-            @Nullable final Task task = taskRepository.findById(assignee.getTaskId());
+            @Nullable final Task task = taskRepository.findBy(assignee.getTaskId());
             if (task != null)
                 tasks.add(task);
         }
@@ -172,7 +171,7 @@ public class TaskService implements ITaskService {
         for (@NotNull final Assignee assignee : assignees) {
             Task task = null;
             try {
-                task = taskRepository.findById(assignee.getTaskId());
+                task = taskRepository.findBy(assignee.getTaskId());
                 tasks.add(task);
             } catch (NoResultException e) {
 
