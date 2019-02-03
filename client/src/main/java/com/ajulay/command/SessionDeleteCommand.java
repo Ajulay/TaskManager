@@ -21,6 +21,11 @@ public class SessionDeleteCommand extends AbstractCommand {
         System.out.println("Enter session id:");
         final String sessionId = getController().nextLine();
         getController().getSessionService().getSessionSoapEndPointPort().deleteSessionById(session, sessionId);
+        System.out.println("[Ok]");
+        toBegin();
     }
 
+    private void toBegin() {
+        getAbstractCommandEvent().fire(getController().getBeginCommand());
+    }
 }

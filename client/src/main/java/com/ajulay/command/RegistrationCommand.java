@@ -25,7 +25,7 @@ public class RegistrationCommand extends AbstractCommand {
         for (int j = 1; j <= ServiceConstant.MAX_ATTEMPT; j++) {
             if (j == ServiceConstant.MAX_ATTEMPT) {
                 System.out.println("Your attempts are ended.");
-                return;
+                break;
             }
             System.out.println("Enter password (required):");
             final String passwordHash = getController().nextLine().hashCode() + "";
@@ -36,8 +36,13 @@ public class RegistrationCommand extends AbstractCommand {
                 continue;
             }
             getController().getSessionService().getSessionSoapEndPointPort().register(login, passwordHash);
-            return;
+            break;
         }
+        System.out.println("[Ok]");
+        toBegin();
     }
 
+    private void toBegin() {
+        getAbstractCommandEvent().fire(getController().getBeginCommand());
+    }
 }

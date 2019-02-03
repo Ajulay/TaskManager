@@ -1,6 +1,7 @@
 package com.ajulay.api;
 
 import com.ajulay.command.AbstractCommand;
+import com.ajulay.command.BeginCommand;
 import com.ajulay.endpoint.*;
 
 import java.lang.Exception;
@@ -32,5 +33,7 @@ public interface IController {
     void registerCommandAll() throws IllegalAccessException, InstantiationException;
 
     UserSoapEndPointService getUserService();
+
+    BeginCommand getBeginCommand();
 
 }

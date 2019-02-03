@@ -27,8 +27,12 @@ public class ProjectCreateCommand extends AbstractCommand {
         final Success success = projectService.getProjectSoapEndPointPort().createProjectByName(session, projectName);
         if (success == null) {
             System.out.println("Project not created...");
-            return;
         }
+        System.out.println("[Ok]");
+        toBegin();
     }
 
+    private void toBegin() {
+        getAbstractCommandEvent().fire(getController().getBeginCommand());
+    }
 }

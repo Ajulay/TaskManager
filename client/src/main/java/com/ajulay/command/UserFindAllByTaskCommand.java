@@ -28,10 +28,12 @@ public class UserFindAllByTaskCommand extends AbstractCommand {
         final Project project = getController().getProjectService().getProjectSoapEndPointPort().getById(session, task.getProjectId());
         if (project == null) {
             System.out.println("No project for your task.");
+            toBegin();
             return;
         }
         if (!project.getAuthorId().equals(session.getUserId())) {
             System.out.println("You can see executor(s) of your projects only.");
+            toBegin();
             return;
         }
         final List<User> users = getController().getUserService().getUserSoapEndPointPort().findUserAllByTaskId(session, taskId);
@@ -40,6 +42,12 @@ public class UserFindAllByTaskCommand extends AbstractCommand {
         for (final User user : users) {
             System.out.println(index++ + ". Surname: " + user.getSurname());
         }
+        System.out.println("[Ok]");
+        toBegin();
+    }
+
+    private void toBegin() {
+        getAbstractCommandEvent().fire(getController().getBeginCommand());
     }
 
 }

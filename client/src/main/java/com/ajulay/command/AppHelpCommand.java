@@ -1,7 +1,6 @@
 package com.ajulay.command;
 
-import com.ajulay.api.IController;
-
+import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import java.util.Collection;
@@ -9,9 +8,8 @@ import java.util.Collection;
 
 public class AppHelpCommand extends AbstractCommand {
 
-
     @Inject
-    private IController controller;
+    private Event<AbstractCommand> abstractCommand;
 
     @Override
     public String getCommandKeyWord() {
@@ -28,6 +26,9 @@ public class AppHelpCommand extends AbstractCommand {
         for (AbstractCommand cmd : commands) {
             System.out.println(cmd.getCommandKeyWord() + " - " + cmd.getDescription());
         }
+        System.out.println("[Ok]");
+        abstractCommand.fire(getController().getBeginCommand());
+
     }
 
 }

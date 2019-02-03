@@ -26,6 +26,11 @@ public class UserFindAllCommand extends AbstractCommand {
             System.out.println(index++ + ". Surname: " + user.getSurname() + ", id: " + user.getId() + ", role: " +
                     user.getRole());
         }
+        System.out.println("[Ok]");
+        toBegin();
     }
 
+    private void toBegin() {
+        getAbstractCommandEvent().fire(getController().getBeginCommand());
+    }
 }

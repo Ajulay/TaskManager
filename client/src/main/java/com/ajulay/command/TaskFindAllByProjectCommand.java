@@ -32,6 +32,11 @@ public class TaskFindAllByProjectCommand extends AbstractCommand {
             System.out.println(index++ + ". Task term: " + term + ", task id: " + task.getId() +
                     ", task content: " + task.getContent());
         }
+        System.out.println("[Ok]");
+        toBegin();
     }
 
+    private void toBegin() {
+        getAbstractCommandEvent().fire(getController().getBeginCommand());
+    }
 }

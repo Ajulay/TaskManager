@@ -22,10 +22,16 @@ public class LogOutCommand extends AbstractCommand {
         final Success success = getController().getSessionService().getSessionSoapEndPointPort().logout(session);
         if (success == null) {
             System.out.println("Check connect.");
+            toBegin();
             return;
         }
         getController().setCurrentSession(null);
         System.out.println("You are logout.");
+        System.out.println("[Ok]");
+        toBegin();
     }
 
+    private void toBegin() {
+        getAbstractCommandEvent().fire(getController().getBeginCommand());
+    }
 }

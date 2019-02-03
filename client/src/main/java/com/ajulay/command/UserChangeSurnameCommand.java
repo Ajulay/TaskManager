@@ -20,6 +20,7 @@ public class UserChangeSurnameCommand extends AbstractCommand {
         final Session session = getController().getCurrentSession();
         if (session == null) {
             System.out.println("You are not login.");
+            toBegin();
             return;
         }
         final User user = getController().getUserService().getUserSoapEndPointPort().findById(session, session.getUserId());
@@ -27,11 +28,18 @@ public class UserChangeSurnameCommand extends AbstractCommand {
         final String sirname = getController().nextLine();
         if (sirname == null || sirname.isEmpty()) {
             System.out.println("Incorrect data. Try again.");
+            toBegin();
             return;
         }
         user.setSurname(sirname);
         getController().getUserService().getUserSoapEndPointPort().updateUser(session, user);
         System.out.println("Surname set.");
+        System.out.println("[Ok]");
+        toBegin();
+    }
+
+    private void toBegin() {
+        getAbstractCommandEvent().fire(getController().getBeginCommand());
     }
 
 }

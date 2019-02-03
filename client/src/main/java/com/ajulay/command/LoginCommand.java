@@ -38,6 +38,7 @@ public class LoginCommand extends AbstractCommand {
         }
         if (getController().getCurrentSession() == null) {
             System.out.println("You entered incorrect data more than 3 times.");
+            toBegin();
             return;
         }
         final List<Session> currentSessions = getController().getSessionService().getSessionSoapEndPointPort()
@@ -47,6 +48,11 @@ public class LoginCommand extends AbstractCommand {
         }
         getController().getCommands().clear();
         getController().registerCommandAll();
+        System.out.println("[Ok]");
+        toBegin();
     }
 
+    private void toBegin() {
+        getAbstractCommandEvent().fire(getController().getBeginCommand());
+    }
 }

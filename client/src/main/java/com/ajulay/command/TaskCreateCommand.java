@@ -33,10 +33,12 @@ public class TaskCreateCommand extends AbstractCommand {
         final Project project = getController().getProjectService().getProjectSoapEndPointPort().getById(session, in);
         if (project == null) {
             System.out.println("No such project.");
+            toBegin();
             return;
         }
         if (!project.getAuthorId().equals(currentUserId)) {
             System.out.println("You can create task for your projects only.");
+            toBegin();
             return;
         }
         final TaskView taskView = new TaskView();
@@ -71,6 +73,8 @@ public class TaskCreateCommand extends AbstractCommand {
         addWorker(taskView, session);
         System.out.println("Task added");
         getController().getTaskService().getTaskSoapEndPointPort().saveTask(session, taskView);
+        System.out.println("[Ok]");
+        toBegin();
     }
 
     private void addWorker(final TaskView task, final Session session) {
@@ -91,6 +95,10 @@ public class TaskCreateCommand extends AbstractCommand {
             System.out.println("Executor not set. Try again.");
         }
         addWorker(task, session);
+    }
+
+    private void toBegin() {
+        getAbstractCommandEvent().fire(getController().getBeginCommand());
     }
 
 }

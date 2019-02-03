@@ -13,6 +13,7 @@ public class ClientApp {
         @NotNull final SeContainer seContainer = initializer.initialize();
         @NotNull final IController controllerUI = seContainer.select(IController.class).get();
         controllerUI.run();
+        seContainer.close();
     }
 
 }

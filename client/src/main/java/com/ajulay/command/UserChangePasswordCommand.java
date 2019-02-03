@@ -25,6 +25,11 @@ public class UserChangePasswordCommand extends AbstractCommand {
         if (success == null) {
             System.out.println("Check connect.");
         }
+        System.out.println("[Ok]");
+        toBegin();
     }
 
+    private void toBegin() {
+        getAbstractCommandEvent().fire(getController().getBeginCommand());
+    }
 }

@@ -22,13 +22,15 @@ public class TaskChangeStatusCommand extends AbstractCommand {
         System.out.println("Enter task id:");
         final String taskId = getController().nextLine();
         System.out.println("Enter task status: 'finished', 'failed' OR 'in_progress'");
-        final String status = getController().nextLine();
+        String status = getController().nextLine();
         final Success success = getController().getTaskService().getTaskSoapEndPointPort().changeStatus(session, taskId, status);
-        if (success == null) {
-            System.out.println("Status not changed");
-            return;
-        }
-        System.out.println("Status changed");
+        final String result = success == null ? "Status not changed" : "Status changed";
+        System.out.println(result);
+        System.out.println("[Ok]");
+        toBegin();
     }
 
+    private void toBegin() {
+        getAbstractCommandEvent().fire(getController().getBeginCommand());
+    }
 }

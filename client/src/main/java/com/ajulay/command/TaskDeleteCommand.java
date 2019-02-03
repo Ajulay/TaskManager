@@ -23,11 +23,13 @@ public class TaskDeleteCommand extends AbstractCommand {
         System.out.println("Enter task id");
         final String taskId = getController().nextLine();
         final Success success = getController().getTaskService().getTaskSoapEndPointPort().deleteTask(session, taskId);
-        if (success == null) {
-            System.out.println("No delete.");
-            return;
-        }
-        System.out.println("task deleted...");
+        final String result = success == null ? "No delete." : "task deleted...";
+        System.out.println(result);
+        System.out.println("[Ok]");
+        toBegin();
     }
 
+    private void toBegin() {
+        getAbstractCommandEvent().fire(getController().getBeginCommand());
+    }
 }

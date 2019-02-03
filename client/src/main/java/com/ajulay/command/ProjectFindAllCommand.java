@@ -27,6 +27,11 @@ public class ProjectFindAllCommand extends AbstractCommand {
             System.out.println(index++ + ". Project name: " + project.getName() + ", project id: " + project.getId() +
                     ", project author id: " + project.getAuthorId());
         }
+        System.out.println("[Ok]");
+        toBegin();
     }
 
+    private void toBegin() {
+        getAbstractCommandEvent().fire(getController().getBeginCommand());
+    }
 }

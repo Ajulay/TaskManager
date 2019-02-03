@@ -29,6 +29,11 @@ public class TaskFindAllCommand extends AbstractCommand {
             System.out.println(index++ + ". Task term: " + term + ", task id: " + task.getId() +
                     ", task content: " + task.getContent() + ", status: " + (task.getStatus() == null ? "no defined" : task.getStatus().toString()));
         }
+        System.out.println("[Ok]");
+        toBegin();
     }
 
+    private void toBegin() {
+        getAbstractCommandEvent().fire(getController().getBeginCommand());
+    }
 }

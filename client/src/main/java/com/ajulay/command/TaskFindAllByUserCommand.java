@@ -30,6 +30,11 @@ public class TaskFindAllByUserCommand extends AbstractCommand {
             final String term = task.getTerm().toString().substring(0, ServiceConstant.SUBSTRING_INSTANT);
             System.out.println(index++ + ". Task content: " + task.getContent() + ", term: " + term);
         }
+        System.out.println("[Ok]");
+        toBegin();
     }
 
+    private void toBegin() {
+        getAbstractCommandEvent().fire(getController().getBeginCommand());
+    }
 }
