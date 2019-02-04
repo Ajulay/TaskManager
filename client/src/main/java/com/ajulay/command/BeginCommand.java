@@ -2,6 +2,8 @@ package com.ajulay.command;
 
 import com.ajulay.api.IController;
 import com.ajulay.endpoint.Session;
+import com.ajulay.eventhandler.interseptor.Logable;
+import org.jetbrains.annotations.Nullable;
 
 import javax.enterprise.event.Observes;
 
@@ -17,9 +19,15 @@ public class BeginCommand extends AbstractCommand {
         return "start";
     }
 
+    @Logable
     public void execute(@Observes BeginCommand beginCommand) throws Exception {
-        final IController controller = getController();
-        final Session currentSession = controller.getCurrentSession();
+        @Nullable final IController controller = getController();
+        if (controller == null) {
+            System.out.println("Something wrong... Try again.");
+            toBegin();
+            return;
+        }
+        @Nullable final Session currentSession = controller.getCurrentSession();
         if (currentSession == null) {
             controller.getCommands().clear();
             controller.register(
@@ -28,15 +36,16 @@ public class BeginCommand extends AbstractCommand {
                     AppExitCommand.class, AppHelpCommand.class
             );
         } else {
-            final String currentUserName = currentSession.getUserId();
+            @Nullable final String currentUserName = currentSession.getUserId();
             System.out.printf("User id: %s\n", currentUserName);
 
         }
-        final String in = controller.nextLine();
+        @Nullable final String in = controller.nextLine();
         if (in == null || in.isEmpty()) {
             toBegin();
+            return;
         }
-        final AbstractCommand command = controller.getCommands().get(in);
+        @Nullable final AbstractCommand command = controller.getCommands().get(in);
         if (command != null) {
             System.out.println(command.getDescription());
             try {

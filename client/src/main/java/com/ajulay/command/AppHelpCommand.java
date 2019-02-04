@@ -1,5 +1,7 @@
 package com.ajulay.command;
 
+import org.jetbrains.annotations.NotNull;
+
 import javax.enterprise.event.Observes;
 import java.util.Collection;
 
@@ -16,6 +18,7 @@ public class AppHelpCommand extends AbstractCommand {
     }
 
     public void execute(@Observes AppHelpCommand appHelpCommand) {
+        @NotNull
         Collection<AbstractCommand> commands = getController().getCommands().values();
         for (AbstractCommand cmd : commands) {
             System.out.println(cmd.getCommandKeyWord() + " - " + cmd.getDescription());

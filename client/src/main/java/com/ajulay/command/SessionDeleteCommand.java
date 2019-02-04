@@ -1,6 +1,9 @@
 package com.ajulay.command;
 
+import com.ajulay.api.IController;
 import com.ajulay.endpoint.Session;
+import com.ajulay.endpoint.Success;
+import org.jetbrains.annotations.Nullable;
 
 import javax.enterprise.event.Observes;
 
@@ -17,10 +20,31 @@ public class SessionDeleteCommand extends AbstractCommand {
     }
 
     public void execute(@Observes SessionDeleteCommand sessionDeleteCommand) {
-        final Session session = getController().getCurrentSession();
+        @Nullable final IController controller = getController();
+        if (controller == null) {
+            System.out.println("Something wrong... Try again.");
+            toBegin();
+            return;
+        }
+        @Nullable final Session session = controller.getCurrentSession();
+        if (session == null) {
+            System.out.println("You are log out.");
+            toBegin();
+            return;
+        }
         System.out.println("Enter session id:");
-        final String sessionId = getController().nextLine();
-        getController().getSessionService().getSessionSoapEndPointPort().deleteSessionById(session, sessionId);
+        @Nullable final String sessionId = getController().nextLine();
+        if (sessionId == null || sessionId.isEmpty()) {
+            System.out.println("You are log out");
+            toBegin();
+            return;
+        }
+        @Nullable final Success success = controller.getSessionService().getSessionSoapEndPointPort().deleteSessionById(session, sessionId);
+        if (success == null) {
+            System.out.println("No delete. Try again.");
+            toBegin();
+            return;
+        }
         System.out.println("[Ok]");
         toBegin();
     }

@@ -3,6 +3,7 @@ package com.ajulay.api;
 import com.ajulay.command.AbstractCommand;
 import com.ajulay.command.BeginCommand;
 import com.ajulay.endpoint.*;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.Exception;
 import java.util.Map;
@@ -28,7 +29,7 @@ public interface IController {
 
     AssigneeSoapEndPointService getAssigneeService();
 
-    void setCurrentSession(Session currentSession);
+    void setCurrentSession(@Nullable Session currentSession);
 
     void registerCommandAll() throws IllegalAccessException, InstantiationException;
 

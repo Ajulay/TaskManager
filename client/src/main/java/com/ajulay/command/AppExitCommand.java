@@ -1,6 +1,7 @@
 package com.ajulay.command;
 
 import com.ajulay.endpoint.Session;
+import org.jetbrains.annotations.Nullable;
 
 import javax.enterprise.event.Observes;
 
@@ -17,7 +18,7 @@ public class AppExitCommand extends AbstractCommand {
     }
 
     public void execute(@Observes AppExitCommand appExitCommand) {
-        final Session session = getController().getCurrentSession();
+        @Nullable final Session session = getController().getCurrentSession();
         if (session != null) {
             getController().getSessionService().getSessionSoapEndPointPort().logout(session);
         }
