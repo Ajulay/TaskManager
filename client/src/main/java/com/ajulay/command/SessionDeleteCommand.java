@@ -35,7 +35,12 @@ public class SessionDeleteCommand extends AbstractCommand {
         System.out.println("Enter session id:");
         @Nullable final String sessionId = getController().nextLine();
         if (sessionId == null || sessionId.isEmpty()) {
-            System.out.println("You are log out");
+            System.out.println("Incorrect data...");
+            toBegin();
+            return;
+        }
+        if (sessionId.equals(controller.getCurrentSession().getId())) {
+            System.out.println("You are logout...");
             toBegin();
             return;
         }

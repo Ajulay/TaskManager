@@ -13,7 +13,6 @@ public class App {
         @NotNull final SeContainer seContainer = initializer.initialize();
         @NotNull final IControllerUI controllerUI = seContainer.select(IControllerUI.class).get();
         controllerUI.run();
-        //TODO 39178,08. 331
     }
 
 }
