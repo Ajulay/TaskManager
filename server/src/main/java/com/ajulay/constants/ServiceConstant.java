@@ -26,5 +26,9 @@ public class ServiceConstant {
     public static final String HIBERNATE_HBM2DDL_AUTO = "hibernate.hbm2ddl.auto";
     public static final String HIBERNATE_SHOW_SQL = "hibernate.sql";
     public static final String HIBERNATE_DIALECT = "hibernate.dialect";
+    public static final String HIBERNATE_C3P0_MIN_SIZE = "hibernate.c3p0.min_size";
+    public static final String HIBERNATE_C3P0_MAX_SIZE = "hibernate.c3p0.max_size";
+    public static final String HIBERNATE_CONNECTION_PROVIDER_CLASS = "hibernate.connection.provider_class";
+    public static final String HIBERNATE_C3P0_ACQUIRE_INCREMENT = "hibernate.c3p0.acquire_increment";
 
 }

@@ -35,8 +35,8 @@ public class SessionSoapEndPoint implements ISessionSoapService {
         session.setUserId(user.getId());
         session.setCreatedDate(new Date());
         session.setSignature(PropertyReader.SessionSignature.sign(user.getId()));//TODO Property
-        sessionService.save(session);
-        return session;
+        final Session savedSession = sessionService.save(session);
+        return savedSession;
     }
 
     @Override

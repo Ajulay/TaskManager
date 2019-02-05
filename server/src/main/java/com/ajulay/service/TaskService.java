@@ -6,22 +6,21 @@ import com.ajulay.entity.Task;
 import com.ajulay.enumirated.Status;
 import com.ajulay.repository.AssigneeRepository;
 import com.ajulay.repository.TaskRepository;
+import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * {@inheritDoc}
  */
 @ApplicationScoped
+@Transactional
 public class TaskService implements ITaskService {
 
     @Inject
@@ -32,46 +31,30 @@ public class TaskService implements ITaskService {
     @NotNull
     private AssigneeRepository assigneeRepository;
 
-    @Inject
-    @NotNull
-    private EntityManager entityManager;
-
     @Nullable
     public Task changeStatus(@NotNull final String taskId, @NotNull final String status) {
         if (taskId.isEmpty() || status.isEmpty()) {
             return null;
         }
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         @Nullable final Task task = taskRepository.findBy(taskId);
         if (task != null) {
             task.setStatus(Status.valueOf(status.toUpperCase()));
         }
-        transaction.commit();
         return task;
     }
 
     @Override
     @NotNull
     public List<Task> findAllByProject(@NotNull final String projectId) {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        //TODO remake later for Criteria
         @NotNull
-        List<Task> tasks = taskRepository.findAll();
-        tasks = tasks.stream().filter(e -> e.getProject().getId().equals(projectId)).collect(Collectors.toList());
-        transaction.commit();
+        List<Task> tasks = taskRepository.findAllByProject(projectId);
         return tasks;
     }
 
     @Override
     @Nullable
     public Task save(@NotNull final Task task) {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @Nullable final Task savedTask = taskRepository.save(task);
-        transaction.commit();
-        return savedTask;
+        return taskRepository.save(task);
     }
 
     @Override
@@ -80,52 +63,35 @@ public class TaskService implements ITaskService {
         if (id.isEmpty()) {
             return null;
         }
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @Nullable final Task task = taskRepository.findBy(id);
-        transaction.commit();
-        return task;
+        return taskRepository.findBy(id);
     }
 
     @Override
     @Nullable
     public Task remove(@NotNull final Task task) {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         taskRepository.remove(task);
-        transaction.commit();
         return task;
     }
 
     @Override
     @Nullable
     public Task update(@NotNull final Task task) {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @Nullable final Task updatedTask = taskRepository.save(task);
-        transaction.commit();
-        return updatedTask;
+        taskRepository.refresh(task);
+        return task;
     }
 
     @Override
     @NotNull
     public List<Task> findAll() {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @NotNull final List<Task> tasks = taskRepository.findAll();
-        transaction.commit();
-        return tasks;
+        return taskRepository.findAll();
     }
 
     @Override
     @NotNull
     public List<Task> updateAll(@NotNull final List<Task> tasks) {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         for (@NotNull final Task task : tasks) {
-            entityManager.merge(task);
+            taskRepository.refresh(task);
         }
-        transaction.commit();
         return tasks;
     }
 
@@ -135,38 +101,30 @@ public class TaskService implements ITaskService {
         if (id.isEmpty()) {
             return null;
         }
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         @Nullable final Task task = taskRepository.findBy(id);
         if (task != null) {
             taskRepository.remove(task);
         }
-        transaction.commit();
         return task;
     }
 
     @Override
     @Nullable
     public List<Task> findAllByUserId(@NotNull final String currentUser) {
-        EntityTransaction transaction = entityManager.getTransaction();
-        final List<Assignee> assignees = assigneeRepository.findByUserId(currentUser);
-        transaction.begin();
+        @NotNull final List<Assignee> assignees = assigneeRepository.findByUserId(currentUser);
         final List<Task> tasks = new ArrayList<>();
-        for (final Assignee assignee : assignees) {
+        for (@NotNull final Assignee assignee : assignees) {
             @Nullable final Task task = taskRepository.findBy(assignee.getTaskId());
             if (task != null)
                 tasks.add(task);
         }
-        transaction.commit();
         return tasks;
     }
 
     @Override
     public List<Task> findTaskAllByUserId(String currentUserId) {
-        final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         @NotNull final List<Assignee> assignees = assigneeRepository.findByUserId(currentUserId);
-        @NotNull final List<Task> tasks = new ArrayList<>();
+        final List<Task> tasks = new ArrayList<>();
 
         for (@NotNull final Assignee assignee : assignees) {
             Task task = null;
@@ -174,10 +132,9 @@ public class TaskService implements ITaskService {
                 task = taskRepository.findBy(assignee.getTaskId());
                 tasks.add(task);
             } catch (NoResultException e) {
-
+                System.out.println(e.getMessage());
             }
         }
-        transaction.commit();
         return tasks;
     }
 

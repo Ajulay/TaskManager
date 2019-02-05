@@ -1,10 +1,7 @@
 package com.ajulay.repository;
 
 import com.ajulay.entity.User;
-import org.apache.deltaspike.data.api.EntityRepository;
-import org.apache.deltaspike.data.api.Modifying;
-import org.apache.deltaspike.data.api.Query;
-import org.apache.deltaspike.data.api.Repository;
+import org.apache.deltaspike.data.api.*;
 
 @Repository(forEntity = User.class)
 public interface UserRepository extends EntityRepository<User, String> {
@@ -17,6 +14,6 @@ public interface UserRepository extends EntityRepository<User, String> {
 
     @Modifying
     @Query("update User as u set u.surname = ?2 where u.id = ?1")
-    void changeSurname(String id, String surname);
+    void changeSurname(@QueryParam("id") String id, String surname);
 
 }

@@ -18,6 +18,7 @@ public class PropertyReader {
         final Properties properties = new Properties();
         final InputStream inputStream = PropertyReader.class.getResourceAsStream(NAME);
         properties.load(inputStream);
+        inputStream.close();
         return properties;
     }
 
@@ -32,9 +33,7 @@ public class PropertyReader {
                 signature += (value + salt) + new Date();
                 signature = signature.hashCode() + "";
             }
-
             return signature;
         }
-
     }
 }

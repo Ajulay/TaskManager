@@ -3,13 +3,12 @@ package com.ajulay.service;
 import com.ajulay.api.service.IAssigneeService;
 import com.ajulay.entity.Assignee;
 import com.ajulay.repository.AssigneeRepository;
+import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,16 +16,11 @@ import java.util.List;
  * {@inheritDoc}
  */
 @ApplicationScoped
+@Transactional
 public class AssigneeService implements IAssigneeService {
 
     @Inject
-    @NotNull
     private AssigneeRepository assigneeRepository;
-
-    @Inject
-    @NotNull
-    private EntityManager entityManager;
-
 
     @Override
     @Nullable
@@ -34,14 +28,10 @@ public class AssigneeService implements IAssigneeService {
         if (taskId.isEmpty() || assignerId.isEmpty()) {
             return null;
         }
-        @NotNull
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         final Assignee assignee = new Assignee();
         assignee.setTaskId(taskId);
         assignee.setUserId(assignerId);
         assigneeRepository.save(assignee);
-        transaction.commit();
         return assignee;
     }
 
@@ -51,26 +41,17 @@ public class AssigneeService implements IAssigneeService {
         if (id.isEmpty()) {
             return null;
         }
-        @NotNull
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         @Nullable final Assignee assignee = assigneeRepository.findById(id);
         if (assignee != null) {
             assigneeRepository.remove(assignee);
         }
-        transaction.commit();
         return assignee;
     }
 
     @Override
     @Nullable
     public Assignee update(@NotNull final Assignee assignee) {
-        @NotNull
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @Nullable final Assignee updatedAssignee = assigneeRepository.save(assignee);
-        transaction.commit();
-        return updatedAssignee;
+        return assigneeRepository.save(assignee);
     }
 
     @Override
@@ -79,45 +60,25 @@ public class AssigneeService implements IAssigneeService {
         if (id.isEmpty()) {
             return null;
         }
-        @NotNull
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @Nullable final Assignee assignee = assigneeRepository.findById(id);
-        transaction.commit();
-        return assignee;
+        return assigneeRepository.findById(id);
     }
 
     @Override
     @Nullable
     public List<Assignee> findAll() {
-        @NotNull
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @Nullable final List<Assignee> assignees = assigneeRepository.findAll();
-        transaction.commit();
-        return assignees;
+        return assigneeRepository.findAll();
     }
 
     @Override
     @NotNull
     public List<Assignee> findAllByUserId(@NotNull final String currentUser) {
-        @NotNull
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @NotNull final List<Assignee> assignees = assigneeRepository.findByUserId(currentUser);
-        transaction.commit();
-        return assignees;
+        return assigneeRepository.findByUserId(currentUser);
     }
 
     @Override
     @NotNull
     public List<Assignee> findAllByTaskId(@NotNull final String taskId) {
-        @NotNull
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @NotNull final List<Assignee> assignees = assigneeRepository.findByTaskId(taskId);
-        transaction.commit();
-        return assignees;
+        return assigneeRepository.findByTaskId(taskId);
     }
 
     @Override
@@ -126,48 +87,32 @@ public class AssigneeService implements IAssigneeService {
         if (taskId.isEmpty()) {
             return Collections.emptyList();
         }
-        @NotNull
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         @NotNull final List<Assignee> assignees = assigneeRepository.findByTaskId(taskId);
         for (@NotNull final Assignee assignee : assignees) {
             assigneeRepository.remove(assignee);
         }
-        transaction.commit();
         return assignees;
     }
 
     @Override
     @Nullable
     public Assignee save(@NotNull final Assignee assignee) {
-        @NotNull
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @Nullable final Assignee savedAssignee = assigneeRepository.save(assignee);
-        transaction.commit();
-        return savedAssignee;
+        return assigneeRepository.save(assignee);
     }
 
     @Override
     @Nullable
     public Assignee remove(@NotNull final Assignee assignee) {
-        @NotNull
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         assigneeRepository.remove(assignee);
-        transaction.commit();
         return assignee;
     }
 
     @Override
     @NotNull
     public List<Assignee> updateAll(@NotNull final List<Assignee> assignees) {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         for (@NotNull final Assignee assignee : assignees) {
-            entityManager.merge(assignee);
+            assigneeRepository.refresh(assignee);
         }
-        transaction.commit();
         return assignees;
     }
 

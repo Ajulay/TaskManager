@@ -2,6 +2,7 @@ package com.ajulay.repository;
 
 import com.ajulay.entity.Session;
 import org.apache.deltaspike.data.api.EntityRepository;
+import org.apache.deltaspike.data.api.Modifying;
 import org.apache.deltaspike.data.api.Query;
 import org.apache.deltaspike.data.api.Repository;
 
@@ -15,5 +16,9 @@ public interface SessionRepository extends EntityRepository<Session, String> {
 
     @Query("SELECT s FROM Session s WHERE s.userId = ?1")
     List<Session> findSessionByUserId(String userId);
+
+    @Query("DELETE FROM Session ")
+    @Modifying
+    void removeAll();
 
 }

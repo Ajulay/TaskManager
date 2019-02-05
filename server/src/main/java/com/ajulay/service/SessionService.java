@@ -3,26 +3,22 @@ package com.ajulay.service;
 import com.ajulay.api.service.ISessionService;
 import com.ajulay.entity.Session;
 import com.ajulay.repository.SessionRepository;
+import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import java.util.Collections;
 import java.util.List;
 
 @ApplicationScoped
+@Transactional
 public class SessionService implements ISessionService {
 
     @Inject
     @NotNull
     private SessionRepository sessionRepository;
-
-    @Inject
-    @NotNull
-    private EntityManager entityManager;
 
     @Nullable
     private Session currentSession;
@@ -30,24 +26,17 @@ public class SessionService implements ISessionService {
     @Override
     @Nullable
     public Session save(@NotNull final Session session) {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @Nullable final Session savedSession = sessionRepository.save(session);
-        transaction.commit();
-        return savedSession;
+        return sessionRepository.save(session);
     }
 
     @Override
     @Nullable
     public Session removeById(@NotNull final String id) {
         if (id.isEmpty()) return null;
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         @Nullable final Session session = sessionRepository.findBy(id);
         if (session != null) {
             sessionRepository.remove(session);
         }
-        transaction.commit();
         return session;
     }
 
@@ -55,36 +44,24 @@ public class SessionService implements ISessionService {
     @Nullable
     public Session findBySignature(@NotNull final String signiture) {
         if (signiture.isEmpty()) return null;
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @Nullable final Session session = sessionRepository.findBySignature(signiture);
-        transaction.commit();
-        return session;
+        return sessionRepository.findBySignature(signiture);
     }
 
     @Override
     @Nullable
     public Session removeBySignature(@NotNull final String signature) {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         @Nullable final Session session = sessionRepository.findBySignature(signature);
         if (session != null) {
             sessionRepository.remove(session);
         }
-        transaction.commit();
         return session;
     }
 
     @Override
     @NotNull
     public List<Session> removeAll() {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         @NotNull final List<Session> sessions = sessionRepository.findAll();
-        for (@NotNull final Session session : sessions) {
-            sessionRepository.remove(session);
-        }
-        transaction.commit();
+        sessionRepository.removeAll();
         return sessions;
 
     }
@@ -93,51 +70,34 @@ public class SessionService implements ISessionService {
     @NotNull
     public List<Session> findByUserId(@NotNull final String userId) {
         if (userId.isEmpty()) return Collections.emptyList();
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @NotNull final List<Session> sessions = sessionRepository.findSessionByUserId(userId);
-        transaction.commit();
-        return sessions;
+        return sessionRepository.findSessionByUserId(userId);
     }
 
     @Override
     @Nullable
     public Session findById(@NotNull final String id) {
         if (id.isEmpty()) return null;
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @Nullable final Session session = sessionRepository.findBy(id);
-        transaction.commit();
-        return session;
+        return sessionRepository.findBy(id);
     }
 
     @Override
     @Nullable
     public Session remove(@NotNull final Session session) {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         sessionRepository.remove(session);
-        transaction.commit();
         return session;
     }
 
     @Override
     @Nullable
     public Session update(@NotNull final Session session) {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @Nullable final Session updatedSession = sessionRepository.save(session);
-        transaction.commit();
-        return updatedSession;
+        sessionRepository.refresh(session);
+        return session;
     }
 
     @Override
     @NotNull
     public List<Session> findAll() {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        @NotNull final List<Session> sessions = sessionRepository.findAll();
-        transaction.commit();
+        List<Session> sessions = sessionRepository.findAll();
         return sessions;
     }
 
@@ -152,13 +112,9 @@ public class SessionService implements ISessionService {
 
     @Override
     public void removeAll(@NotNull final List<Session> sessions) {
-        @NotNull final EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
         for (@NotNull final Session session : sessions) {
-            entityManager.remove(session);
+            sessionRepository.remove(session);
         }
-        transaction.commit();
     }
-
 
 }
