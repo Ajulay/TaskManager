@@ -3,11 +3,11 @@ package com.ajulay.service;
 import com.ajulay.api.service.IProjectService;
 import com.ajulay.entity.Project;
 import com.ajulay.repository.ProjectRepository;
-import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * {@inheritDoc}
  */
-@ApplicationScoped
+@Component
 @Transactional
 public class ProjectService implements IProjectService {
 
@@ -28,7 +28,7 @@ public class ProjectService implements IProjectService {
         if (projectId.isEmpty()) {
             return null;
         }
-        return projectRepository.findBy(projectId);
+        return projectRepository.findById(projectId).get();
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ProjectService implements IProjectService {
     @Override
     @Nullable
     public Project update(@NotNull final Project project) {
-        projectRepository.refresh(project);
+        projectRepository.save(project);
         return project;
     }
 
@@ -68,9 +68,7 @@ public class ProjectService implements IProjectService {
     @Override
     @NotNull
     public List<Project> updateAll(@NotNull final List<Project> projects) {
-        for (@NotNull final Project project : projects) {
-            projectRepository.refresh(project);
-        }
+        projectRepository.saveAll(projects);
         return projects;
     }
 

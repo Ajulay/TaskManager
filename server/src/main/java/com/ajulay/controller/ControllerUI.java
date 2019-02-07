@@ -2,26 +2,27 @@ package com.ajulay.controller;
 
 import com.ajulay.api.controller.IControllerUI;
 import com.ajulay.api.service.*;
-import com.ajulay.api.soap.*;
 import com.ajulay.command.*;
 import com.ajulay.constants.ServiceConstant;
+import com.ajulay.endpoint.*;
 import com.ajulay.entity.Session;
 import com.ajulay.entity.User;
 import com.ajulay.enumirated.Role;
-import com.ajulay.hibernate.HibernateUtil;
-import com.ajulay.service.SessionService;
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.xml.ws.Endpoint;
-import java.io.IOException;
 import java.util.*;
 
 /**
  * ControllerUI - class-controller for interacting
  */
-@ApplicationScoped
+@Component
+@Getter
+@Setter
 public class ControllerUI implements IControllerUI {
 
     private static final Class[] CLASSES = {
@@ -36,23 +37,23 @@ public class ControllerUI implements IControllerUI {
     };
 
     @Inject
-    private IProjectSoapService projectSoapService;
+    private ProjectSoapEndPoint projectSoapService;
 
     @Inject
-    private ITaskSoapService taskSoapService;
+    private TaskSoapEndPoint taskSoapService;
 
     @Inject
-    private IUserSoapService userSoapService;
+    private UserSoapEndPoint userSoapService;
 
     @Inject
-    private IAssigneeSoapService assigneeSoapService;
+    private AssigneeSoapEndPoint assigneeSoapService;
 
     @Inject
-    private ISessionSoapService sessionSoapService;
+    private SessionSoapEndPoint sessionSoapService;
 
     @Inject
     private IUserService userService;
-
+    //
     @Inject
     private IProjectService projectService;
 
@@ -61,9 +62,9 @@ public class ControllerUI implements IControllerUI {
 
     @Inject
     private IAssigneeService assigneeService;
-
+    //
     @Inject
-    private SessionService sessionService;
+    private ISessionService sessionService;
 
     private final Map<String, AbstractCommand> commands = new HashMap<>();
 
@@ -88,7 +89,7 @@ public class ControllerUI implements IControllerUI {
     }
 
     public void run() throws Exception {
-        startHibernate();
+//        //startHibernate();
         runServices();
         loadData();
         controlSession();
@@ -178,31 +179,6 @@ public class ControllerUI implements IControllerUI {
         controlThread.start();
     }
 
-
-    private void startHibernate() throws IOException {
-        HibernateUtil.factory();
-    }
-
-    public IUserService getUserService() {
-        return userService;
-    }
-
-    public IProjectService getProjectService() {
-        return projectService;
-    }
-
-    public ITaskService getTaskService() {
-        return taskService;
-    }
-
-    public Map<String, AbstractCommand> getCommands() {
-        return commands;
-    }
-
-    public IAssigneeService getAssigneeService() {
-        return assigneeService;
-    }
-
     public Scanner getScanner() {
         return scanner;
     }
@@ -214,5 +190,6 @@ public class ControllerUI implements IControllerUI {
     public ISessionService getSessionService() {
         return sessionService;
     }
+
 
 }

@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZoneId;
@@ -15,7 +14,6 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@ApplicationScoped
 @Table(name = "task")
 @Getter
 @Setter
@@ -27,7 +25,7 @@ public class Task implements Serializable {
     private String id = UUID.randomUUID().toString();
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
 

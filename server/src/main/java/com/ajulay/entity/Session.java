@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -15,7 +14,6 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "session")
-@ApplicationScoped
 @Getter
 @Setter
 @NoArgsConstructor

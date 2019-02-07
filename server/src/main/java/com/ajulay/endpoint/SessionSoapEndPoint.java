@@ -1,5 +1,7 @@
 package com.ajulay.endpoint;
 
+import com.ajulay.api.service.ISessionService;
+import com.ajulay.api.service.IUserService;
 import com.ajulay.api.soap.ISessionSoapService;
 import com.ajulay.controller.util.PropertyReader;
 import com.ajulay.endpoint.transport.Success;
@@ -7,23 +9,23 @@ import com.ajulay.entity.Session;
 import com.ajulay.entity.User;
 import com.ajulay.exception.checked.NoSuchAssignerException;
 import com.ajulay.exception.unchecked.LoginExistsException;
-import com.ajulay.service.SessionService;
-import com.ajulay.service.UserService;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
 import javax.jws.WebService;
 import java.util.Date;
 import java.util.List;
 
 @WebService
+@Component
 public class SessionSoapEndPoint implements ISessionSoapService {
 
-    @Inject
-    private SessionService sessionService;
+    @Autowired
+    private ISessionService sessionService;
 
-    @Inject
-    private UserService userService;
+    @Autowired
+    private IUserService userService;
 
     @Override
     @Nullable
@@ -69,7 +71,8 @@ public class SessionSoapEndPoint implements ISessionSoapService {
         if (!currentSession.getSignature().equals(session.getSignature())) {
             return null;
         }
-        return sessionService.findByUserId(session.getUserId());
+        List<Session> sessions = sessionService.findByUserId(session.getUserId());
+        return sessions;
     }
 
     @Override

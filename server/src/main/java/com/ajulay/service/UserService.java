@@ -1,15 +1,15 @@
 package com.ajulay.service;
 
-import com.ajulay.api.service.IAssigneeService;
 import com.ajulay.api.service.IUserService;
 import com.ajulay.entity.Assignee;
 import com.ajulay.entity.User;
+import com.ajulay.repository.AssigneeRepository;
 import com.ajulay.repository.UserRepository;
-import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * {@inheritDoc}
  */
-@ApplicationScoped
+@Component
 @Transactional
 public class UserService implements IUserService {
 
@@ -26,11 +26,10 @@ public class UserService implements IUserService {
     private User currentUser;
 
     @Inject
-    @NotNull
     private UserRepository userRepository;
 
     @Inject
-    private IAssigneeService assigneeService;
+    private AssigneeRepository assigneeRepository;
 
     @Override
     @Nullable
@@ -47,8 +46,8 @@ public class UserService implements IUserService {
     @Override
     @Nullable
     public User removeById(@NotNull final String id) {
-        final User user = userRepository.findById(id);
-        userRepository.remove(user);
+        final User user = userRepository.getOne(id);
+        userRepository.delete(user);
         return user;
     }
 
@@ -64,7 +63,7 @@ public class UserService implements IUserService {
         if (id.isEmpty()) {
             return null;
         }
-        return userRepository.findById(id);
+        return userRepository.findById(id).get();
     }
 
     @Override
@@ -87,7 +86,7 @@ public class UserService implements IUserService {
     public User changePassword(@NotNull final User user, @NotNull final String passwordHash) {
         if (passwordHash.isEmpty()) return null;
         user.setPasswordHash(passwordHash);
-        userRepository.refresh(user);
+        userRepository.save(user);
         return user;
     }
 
@@ -109,7 +108,7 @@ public class UserService implements IUserService {
     @Override
     @Nullable
     public User remove(@NotNull final User user) {
-        userRepository.remove(user);
+        userRepository.delete(user);
         return user;
     }
 
@@ -122,19 +121,18 @@ public class UserService implements IUserService {
     @Override
     @NotNull
     public List<User> updateAll(@NotNull final List<User> users) {
-        for (@NotNull final User user : users) {
-            userRepository.refresh(user); //todo 1 request
-        }
+        userRepository.saveAll(users); //todo 1 request
+
         return users;
     }
 
     @Override
     @NotNull
     public List<User> findUserAllByTaskId(@NotNull final String taskId) {
-        @NotNull final List<Assignee> assignees = assigneeService.findAllByTaskId(taskId);
+        @NotNull final List<Assignee> assignees = assigneeRepository.findByTaskId(taskId);
         final List<User> users = new ArrayList<>();
         for (@NotNull final Assignee assignee : assignees) {
-            final User user = userRepository.findById(assignee.getUserId());
+            final User user = userRepository.getOne(assignee.getUserId());
             users.add(user);
         }
         return users;
@@ -143,7 +141,7 @@ public class UserService implements IUserService {
     @Nullable
     public User changeSurname(String userId, String surname) {
         userRepository.changeSurname(userId, surname);
-        return userRepository.findById(userId);
+        return userRepository.getOne(userId);
     }
 
 }

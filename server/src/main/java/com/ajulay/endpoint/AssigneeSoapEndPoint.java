@@ -1,16 +1,17 @@
 package com.ajulay.endpoint;
 
+import com.ajulay.api.service.IAssigneeService;
+import com.ajulay.api.service.ISessionService;
 import com.ajulay.api.soap.IAssigneeSoapService;
 import com.ajulay.endpoint.transport.Success;
 import com.ajulay.entity.Assignee;
 import com.ajulay.entity.Session;
 import com.ajulay.exception.unchecked.NullIdException;
-import com.ajulay.service.AssigneeService;
-import com.ajulay.service.SessionService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
 import javax.jws.WebService;
 import java.util.Collections;
 import java.util.List;
@@ -19,13 +20,14 @@ import java.util.List;
  * {@inheritDoc}
  */
 @WebService
+@Component
 public class AssigneeSoapEndPoint implements IAssigneeSoapService {
 
-    @Inject
-    private SessionService sessionService;
+    @Autowired
+    private ISessionService sessionService;
 
-    @Inject
-    private AssigneeService assigneeService;
+    @Autowired
+    private IAssigneeService assigneeService;
 
     @Override
     @Nullable
@@ -69,7 +71,8 @@ public class AssigneeSoapEndPoint implements IAssigneeSoapService {
         if (id == null || id.isEmpty()) {
             throw new NullIdException();
         }
-        return assigneeService.findById(id);
+        Assignee assignee = assigneeService.findById(id);
+        return assignee;
     }
 
     @Override
@@ -91,7 +94,8 @@ public class AssigneeSoapEndPoint implements IAssigneeSoapService {
     @NotNull
     public List<Assignee> findAssigneeAllByUserId(final Session session, final String userId) {
         if (userId == null) return Collections.emptyList();
-        return assigneeService.findAllByUserId(userId);
+        List<Assignee> assignees = assigneeService.findAllByUserId(userId);
+        return assignees;
     }
 
 }

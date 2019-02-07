@@ -3,11 +3,11 @@ package com.ajulay.service;
 import com.ajulay.api.service.IAssigneeService;
 import com.ajulay.entity.Assignee;
 import com.ajulay.repository.AssigneeRepository;
-import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * {@inheritDoc}
  */
-@ApplicationScoped
+@Component
 @Transactional
 public class AssigneeService implements IAssigneeService {
 
@@ -41,9 +41,9 @@ public class AssigneeService implements IAssigneeService {
         if (id.isEmpty()) {
             return null;
         }
-        @Nullable final Assignee assignee = assigneeRepository.findById(id);
+        @Nullable final Assignee assignee = assigneeRepository.findById(id).get();
         if (assignee != null) {
-            assigneeRepository.remove(assignee);
+            assigneeRepository.delete(assignee);
         }
         return assignee;
     }
@@ -60,7 +60,7 @@ public class AssigneeService implements IAssigneeService {
         if (id.isEmpty()) {
             return null;
         }
-        return assigneeRepository.findById(id);
+        return assigneeRepository.findById(id).get();
     }
 
     @Override
@@ -88,9 +88,7 @@ public class AssigneeService implements IAssigneeService {
             return Collections.emptyList();
         }
         @NotNull final List<Assignee> assignees = assigneeRepository.findByTaskId(taskId);
-        for (@NotNull final Assignee assignee : assignees) {
-            assigneeRepository.remove(assignee);
-        }
+        assigneeRepository.deleteAll(assignees);
         return assignees;
     }
 
@@ -103,16 +101,14 @@ public class AssigneeService implements IAssigneeService {
     @Override
     @Nullable
     public Assignee remove(@NotNull final Assignee assignee) {
-        assigneeRepository.remove(assignee);
+        assigneeRepository.delete(assignee);
         return assignee;
     }
 
     @Override
     @NotNull
     public List<Assignee> updateAll(@NotNull final List<Assignee> assignees) {
-        for (@NotNull final Assignee assignee : assignees) {
-            assigneeRepository.refresh(assignee);
-        }
+        assigneeRepository.saveAll(assignees);
         return assignees;
     }
 

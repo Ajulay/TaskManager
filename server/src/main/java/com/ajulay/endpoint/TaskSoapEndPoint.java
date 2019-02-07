@@ -10,22 +10,24 @@ import com.ajulay.entity.Project;
 import com.ajulay.entity.Session;
 import com.ajulay.entity.Task;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
 import javax.jws.WebService;
 import java.util.ArrayList;
 import java.util.List;
 
 @WebService
+@Component
 public class TaskSoapEndPoint implements ITaskSoapService {
 
-    @Inject
+    @Autowired
     private ITaskService taskService;
 
-    @Inject
+    @Autowired
     private ISessionService sessionService;
 
-    @Inject
+    @Autowired
     private IProjectService projectService;
 
     @Override

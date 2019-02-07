@@ -8,8 +8,9 @@ import com.ajulay.endpoint.transport.Success;
 import com.ajulay.entity.Session;
 import com.ajulay.entity.User;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
 import javax.jws.WebService;
 import java.util.List;
 
@@ -18,12 +19,13 @@ import java.util.List;
  */
 
 @WebService
+@Component
 public class UserSoapEndPoint implements IUserSoapService {
 
-    @Inject
+    @Autowired
     private ISessionService sessionService;
 
-    @Inject
+    @Autowired
     private IUserService userService;
 
     @Override

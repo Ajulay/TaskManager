@@ -1,16 +1,16 @@
 package com.ajulay.repository;
 
 import com.ajulay.entity.Task;
-import org.apache.deltaspike.data.api.EntityRepository;
-import org.apache.deltaspike.data.api.Query;
-import org.apache.deltaspike.data.api.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository(forEntity = Task.class)
-public interface TaskRepository extends EntityRepository<Task, String> {
+@Repository
+public interface TaskRepository extends JpaRepository<Task, String> {
 
-    @Query("SELECT t FROM Task t WHERE t.projectId = ?1")
+    @Query("SELECT t FROM Task t WHERE t.project.id = ?1")
     List<Task> findAllByProject(String projectId);
 
 }

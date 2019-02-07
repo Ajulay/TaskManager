@@ -3,7 +3,6 @@ package com.ajulay.hibernate;
 import com.ajulay.constants.ServiceConstant;
 import com.ajulay.controller.util.PropertyReader;
 import com.ajulay.entity.*;
-import org.apache.deltaspike.jpa.api.transaction.TransactionScoped;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -12,8 +11,6 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.AvailableSettings;
 import org.jetbrains.annotations.NotNull;
 
-import javax.enterprise.inject.Produces;
-import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +20,7 @@ import java.util.logging.Level;
 public class HibernateUtil {
 
     @NotNull
-    public static SessionFactory factory() throws IOException {
+    public SessionFactory factory() throws IOException {
         java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
         final Properties property = PropertyReader.loadProperty();
             final Map<String, String> settings = new HashMap<>();
@@ -38,6 +35,7 @@ public class HibernateUtil {
         settings.put(AvailableSettings.C3P0_MAX_SIZE, property.getProperty(ServiceConstant.HIBERNATE_C3P0_MAX_SIZE));
         settings.put(AvailableSettings.CONNECTION_PROVIDER, property.getProperty(ServiceConstant.HIBERNATE_CONNECTION_PROVIDER_CLASS));
         settings.put(AvailableSettings.C3P0_ACQUIRE_INCREMENT, property.getProperty(ServiceConstant.HIBERNATE_C3P0_ACQUIRE_INCREMENT));
+        settings.put(AvailableSettings.CURRENT_SESSION_CONTEXT_CLASS, property.getProperty(AvailableSettings.CURRENT_SESSION_CONTEXT_CLASS));
             final StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();
             registryBuilder.applySettings(settings);
             final StandardServiceRegistry registry = registryBuilder.build();
@@ -50,13 +48,6 @@ public class HibernateUtil {
             sources.addAnnotatedClass(HibernateUtil.class);
             final Metadata metadata = sources.getMetadataBuilder().build();
             return metadata.getSessionFactoryBuilder().build();
-    }
-
-    @Produces
-    @NotNull
-    @TransactionScoped
-    public EntityManager getEntityManager() throws IOException {
-        return factory().createEntityManager();
     }
 
 }

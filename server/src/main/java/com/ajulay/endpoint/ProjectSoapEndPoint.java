@@ -1,26 +1,28 @@
 package com.ajulay.endpoint;
 
+import com.ajulay.api.service.IProjectService;
+import com.ajulay.api.service.ISessionService;
 import com.ajulay.api.soap.IProjectSoapService;
 import com.ajulay.endpoint.transport.Success;
 import com.ajulay.entity.Project;
 import com.ajulay.entity.Session;
-import com.ajulay.service.ProjectService;
-import com.ajulay.service.SessionService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
 import javax.jws.WebService;
 import java.util.List;
 
 @WebService
+@Component
 public class ProjectSoapEndPoint implements IProjectSoapService {
 
-    @Inject
-    private SessionService sessionService;
+    @Autowired
+    private ISessionService sessionService;
 
-    @Inject
-    private ProjectService projectService;
+    @Autowired
+    private IProjectService projectService;
 
 
     @Override

@@ -1,24 +1,19 @@
 package com.ajulay.repository;
 
 import com.ajulay.entity.Session;
-import org.apache.deltaspike.data.api.EntityRepository;
-import org.apache.deltaspike.data.api.Modifying;
-import org.apache.deltaspike.data.api.Query;
-import org.apache.deltaspike.data.api.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository(forEntity = Session.class)
-public interface SessionRepository extends EntityRepository<Session, String> {
+@Repository
+public interface SessionRepository extends JpaRepository<Session, String> {
 
     @Query("SELECT s FROM Session s WHERE s.signature = ?1")
     Session findBySignature(String signature);
 
     @Query("SELECT s FROM Session s WHERE s.userId = ?1")
     List<Session> findSessionByUserId(String userId);
-
-    @Query("DELETE FROM Session ")
-    @Modifying
-    void removeAll();
 
 }
